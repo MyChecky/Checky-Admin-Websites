@@ -1,8 +1,11 @@
 # checky-ivew
 
 > checky admin webapp with iview
-
-## Build Setup
+## 相关程序
+> 1. WebStrom
+> 2. node.js
+> 3. Git
+## 初始化
  clone 或者 download 此项目
 打开 WebStorm 在terminal 终端执行下列 语句
 
@@ -31,9 +34,9 @@ Vue.prototype.$echarts = echarts
 ```
 具体用法参考[eChart官网](https://www.npmjs.com/package/echarts)和[一篇简书](https://www.jianshu.com/p/cf0a54374419)
 
-### develop
+## develop
 
-#### 1. 文件结构
+### 1. 文件结构
 
 > * asset
 > * components>... : 一级组件，一些小的集成组件，例如登陆块，表格，图
@@ -53,8 +56,17 @@ Vue.prototype.$echarts = echarts
 > * App.vue: 入口组件，修改务必告知所有人
 > * main.js: 主函数文件，全局声明
 
-#### 2. 组件开发
+### 2. 组件开发
 
 > 1. 在components中声明一个新的vue文件
 > 2. 编写文件和需要的接口调用函数
 > 3. 实装组件到对应的view页面中
+
+### 3. Git
+
+添加账户：file->settings->version control->github，添加自己的账户
+添加远端：VCS->git->remotes,添加远端仓库[https://github.com/yeung66/Checky-Admin-Websites.git](https://github.com/yeung66/Checky-Admin-Websites.git)
+**生成项目时会自动搜索git，如果有误请：file->settings->version control->git 添加git程序地址**
+VCS->import into version control->create git repository，新建本地仓库（如果clone,则可能已经创建了本地仓库）
+VCS->commit，提交更改至本地git仓库
+VCS->git->push, 提交至远端仓库
