@@ -4,7 +4,7 @@
 ## 相关程序
 
 > 1. WebStrom
-> 2. node.js
+> 2. node.js[node.js参考](https://blog.csdn.net/weixin_40877388/article/details/80911934)
 > 3. Git
 
 ## 初始化
@@ -40,7 +40,7 @@ Vue.prototype.$echarts = echarts
 
 ### 1. 文件结构
 
-> * asset
+> * asset : 静态文件，包括logo和font-awesome，font-awesome使用参考[font-awesome](http://fontawesome.dashgame.com/)
 > * components>... : 一级组件，一些小的集成组件，例如登陆块，表格，图
 > * newtheme>theme : 新样式文件，目前未使用，less文件编译有问题
 > * router>index ：路由控制
@@ -66,9 +66,9 @@ Vue.prototype.$echarts = echarts
 
 ### 3. Git
 
-> 添加账户：file->settings->version control->github，添加自己的账户
-> 添加远端：VCS->git->remotes,添加远端仓库[https://github.com/yeung66/Checky-Admin-Websites.git](https://github.com/yeung66/Checky-Admin-Websites.git)
-> **生成项目时会自动搜索git，如果有误请：file->settings->version control->git 添加git程序地址**
-> VCS->import into version control->create git repository，新建本地仓库（如果clone,则可能已经创建了本地仓库）
-> VCS->commit，提交更改至本地git仓库
-> VCS->git->push, 提交至远端仓库
+> * 添加账户：file->settings->version control->github，添加自己的账户
+> * 添加远端：VCS->git->remotes,添加远端仓库[https://github.com/yeung66/Checky-Admin-Websites.git](https://github.com/yeung66/Checky-Admin-Websites.git)
+> * **生成项目时会自动搜索git，如果有误请：file->settings->version control->git 添加git程序地址**
+> * VCS->import into version control->create git repository，新建本地仓库（如果clone,则可能已经创建了本地仓库）
+> * VCS->commit，提交更改至本地git仓库
+> * VCS->git->push, 提交至远端仓库
