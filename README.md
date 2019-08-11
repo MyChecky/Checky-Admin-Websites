@@ -3,8 +3,10 @@
 > checky admin webapp with iview
 ## 相关程序
 
+**项目是已经创建好的，具体的创建流程可以参考学习 [webstrom下的vue项目搭建](https://blog.csdn.net/weixin_40877388/article/details/80911934)**
+
 > 1. WebStrom
-> 2. node.js[node.js参考](https://blog.csdn.net/weixin_40877388/article/details/80911934)
+> 2. node.js [node.js参考](https://blog.csdn.net/xmzyjr123/article/details/79428611)
 > 3. Git
 
 ## 初始化
@@ -72,3 +74,21 @@ Vue.prototype.$echarts = echarts
 > * VCS->import into version control->create git repository，新建本地仓库（如果clone,则可能已经创建了本地仓库）
 > * VCS->commit，提交更改至本地git仓库
 > * VCS->git->push, 提交至远端仓库
+
+### 4. 与后台开发环境
+
+*目前测试与生产环境配置后续更新，目前无影响*
+
+> 环境的base_url, utils/axios.js中
+```javascript
+// 环境的切换
+if (process.env.NODE_ENV === 'development') {//开发环境
+  axios.defaults.baseURL = 'localhost:8082';
+}
+else if (process.env.NODE_ENV === 'debug') {//测试环境
+  axios.defaults.baseURL = '';
+}
+else if (process.env.NODE_ENV === 'production') {// 生产环境
+  axios.defaults.baseURL = '';
+}
+```
