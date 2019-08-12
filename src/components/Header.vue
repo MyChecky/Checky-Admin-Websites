@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import API from '../utils/api'
     export default {
         name: "Header",
       data(){
@@ -24,8 +25,15 @@
       },
       methods:{
         quit(){
-          this.$Store.commit('$_removeStorage');
-          this.$router.push('/login');
+          API.logout({sessionKey:this.$Store.getter.getAttr('sessionKey')})
+          .then((res)=>{
+            this.$Store.commit('$_removeStorage');
+            this.$router.push('/login');  
+          })
+          .catch((res)=>{
+            console.log(res)
+          })
+          
         }
       }
     }
