@@ -79,11 +79,13 @@ Vue.prototype.$echarts = echarts
 
 *目前测试与生产环境配置后续更新，目前无影响*
 
-> 环境的base_url, utils/axios.js中
+> 前端运行环境在config->index.js中配置，运行时为localhost:8081
+
+> 与后台交互的base_url, 在utils/axios.js中
 ```javascript
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {//开发环境
-  axios.defaults.baseURL = 'localhost:8082';
+  axios.defaults.baseURL = 'localhost:8080';
 }
 else if (process.env.NODE_ENV === 'debug') {//测试环境
   axios.defaults.baseURL = '';
