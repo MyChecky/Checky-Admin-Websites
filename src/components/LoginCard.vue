@@ -43,7 +43,11 @@
             if (res.data.state==='ok') {
               
               this.$Message.success('登陆成功!');
-              this.$Store.commit('$_setStorage', {user: this.loginInfo.username})
+              this.$Store.commit('$_setStorage', {
+                  user: this.loginInfo.username,
+                  sessionKey: res.data.sessionKey,
+                  userId: res.data.userId
+                })
               this.$Store.commit('$_setLogin', '1')
               setTimeout(()=>{
                 this.$router.push('/')

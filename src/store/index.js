@@ -8,7 +8,9 @@ const store = new Vuex.Store({
   state () {
     return {
       user: null,
-      isLogin: '0'
+      isLogin: '0',
+      userId: '',
+      sessionKey: ''
     }
   },
   getters: {
@@ -18,6 +20,18 @@ const store = new Vuex.Store({
         state.isLogin = localStorage.getItem(isLogin)
       }
       return state.user
+    },
+
+    auth: (state)=>{
+        if(userId&&sessionKey) return {
+            userId: state.userId,
+            sessionKey: state.sessionKey
+        }
+    },
+
+    getAttr: (state)=>(key)=>{
+      if(!state[key]) state[key] = JSON.parse(localStorage.getItem(key))
+      return state[key]
     }
   },
   mutations: {
@@ -26,8 +40,14 @@ const store = new Vuex.Store({
       localStorage.setItem(isLogin, value)
     },
     $_setStorage (state, value) {
-      state.user = value
-      localStorage.setItem(key, JSON.stringify(value))
+        
+      for(var key in value){
+        state[key] = value[key]
+        localStorage.setItem(key,JSON.stringify(value[key]))
+      }
+      
+      // state.user = value
+      // localStorage.setItem(key, JSON.stringify(value))
     },
     $_removeStorage (state) {
       state.user = null

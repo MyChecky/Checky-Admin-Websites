@@ -1,6 +1,7 @@
 // 封装 axios 请求
 import axios from 'axios'; // 引入axios
 import router from '../router/index'
+import store from '../store/index'
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = 'http://localhost:8080';
@@ -63,7 +64,9 @@ export function post(url, data = {}) {
     url: url,
     method: 'post',
     headers: {
-      'Content-Type':'application/json;charset=UTF-8'
+      'Content-Type':'application/json;charset=UTF-8',
+      'userId': store.getters.getAttr('userId'),
+      'sessionKey': store.getters.getAttr('sessionKey')
     },
     data:data
   };
