@@ -3,7 +3,7 @@ import axios from 'axios'; // 引入axios
 import router from '../router/index'
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'localhost:8082';
+  axios.defaults.baseURL = 'http://localhost:8080';
 }
 else if (process.env.NODE_ENV === 'debug') {
   axios.defaults.baseURL = '';

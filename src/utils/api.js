@@ -9,6 +9,7 @@ export default {
   },
   // 示例 api: 发送登录信息
   login: (data) => {
-    return post('/users/login', data)
+    return post('/admin/login', data)
   }
+
 }

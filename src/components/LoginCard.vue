@@ -3,10 +3,10 @@
     <div class="logo-div">Checky</div>
     <Form ref="loginInfo" :model="loginInfo" label-position="top" :rules="ruleInline">
       <Form-item label="用户名">
-        <Input type="text" v-model="loginInfo.username"></Input>
+        <Input type="text" v-model="loginInfo.username"/>
       </Form-item>
       <Form-item label="密码">
-        <Input type="password" v-model="loginInfo.password"></Input>
+        <Input type="password" v-model="loginInfo.password"/>
       </Form-item>
       <Form-item>
         <Button style="margin-top: 30px; background-color: #e83015;color: #fff;" @click="login('loginInfo')" long>登陆系统</Button>
@@ -39,7 +39,9 @@
       login() {
         API.login(this.loginInfo)
           .then((res)=>{
-            if (res.data.state==='OK') {
+              console.log(res.data.state)
+            if (res.data.state==='ok') {
+              
               this.$Message.success('登陆成功!');
               this.$Store.commit('$_setStorage', {user: this.loginInfo.username})
               this.$Store.commit('$_setLogin', '1')

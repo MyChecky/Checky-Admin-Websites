@@ -29,7 +29,7 @@ router.beforeEach((to, from, next) => {
       },800)
     }
   } else {
-    // 不需要登录权限的也页面
+    // 不需要登录权限的页面
     next();
   }
 });
