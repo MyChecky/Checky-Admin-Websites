@@ -6,6 +6,10 @@ import router from './router/index'
 import iView from 'iview/dist/iview'
 import store from './store/index'
 
+// 注释以关闭 mock 数据
+if(process.env.MOCK)
+  require('./mock/mock');
+
 import  './assets/font-awesome-4.7.0/css/font-awesome.css'
 import  'iview/dist/styles/iview.css'
 // import './newtheme/theme.less' // 覆盖原有默认颜色样式出现less文件加载错误，有谁有能力可以后续解决

@@ -3,17 +3,46 @@
 import {get, post, deletes, put} from "./axios";
 
 export default {
-  // 示例 api：获取用户信息
-  getUserInfo: (data)=>{
-    return get('/users/getInfo', data)
+// 登录
+  login : {
+    // 发送登录信息
+    login: (data) => {
+      return post('/admin/login', data)
+    },
+    // 注销
+    logout: (data) => {
+      return post('/admin/logout',data)
+    }
   },
-  // 示例 api: 发送登录信息
-  login: (data) => {
-    return post('/admin/login', data)
+// 用户
+  users : {
+    // 获取所有用户信息
+    queryUsersInfo: (data) => {
+      return post('/admin/user/all',data)
+    },
+    // 查询单个用户详情
+    queryUserInfo: (data) =>{
+      return post('/admin/user/query',data)
+    }
   },
+// 动态
+  essays : {
 
-  logout: (data) => {
-    return post('/admin/logout',data)
+  },
+// 任务
+  tasks : {
+
+  },
+// 资金
+  money : {
+
+  },
+// 申诉
+  appeal : {
+
+  },
+// 举报
+  report : {
+
   }
-
 }

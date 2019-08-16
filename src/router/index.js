@@ -14,7 +14,10 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      meta: {auth: true},
+      meta: {
+        auth: false // 开发时用false
+      },
+      redirect: 'users',
       components: {container: () => import('@/views/RouterView')},
       children: [
         {
@@ -22,7 +25,7 @@ export default new Router({
           name: 'users',
           meta: {
             title: '',
-            auth: true
+            auth: false // 开发时用false
           },
           components: {content: () => import('@/views/users/UsersList')}
         },

@@ -37,9 +37,9 @@
     },
     methods: {
       login() {
-        API.login(this.loginInfo)
+        API.login.login(this.loginInfo)
           .then((res)=>{
-              console.log(res.data.state)
+              console.log(res.data.state);
             if (res.data.state==='ok') {
               
               this.$Message.success('登陆成功!');
