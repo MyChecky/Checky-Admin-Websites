@@ -1,7 +1,7 @@
 <template>
   <div>
     <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
-    <Page class="pager" :total="usersSize" :page-size="pageSize"></Page>
+    <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -176,8 +176,11 @@
       this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 80;
     },
     methods:{
-      detail(index){
-        console.log(this.tableData.indexOf(index));
+      // detail(index){
+      //   console.log(this.tableData.indexOf(index));
+      // }
+      changePage(){
+
       }
     }
   }
