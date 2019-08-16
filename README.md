@@ -44,6 +44,9 @@ Vue.prototype.$echarts = echarts
 
 > * asset : 静态文件，包括logo和font-awesome，font-awesome使用参考[font-awesome](http://fontawesome.dashgame.com/)
 > * components>... : 一级组件，一些小的集成组件，例如登陆块，表格，图
+> * mock 
+> > mock.js mock对外导出接口，已在main.js中引用，会根据运行环境不同禁用，前后台开发时，请注释或禁用main.js中的require（mock）
+> > users.js 用户相关接口
 > * newtheme>theme : 新样式文件，目前未使用，less文件编译有问题
 > * router>index ：路由控制
 > * store>index ：本地存储函数，例如登陆状态
@@ -94,3 +97,8 @@ else if (process.env.NODE_ENV === 'production') {// 生产环境
   axios.defaults.baseURL = '';
 }
 ```
+
+### 5. 关于Mock的使用
+
+> Mock是前端调试时生成假数据的依赖项，前端人员可以根据接口文件编写对应数据，在运行时，mock会自动拦截axios(ajax)请求，并返回假数据，具体语法请参考[Mock.js](http://mockjs.com/examples.html)
+**Mock会拦截请求，故在前后台测试时请注释或禁用main.js中的引用部分**
