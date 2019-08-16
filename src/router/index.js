@@ -30,6 +30,15 @@ export default new Router({
           components: {content: () => import('@/views/users/UsersList')}
         },
         {
+          path: 'users/:userId',
+          name: 'detail',
+          meta: {
+            title: '',
+            auth: false // 开发时用false
+          },
+          components: {content: () => import('@/views/users/UserDetail')}
+        },
+        {
           path: 'essays',
           name: 'essays',
           meta: {

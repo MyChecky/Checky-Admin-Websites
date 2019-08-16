@@ -13,7 +13,7 @@ const UsersList = {
         "userTime|1": "@date('yyyy-MM-dd')",
         "taskNum|0-9": 1,
         "superviseNum|0-9": 1,
-        "credit|1-5": 0
+        "userCredit|1-100": 0
       }
     ]
   }).users

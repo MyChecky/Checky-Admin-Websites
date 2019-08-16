@@ -8,7 +8,7 @@
           <Button class="quit-button" @click="quit">注销</Button>
         </div>
         <div class="avatar-div">
-          <img src="" alt="avatar" class="avatar">
+          欢迎你：{{}}
         </div>
       </div>
     </div>
@@ -20,7 +20,6 @@
         name: "Header",
       data(){
           return{
-
           }
       },
       methods:{
