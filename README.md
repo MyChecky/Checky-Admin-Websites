@@ -101,4 +101,9 @@ else if (process.env.NODE_ENV === 'production') {// 生产环境
 ### 5. 关于Mock的使用
 
 > Mock是前端调试时生成假数据的依赖项，前端人员可以根据接口文件编写对应数据，在运行时，mock会自动拦截axios(ajax)请求，并返回假数据，具体语法请参考[Mock.js](http://mockjs.com/examples.html)
-**Mock会拦截请求，故在前后台测试时请注释或禁用main.js中的引用部分**
+> **Mock会拦截请求，故在前后台测试时请注释或禁用main.js中的引用部分**
+
+### 6. 开发时路由跳转权限
+
+> router>index.js>routes 中每一个路由对象（包括子路由对象）中`meta:{auth:[true|false]}`设置为true表示该页面需要登录权限，false不需要
+> 前端人员开发时根据需要修改跳转权限，方便调试
