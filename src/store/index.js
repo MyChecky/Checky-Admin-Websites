@@ -54,6 +54,8 @@ const store = new Vuex.Store({
       state.isLogin = '0'
       localStorage.removeItem(key)
       localStorage.removeItem(isLogin)
+      localStorage.removeItem('userId')
+      localStorage.removeItem('sessionKey')
     }
   }
 });

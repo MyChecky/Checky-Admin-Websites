@@ -104,14 +104,14 @@
         });
         columns.push({
           title: '信用',
-          key: 'credit',
+          key: 'userCredit',
           sortable: true,
           render: (h,params)=>{
             return h(
               Credit,
               {
                 props:{
-                  score: params.row.credit
+                  score: Math.round(params.row.userCredit / 20)
                 }
               }
             )
