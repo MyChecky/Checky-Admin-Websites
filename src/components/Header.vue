@@ -24,12 +24,14 @@
       },
       methods:{
         quit(){
-          API.logout({sessionKey:this.$Store.getter.getAttr('sessionKey')})
+          API.login.logout({sessionKey:this.$Store.getters.getAttr('sessionKey')})
           .then((res)=>{
             this.$Store.commit('$_removeStorage');
             this.$router.push('/login');  
           })
           .catch((res)=>{
+              this.$Store.commit('$_removeStorage');
+            this.$router.push('/login'); 
             console.log(res)
           })
           

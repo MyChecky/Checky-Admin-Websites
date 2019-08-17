@@ -111,7 +111,7 @@
               Credit,
               {
                 props:{
-                  score: Math.round(params.row.userCredit/20)
+                  score: Math.round(params.row.userCredit / 20)
                 }
               }
             )
