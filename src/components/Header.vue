@@ -8,19 +8,22 @@
           <Button class="quit-button" @click="quit">注销</Button>
         </div>
         <div class="avatar-div">
-          欢迎你：{{}}
+          欢迎你：{{username}}
         </div>
       </div>
     </div>
 </template>
 
 <script>
-    import API from '../utils/api'
     export default {
         name: "Header",
       data(){
           return{
+            username:''
           }
+      },
+      beforeCreate(){
+          this.username = this.$Store.getters.getAttr('user');
       },
       methods:{
         quit(){
@@ -60,10 +63,10 @@
     margin: auto 10px;
   }
   .avatar-div{
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    box-shadow: 1px 1px 2px 0px rgba(100,100,100,0.3);
+    /*border-radius: 50%;*/
+    /*height: 50px;*/
+    /*width: 50px;*/
+    /*box-shadow: 1px 1px 2px 0px rgba(100,100,100,0.3);*/
   }
   .button-bar{
     margin: auto 20px;

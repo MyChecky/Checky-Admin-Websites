@@ -5,17 +5,20 @@ import App from './App'
 import router from './router/index'
 import iView from 'iview/dist/iview'
 import store from './store/index'
-
+import API from './utils/api'
+import * as translator from './utils/translator'
 // 注释以关闭 mock 数据
-// if(process.env.MOCK) require('./mock/mock');
+if(process.env.MOCK) require('./mock/mock');
 
 import  './assets/font-awesome-4.7.0/css/font-awesome.css'
 import  'iview/dist/styles/iview.css'
-// import './newtheme/theme.less' // 覆盖原有默认颜色样式出现less文件加载错误，有谁有能力可以后续解决
+import './newtheme/theme.css' // 覆盖原有默认颜色样式出现less文件加载错误，有谁有能力可以后续解决
 
 Vue.use(iView);
 Vue.use(router);
+Vue.prototype.$api = API;
 Vue.prototype.$Store = store;
+Vue.prototype.$translator = translator;
 Vue.config.productionTip = false;
 
 // 跳转前，判断是否登录

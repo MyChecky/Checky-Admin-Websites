@@ -40,7 +40,7 @@ service.interceptors.response.use(
   },
   error => {
     if (error.response && error.response.status === 404) {
-      router.push('/blank.vue')
+      router.push('/404')
     }else if(error.response && error.response.status === 403){      
       store.commit('$_removeStorage')
       alert('登录失效，请重新登录！')

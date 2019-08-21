@@ -1,6 +1,13 @@
 <template>
   <div>
-    <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
+    <Card>
+      <div class="table-header">
+        <span class="card-title">用户列表</span>
+        <span class="total">总数：{{usersSize}}</span>
+        <div class="search-div"></div>
+      </div>
+      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
+    </Card>
     <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
@@ -111,7 +118,7 @@
               Credit,
               {
                 props:{
-                  score: Math.round(params.row.userCredit / 20)
+                  score: Math.ceil(params.row.userCredit / 20)
                 }
               }
             )
@@ -143,12 +150,7 @@
                 on:{
                   click:(e)=>{// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    console.log(e.target.attributes.userId);
-                    API.users.queryUserInfo(e.target.attributes.userId).then(
-
-                    ).catch(
-
-                    )
+                    this.$router.push(`/users/id=${e.target.attributes.userId.nodeValue}`);
                   }
                 }
               },
@@ -165,7 +167,6 @@
         res.data.users.map(item=>{
           item.userGender = item.userGender===1?'男':'女'
         });
-        console.log(res.data.users);
         this.usersSize = res.data.usersSize;
         this.tableData = res.data.users;
       }).catch((err)=>{
@@ -173,20 +174,33 @@
       })
     },
     mounted(){
-      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 80;
+      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods:{
       // detail(index){
       //   console.log(this.tableData.indexOf(index));
       // }
-      changePage(){
-
+      changePage(e){
+        this.page = e
+        API.users.queryUsersInfo({"page":this.page}).then((res)=>{
+          res.data.users.map(item=>{
+            item.userGender = item.userGender===1?'男':'女'
+          });
+          console.log(res.data.users);
+          this.usersSize = res.data.usersSize;
+          this.tableData = res.data.users;
+        }).catch((err)=>{
+          console.log(err);
+        })
       }
     }
   }
 </script>
 
 <style scoped>
+  .table-header{
+    margin-bottom: 10px
+  }
   .table{
     margin: auto 0px;
     height: 100%;
@@ -196,5 +210,11 @@
     flex-direction: row;
     justify-content: center;
     margin: 5px auto;
+  }
+  .card-title{
+    font-weight: 600;
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
   }
 </style>

@@ -7,9 +7,9 @@ const isLogin = 'isLogin';
 const store = new Vuex.Store({
   state () {
     return {
-      user: null,
+      user: null,// 用户名
       isLogin: '0',
-      userId: '',
+      userId: '',// 登录标识
       sessionKey: ''
     }
   },
@@ -40,12 +40,10 @@ const store = new Vuex.Store({
       localStorage.setItem(isLogin, value)
     },
     $_setStorage (state, value) {
-        
       for(var key in value){
         state[key] = value[key]
         localStorage.setItem(key,JSON.stringify(value[key]))
       }
-      
       // state.user = value
       // localStorage.setItem(key, JSON.stringify(value))
     },

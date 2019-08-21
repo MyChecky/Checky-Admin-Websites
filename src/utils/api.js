@@ -4,45 +4,49 @@ import {get, post, deletes, put} from "./axios";
 
 export default {
 // 登录
-  login : {
+  login: {
     // 发送登录信息
     login: (data) => {
       return post('/admin/login', data)
     },
     // 注销
     logout: (data) => {
-      return post('/admin/logout',data)
+      return post('/admin/logout', data)
     }
   },
 // 用户
-  users : {
+  users: {
     // 获取所有用户信息
     queryUsersInfo: (data) => {
-      return post('/admin/user/all',data)
+      return post('/admin/user/all', data)
     },
     // 查询单个用户详情
-    queryUserInfo: (data) =>{
-      return post('/admin/user/query',data)
+    queryUserInfo: (data) => {
+      return post('/admin/user/query', data)
+    },
+    // 查询单个用户任务
+    queryUserTask: (data) => {
+      return post('/admin/tasks', data)
     }
   },
 // 动态
-  essays : {
-
-  },
+  essays: {},
 // 任务
-  tasks : {
-
+  tasks: {
+    // 获取任务类型
+    queryType: (data) => {
+      return post('/taskType/allType',data)
+    }
   },
 // 资金
-  money : {
-
+  money: {
+    // 获取单个用户资金记录
+    queryUserMoneyFlow: (data) =>{
+      return post('/admin/moneyFlows',data)
+    }
   },
 // 申诉
-  appeal : {
-
-  },
+  appeal: {},
 // 举报
-  report : {
-
-  }
+  report: {}
 }

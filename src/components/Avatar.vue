@@ -1,5 +1,5 @@
 <template>
-    <div class="avatar-container">
+    <div class="avatar-container" :style="avatarSize">
       <img :src="source" alt="" class="avatar">
     </div>
 </template>
@@ -8,11 +8,16 @@
   export default {
     name: "Avatar",
     props:[
-      "source"
+      "source","size"
     ],
     data(){
       return{
+        avatarSize:''
       }
+    },
+    beforeMount(){
+      if (this.size)
+        this.avatarSize = `width:${this.size}px;height:${this.size}px;`
     }
   }
 </script>

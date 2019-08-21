@@ -1,34 +1,381 @@
 <template>
-    <div class="container">
-      <div class="basic-div">
-        <Card></Card>
-        <Card></Card>
-        <Card></Card>
+  <div class="container">
+    <div v-if="exist">
+      <div class="inner-div">
+        <Card>
+          <span class="card-title">基本信息</span>
+          <div class="inner-card">
+            <Avatar :source="userInfo.userAvatar" :size="80"></Avatar>
+            <div class="info-div">
+              <span class="info-item">ID：{{userInfo.userId}}</span>
+              <span class="info-item">昵称：{{userInfo.userName}}</span>
+              <span class="info-item">性别：{{userInfo.userGender===1?'男':'女'}}<i
+                :class="['fa',userInfo.userGender===1?'fa-mars':'fa-venus',userInfo.userGender===1?'mars':'venus']"></i></span>
+              <span class="info-item">创建时间：{{userInfo.userTime}}</span>
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <span class="card-title">兴趣爱好</span>
+          <div class="inner-card"></div>
+        </Card>
+        <Card>
+          <div style="display: flex;flex-direction: column;justify-content: space-between;height: 100%;">
+            <span class="card-title">信用评分</span>
+            <span class="credit-span">评分：{{userInfo.userCredit}}</span>
+            <Credit v-if='score>=0' size="large" :score="score"></Credit>
+            <div class="credit-button-div">
+              <button class="op-button">举报/申诉</button>
+              <button class="fa fa-eye op-button disabled">恢复</button>
+              <button class="fa fa-exclamation-circle op-button cancel">屏蔽用户</button>
+            </div>
+          </div>
+        </Card>
       </div>
-      <div class="money-flow">
-        <div class="chart"></div>
-        <div class="record"></div>
+      <div class="inner-div">
+        <Card class="others">
+          <div class="table-header">
+            <span class="card-title">资金记录</span>
+            <span class="total">总数：{{money.length}}</span>
+            <div class="search-div"></div>
+          </div>
+          <div class="task-list">
+            <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
+                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
+                   :columns="moneyColumns"></Table>
+          </div>
+        </Card>
       </div>
-      <div class="others">
-        <div class="relation"></div>
-        <div class="task-list"></div>
+      <div class="inner-div">
+        <Card class="others">
+          <div class="table-header">
+            <span class="card-title">任务列表</span>
+            <span class="total">总数：{{tasks.length}}</span>
+            <div class="search-div"></div>
+          </div>
+          <div class="task-list">
+            <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
+                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tasks"
+                   :columns="taskColumns"></Table>
+          </div>
+        </Card>
       </div>
     </div>
+    <div v-else>
+      <div class="notice">
+        <i class="fa fa-question-circle"></i>
+        <span class="tag">用户不存在</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "UserDetail"
+  import Avatar from '../../components/Avatar'
+  import Credit from '../../components/Credit'
+  import SearchBar from '../../components/SearchBar'
+  import MoneyTag from '../../components/MoneyTag'
+  export default {
+    name: "UserDetail",
+    components: {
+      Avatar: Avatar,
+      Credit: Credit,
+      SearchBar: SearchBar,
+      MoneyTag: MoneyTag
+    },
+    data() {
+      return {
+        showBorder: false,
+        showStripe: false,
+        showHeader: true,
+        showIndex: false,
+        showCheckbox: false,
+        fixedHeader: false,
+        tableHeight: 400,
+        pageSize: 10,
+        tableSize: 'default',
+        exist: true,
+        score: -1,
+        userInfo: {},
+        tasks: [],
+        money: []
+      }
+    },
+    computed: {
+      taskColumns() {
+        let columns = [];
+        if (this.showCheckbox) {
+          columns.push({
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          })
+        }
+        if (this.showIndex) {
+          columns.push({
+            type: 'index',
+            width: 60,
+            align: 'center'
+          })
+        }
+        columns.push({
+          title: 'ID',
+          key: 'taskId'
+        });
+        columns.push({
+          title: '标题',
+          key: 'taskTitle'
+        });
+        columns.push({
+          title: '类型',
+          key: 'typeId',
+          align: 'center'
+        });
+        columns.push({
+          title: '状态',
+          key: 'taskState',
+          align: 'center',
+          filterMultiple: false,
+          filters: [
+            {
+              label: '进行中',
+              value: '进行中'
+            },
+            {
+              label: '未知',
+              value: '未知'
+            },
+            {
+              label: '成功',
+              value: '成功'
+            },
+            {
+              label: '失败',
+              value: '失败'
+            }
+          ],
+          filterMethod(value, row) {
+            return row.taskState === value;
+          }
+        });
+        columns.push({
+          title: '开始时间',
+          key: 'taskStartTime',
+          align: 'center',
+          sortable: true
+        });
+        columns.push({
+          title: '结束时间',
+          key: 'taskEndTime',
+          align: 'center',
+          sortable: true
+        });
+        return columns;
+      },
+      moneyColumns() {
+        let columns = [];
+        if (this.showCheckbox) {
+          columns.push({
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          })
+        }
+        if (this.showIndex) {
+          columns.push({
+            type: 'index',
+            width: 60,
+            align: 'center'
+          })
+        }
+        columns.push({
+          title: 'ID',
+          key: 'flowId'
+        });
+        columns.push({
+          title: '任务',
+          key: 'taskId'
+        });
+        columns.push({
+          title: '来源',
+          key: 'fromUserId'
+        });
+        columns.push({
+          title: '去向',
+          key: 'toUserId',
+        });
+        columns.push({
+          title: '金额',
+          key: 'flowMoney',
+          render: (h, params) => {
+            return h(
+              MoneyTag,
+              {
+                props:{
+                  money: params.row.flowMoney
+                }
+              }
+            )
+          }
+        });
+        columns.push({
+          title: '时间',
+          key: 'flowTime',
+          align: 'center',
+          sortable: true
+        });
+        return columns;
+      }
+    },
+    beforeMount() {
+      let id = this.$route.params.userId;
+      console.log(`查询用户:${id}`);
+      this.$api.users.queryUserInfo(id)
+        .then((res) => {
+          console.log(res);
+          this.userInfo = res.data.userInfo;
+          this.score = Math.ceil(this.userInfo.userCredit / 20);
+        }).catch((err) => {
+        console.log(err)
+      })
+      this.$api.users.queryUserTask(id)
+        .then((res) => {
+          res.data.tasks.map(item => {
+            item.taskState = this.$translator.translator('taskState', item.taskState)
+            item.taskType = this.$translator.translator('taskType', item.taskType)
+          })
+          console.log(res)
+          this.tasks = res.data.tasks
+        }).catch((err) => {
+        console.log(err)
+      })
+      this.$api.money.queryUserMoneyFlow(id)
+        .then((res) => {
+          this.money = res.data.moneyFlows
+        }).catch((err) => {
+        console.log(err)
+      })
+    },
+    methods: {
+      search(keyword) {
+      }
     }
+  }
 </script>
 
 <style scoped>
-.container{
-  display: flex;
-  flex-direction: column;
-}
-  .basic-div{
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inner-div {
     display: flex;
     justify-content: space-between;
+    margin: 15px auto;
+    padding: 0px 10px;
+    width: 100%;
+  }
+
+  .table-header {
+    margin-bottom: 10px
+  }
+
+  .notice {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 5px;
+    width: 300px;
+    height: 100px;
+    color: #e83015;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tag {
+    margin: auto 20px;
+    color: #999999;
+  }
+
+  .card-title {
+    font-weight: 600;
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .inner-card {
+    flex-grow: 2;
+    display: flex;
+    margin: 5px;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .info-div {
+    padding: 5px;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-item {
+    margin: 5px 2px;
+  }
+
+  .mars {
+    margin: auto 10px;
+    font-weight: 600;
+    color: #2b85e4;
+  }
+
+  .venus {
+    margin: auto 10px;
+    font-weight: 600;
+    color: deeppink;
+  }
+
+  .credit-span {
+    padding: 2px 8px;
+  }
+
+  .credit-button-div {
+    padding-left: 3px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .op-button {
+    padding: 5px 10px;
+    background-color: #2b85e4;
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    margin: 0px 5px;
+  }
+
+  .cancel {
+    background-color: #e83015;
+  }
+
+  .disabled {
+    background-color: #999999;
+  }
+
+  .money-flow {
+    display: flex;
+    width: 100%;
+  }
+
+  .others {
+    display: flex;
+    width: 100%;
   }
 </style>

@@ -1,0 +1,13 @@
+/*@import "~iview/src/styles/index.less";*/
+*{
+  outline: none;
+}
+.ivu-table:after,.ivu-table:before,.ivu-table-wrapper{
+  border: none!important;
+  background-color: #fff;
+}
+
+.ivu-card-body {
+  height: 100%;
+  width: 100%;
+}
