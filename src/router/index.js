@@ -15,7 +15,7 @@ export default new Router({
       path: '/',
       name: 'home',
       meta: {
-        auth: true // 开发时用false
+        auth: false // 开发时用false
       },
       redirect: 'users',
       components: {container: () => import('@/views/RouterView')},
@@ -25,7 +25,7 @@ export default new Router({
           name: 'users',
           meta: {
             title: '',
-            auth: true // 开发时用false
+            auth: false // 开发时用false
           },
           components: {content: () => import('@/views/users/UsersList')}
         },
@@ -61,7 +61,7 @@ export default new Router({
           name: 'task-list',
           meta: {
             title: '',
-            auth: true
+            auth: false
           },
           components: {content: () => import('@/views/tasks/TasksList')}
         },

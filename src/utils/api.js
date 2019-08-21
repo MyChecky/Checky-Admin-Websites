@@ -31,6 +31,9 @@ export default {
   },
 // 任务
   tasks : {
+    getTasks: (data) => {
+      return post('/admin/tasks',data)
+    }
 
   },
 // 资金

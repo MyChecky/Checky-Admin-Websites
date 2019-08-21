@@ -7,7 +7,7 @@ import iView from 'iview/dist/iview'
 import store from './store/index'
 
 // 注释以关闭 mock 数据
-// if(process.env.MOCK) require('./mock/mock');
+if(process.env.MOCK) require('./mock/mock');
 
 import  './assets/font-awesome-4.7.0/css/font-awesome.css'
 import  'iview/dist/styles/iview.css'
