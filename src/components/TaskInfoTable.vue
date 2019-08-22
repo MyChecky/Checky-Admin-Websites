@@ -9,6 +9,7 @@
   import API from '../utils/api'
   import Credit from '../components/Credit'
   import Avatar from '../components/Avatar'
+  import router from '../router/index'
   export default {
     name: "UsersInfoTable",
     components: {Credit: Credit,Avatar: Avatar},
@@ -78,11 +79,7 @@
                   click:(e)=>{// 点击事件， e 为事件参数
                     e.stopPropagation();
                     console.log(e.target.attributes.userId);
-                    API.users.queryUserInfo(e.target.attributes.userId).then(
-
-                    ).catch(
-
-                    )
+                    router.push('/users/id='+this.tableData[params.index].userId)
                   }
                 }
               },
@@ -117,13 +114,13 @@
         columns.push({
           title: '开始时间',
           key: 'taskStartTime',
-          width: 100,
+          width: 120,
           sortable: true
         });
         columns.push({
           title: '结束时间',
           key: 'taskEndTime',
-          width: 100,
+          width: 120,
           sortable: true
         });
        
@@ -202,10 +199,8 @@
     beforeMount: function(){
       // 请求所有用户信息
       API.tasks.getTasks({"page":this.page}).then((res)=>{
-        var userNameMapping = res.data.userNames  
         res.data.tasks.map(item=>{
           item.taskState = this.stateMapping[item.taskState]
-          item.userName = userNameMapping[item.userId]
         });
         console.log(res.data.tasks);
         // this.usersSize = res.data.usersSize;
