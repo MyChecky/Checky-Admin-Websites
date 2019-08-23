@@ -70,7 +70,7 @@ export default new Router({
           name: 'task-list',
           meta: {
             title: '',
-            auth: true
+            auth: false
           },
           components: {content: () => import('@/views/tasks/TasksList')}
         },

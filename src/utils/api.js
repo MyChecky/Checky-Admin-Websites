@@ -32,7 +32,10 @@ export default {
 // 动态
   essays: {},
 // 任务
-  tasks: {
+  tasks : {
+    getTasks: (data) => {
+      return post('/admin/tasks',data)
+    },
     // 获取任务类型
     queryType: (data) => {
       return post('/taskType/allType',data)
