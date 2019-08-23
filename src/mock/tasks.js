@@ -180,7 +180,29 @@ const TaskType = Mock.mock({
 const UserDetail = {
 
 };
+
+const taskDetail = {
+   task: {
+      "taskId":"02ea8987-6374-4bbd-b517-01b5159bd08e",
+      "userId":"oM2yQ4jR0La_jZ8hyxkERsqNTh_8",
+      "userName":"Yeung！",
+      "typeId":"1747492e-1dd8-4975-82f8-32b204e49891",
+      "taskTitle":"带权限任务测试",
+      "taskContent":"踩踩踩踩踩踩踩踩踩踩踩踩从",
+      "taskStartTime":"2019-07-24",
+      "taskEndTime":"2019-09-24",
+      "taskState":"during",
+      "taskMoney":200.0,
+      "supervisorNum":3,
+      "refundMoney":0.0,
+      "checkTimes":54,
+      "checkNum":0,
+      "checkFrec":"1101111",
+      "matchNum":0
+   },
+   state: "OK"
+}
 export {
-  TasksList, UserDetail, TaskType
+  TasksList, taskDetail, TaskType
 }
 

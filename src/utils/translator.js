@@ -19,6 +19,11 @@ const dictionary = {
     "fail":"失败",
     "success":"完成",
     "during":"进行中"
+  },
+  "checkState":{
+    "unknown":"未判定",
+    "pass": "已通过",
+    "deny": "不通过"
   }
 };
 const translator = function (dataType,value) {

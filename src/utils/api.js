@@ -39,8 +39,23 @@ export default {
     // 获取任务类型
     queryType: (data) => {
       return post('/taskType/allType',data)
+    },
+
+    queryTask: data => {
+      return post('/task/queryTask',data)
+    },
+
+    getTaskSupervisors: data => {
+      return post('/admin/supervisors',data)
     }
   },
+
+  checks : {
+    getTaskChecks: data => {
+      return post('/admin/checks',data)
+    }
+  },
+
 // 资金
   money: {
     // 获取单个用户资金记录

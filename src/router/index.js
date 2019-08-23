@@ -75,6 +75,15 @@ export default new Router({
           components: {content: () => import('@/views/tasks/TasksList')}
         },
         {
+          path: 'tasks/id=:taskId',
+          name: 'task-list',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/tasks/TaskDetail')}
+        },
+        {
           path: 'tasks/type',
           name: 'type',
           meta: {
