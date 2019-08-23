@@ -48,7 +48,7 @@ const UserTask = Mock.mock({
       "taskStartTime": "@date('yyyy-MM-dd')",
       "taskEndTime": "@date('yyyy-MM-dd')",
       "taskState|1": [
-        "during", "unknown", "fail", "success"
+        "during", "nomatch", "fail", "success"
       ],
       "taskMoney|0-200.1-2": 1,
       "supervisorNum|1-10": 1,

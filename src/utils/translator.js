@@ -15,7 +15,7 @@ const dictionary = {
     2: '女'
   },
   "taskState":{
-    "unknown":"未知",
+    "nomatch":"未匹配",
     "fail":"失败",
     "success":"完成",
     "during":"进行中"

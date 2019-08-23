@@ -37,7 +37,7 @@
           <div class="table-header">
             <span class="card-title">资金记录</span>
             <span class="total">总数：{{money.length}}</span>
-            <div class="search-div"></div>
+            <div class="search-div"><SearchBar></SearchBar></div>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
@@ -51,7 +51,7 @@
           <div class="table-header">
             <span class="card-title">任务列表</span>
             <span class="total">总数：{{tasks.length}}</span>
-            <div class="search-div"></div>
+            <div class="search-div"><SearchBar></SearchBar></div>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
@@ -138,8 +138,8 @@
           filterMultiple: false,
           filters: [
             {
-              label: '进行中',
-              value: '进行中'
+              label: '未匹配',
+              value: '未匹配'
             },
             {
               label: '未知',
@@ -278,9 +278,15 @@
   }
 
   .table-header {
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
   }
-
+  .search-div{
+    flex-grow: 5;
+    display: flex;
+    justify-content: flex-end;
+  }
   .notice {
     position: absolute;
     left: 50%;
@@ -306,7 +312,7 @@
     font-weight: 600;
     color: #333;
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-right: 10px;
   }
 
   .inner-card {
@@ -356,7 +362,7 @@
     background-color: #2b85e4;
     color: #fff;
     border: none;
-    border-radius: 2px;
+    border-radius: 3px;
     cursor: pointer;
     margin: 0px 5px;
   }

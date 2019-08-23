@@ -8,7 +8,7 @@ import store from './store/index'
 import API from './utils/api'
 import * as translator from './utils/translator'
 // 注释以关闭 mock 数据
-if(process.env.MOCK) require('./mock/mock');
+// if(process.env.MOCK) require('./mock/mock');
 
 import  './assets/font-awesome-4.7.0/css/font-awesome.css'
 import  'iview/dist/styles/iview.css'
@@ -23,6 +23,7 @@ Vue.config.productionTip = false;
 
 // 跳转前，判断是否登录
 router.beforeEach((to, from, next) => {
+  iView.LoadingBar.start();
   if (to.matched.some(m => m.meta.auth)) {
     if (window.localStorage.isLogin === '1') {
       // 已登录直接跳转
@@ -30,6 +31,7 @@ router.beforeEach((to, from, next) => {
     } else if (to.path !== '/login') {
       // 未登录跳转到login
       Vue.prototype.$Message.error('检测到您还未登录,请登录后操作！');
+      iView.LoadingBar.error()
       setTimeout(()=>{
         next({path: '/login'});
       },800)
@@ -41,6 +43,7 @@ router.beforeEach((to, from, next) => {
 });
 // 跳转后函数
 router.afterEach((to, from) => {
+  iView.LoadingBar.finish()
   console.log('跳转到：'+to.name);
 });
 
