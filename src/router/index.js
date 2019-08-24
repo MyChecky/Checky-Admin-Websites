@@ -43,7 +43,7 @@ export default new Router({
           name: 'essays',
           meta: {
             title: '',
-            auth: true
+            auth: false
           },
           components: {content: () => import('@/views/essays/EssaysList')}
         },
@@ -88,7 +88,7 @@ export default new Router({
           name: 'type',
           meta: {
             title: '',
-            auth: true
+            auth: false
           },
           components: {content: () => import('@/views/tasks/TasksType')}
         },
@@ -97,7 +97,7 @@ export default new Router({
           name: 'appeal',
           meta: {
             title: '',
-            auth: true
+            auth: false
           },
           components: {content: () => import('@/views/appeal/AppealList')}
         },
@@ -106,7 +106,7 @@ export default new Router({
           name: 'report',
           meta: {
             title: '',
-            auth: true
+            auth: false
           },
           components: {content: () => import('@/views/report/ReportList')}
         }

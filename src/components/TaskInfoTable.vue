@@ -180,12 +180,7 @@
                 on:{
                   click:(e)=>{// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    console.log(e.target.attributes.userId);
-                    API.users.queryUserInfo(e.target.attributes.userId).then(
-
-                    ).catch(
-
-                    )
+                    this.$router.push('/tasks/id='+this.tableData[params.index].taskId)
                   }
                 }
               },

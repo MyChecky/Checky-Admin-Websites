@@ -24,6 +24,10 @@ const dictionary = {
     "unknown":"未判定",
     "pass": "已通过",
     "deny": "不通过"
+  },
+  "reportType":{
+    0:"动态",
+    1:"用户"
   }
 };
 const translator = function (dataType,value) {

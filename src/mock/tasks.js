@@ -202,7 +202,20 @@ const taskDetail = {
    },
    state: "OK"
 }
+
+const SuggestionList = Mock.mock({
+   state: 'ok',
+   'suggestions|1-10': [{
+      'suggestionId|1':'@guid',
+      'userId|1':'@guid',
+      'userName|1':'@name',
+      'suggestionContent|2-5': '@cword',
+      'suggestionTime|1' : "@date('yyyy-MM-dd hh:mm:ss')",
+
+   }]
+})
+
 export {
-  TasksList, taskDetail, TaskType
+  TasksList, taskDetail, TaskType, SuggestionList
 }
 

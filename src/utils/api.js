@@ -30,7 +30,11 @@ export default {
     }
   },
 // 动态
-  essays: {},
+  essays: {
+    getEssays : data=>{
+      return post('/admin/essays',data)
+    }
+  },
 // 任务
   tasks : {
     getTasks: (data) => {
@@ -39,6 +43,10 @@ export default {
     // 获取任务类型
     queryType: (data) => {
       return post('/taskType/allType',data)
+    },
+
+    queryTypeSuggestion: data =>{
+      return post('/taskType/suggestions',data)
     },
 
     queryTask: data => {
@@ -64,7 +72,15 @@ export default {
     }
   },
 // 申诉
-  appeal: {},
+  appeal: {
+    getAppeals: data =>{
+      return post('/admin/appeals',data)
+    }
+  },
 // 举报
-  report: {}
+  report: {
+    getReports: data => {
+      return post('/admin/reports',data)
+    }
+  }
 }

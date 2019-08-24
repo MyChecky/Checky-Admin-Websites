@@ -230,11 +230,7 @@
                   click:(e)=>{// 点击事件， e 为事件参数
                     e.stopPropagation();
                     console.log(e.target.attributes.checkId);
-                    API.users.queryUserInfo(e.target.attributes.checkId).then(
-
-                    ).catch(
-
-                    )
+                    
                   }
                 }
               },
@@ -260,6 +256,7 @@
         taskId: id  
       })
       .then((res)=>{
+        console.log(res.data)
         this.supervisors = res.data.supervisors
       })
       .catch((err)=>{
@@ -270,7 +267,7 @@
         taskId: id
       })
       .then((res)=>{
-        console.log(res.data.checks)
+        console.log(res.data)
         this.checks = res.data.checks
         this.checks.map((item)=>{
           item.checkState = this.$translator.translator('checkState',item.checkState)
