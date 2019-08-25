@@ -169,8 +169,7 @@ const TasksList = {
    ]
 }
 const TaskType = Mock.mock({
-  status: 'OK',
-  "types|1-5": [
+  "taskTypes|1-10":[
     {
       "typeId": "@guid",
       'typeContent': "@cword(2,3)"

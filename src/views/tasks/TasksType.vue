@@ -180,7 +180,7 @@
       this.$api.tasks.queryType({})
         .then((res)=>{
           console.log(res.data)
-            this.types = res.data
+            this.types = res.data.taskTypes? res.data.taskTypes:res.data
             
         })
         .catch(err=>{
@@ -201,16 +201,7 @@
       // }
       changePage(e){
         this.page = e
-        API.users.queryUsersInfo({"page":this.page}).then((res)=>{
-          res.data.users.map(item=>{
-            item.userGender = item.userGender===1?'男':'女'
-          });
-          console.log(res.data.users);
-          this.usersSize = res.data.usersSize;
-          this.tableData = res.data.users;
-        }).catch((err)=>{
-          console.log(err);
-        })
+        
       }
     }
   }

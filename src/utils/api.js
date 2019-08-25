@@ -69,6 +69,10 @@ export default {
     // 获取单个用户资金记录
     queryUserMoneyFlow: (data) =>{
       return post('/admin/moneyFlows',data)
+    },
+
+    queryAllMoneyFlow: data => {
+      return post('/admin/moneyFlows/all',data)
     }
   },
 // 申诉

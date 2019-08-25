@@ -57,13 +57,13 @@ export default new Router({
           components: {content: () => import('@/views/money/Chart')}
         },
         {
-          path: 'money/payback',
-          name: 'payback',
+          path: 'money/moneyFlow',
+          name: 'moneyFlow',
           meta: {
             title: '',
-            auth: true
+            auth: false
           },
-          components: {content: () => import('@/views/money/PayBack')}
+          components: {content: () => import('@/views/money/moneyFlow')}
         },
         {
           path: 'tasks/list',

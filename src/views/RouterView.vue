@@ -23,9 +23,9 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-bar-chart"></span>
             <div :class="[display,'item-tag']">统计图</div>
           </MenuItem>
-          <MenuItem name="payback" key="3-2" to="/money/payback">
+          <MenuItem name="moneyFlow" key="3-2" to="/money/moneyFlow">
             <span :style="iconSize" class="item-icon fa fa-fw fa-refresh"></span>
-            <div :class="[display,'item-tag']">退还管理</div>
+            <div :class="[display,'item-tag']">流水记录</div>
           </MenuItem>
         </Submenu>
         <Submenu name="tasks" key="4">

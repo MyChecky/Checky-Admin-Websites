@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 
 const AppealList = Mock.mock({
     state:'ok',
-    'appeals|1-10': [{
+    'appeals|1-8': [{
         'appealId|1':'@guid',
         'userId':'@guid',
         'userName':'@cname',

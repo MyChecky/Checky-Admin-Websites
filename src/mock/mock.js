@@ -27,6 +27,11 @@ mock.mock(`${base}/taskType/allType`,'post',()=>{
 mock.mock(`${base}/admin/moneyFlows`,'post',()=>{
   return money.UserMoney
 })
+
+mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
+  return money.MoneyFlowList
+})
+
 mock.mock(`${base}/admin/task/tasks`,'post',() => {
   return tasks.TasksList
 })
