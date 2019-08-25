@@ -98,7 +98,8 @@
         score: -1,
         userInfo: {},
         tasks: [],
-        money: []
+        money: [],
+        page: -1
       }
     },
     computed: {
@@ -229,16 +230,22 @@
     },
     beforeMount() {
       let id = this.$route.params.userId;
+      
       console.log(`查询用户:${id}`);
-      this.$api.users.queryUserInfo(id)
+      this.$api.users.queryUserInfo({
+        userId:id,
+      })
         .then((res) => {
           console.log(res);
-          this.userInfo = res.data.userInfo;
+          this.userInfo = res.data.user;
           this.score = Math.ceil(this.userInfo.userCredit / 20);
         }).catch((err) => {
         console.log(err)
       })
-      this.$api.users.queryUserTask(id)
+      this.$api.users.queryUserTask({
+        userId:id,
+        page:this.page
+      })
         .then((res) => {
           res.data.tasks.map(item => {
             item.taskState = this.$translator.translator('taskState', item.taskState)
@@ -249,7 +256,10 @@
         }).catch((err) => {
         console.log(err)
       })
-      this.$api.money.queryUserMoneyFlow(id)
+      this.$api.money.queryUserMoneyFlow({
+        userId:id,
+        page:this.page
+      })
         .then((res) => {
           this.money = res.data.moneyFlows
         }).catch((err) => {

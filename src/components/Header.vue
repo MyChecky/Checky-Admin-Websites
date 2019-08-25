@@ -27,7 +27,7 @@
       },
       methods:{
         quit(){
-          API.login.logout({sessionKey:this.$Store.getters.getAttr('sessionKey')})
+          this.$api.login.logout({sessionKey:this.$Store.getters.getAttr('sessionKey')})
           .then((res)=>{
             this.$Store.commit('$_removeStorage');
             this.$router.push('/login');  

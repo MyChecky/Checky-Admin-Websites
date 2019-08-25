@@ -3,7 +3,7 @@
     <Card>
       <div class="table-header">
         <span class="card-title">动态列表</span>
-        <span class="total">总数：{{essaysSize}}</span>
+        <span class="total">总数：{{tableData.length}}</span>
         <div class="search-div"></div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
@@ -139,7 +139,7 @@
       },
     },
     beforeMount: function(){
-      this.$api.essays.getEssays({})
+      this.$api.essays.getEssays({page:this.page})
         .then((res)=>{
           console.log(res.data)
           this.essaysSize = res.data.essaysSize

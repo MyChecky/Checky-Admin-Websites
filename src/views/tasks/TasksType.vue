@@ -180,12 +180,13 @@
       this.$api.tasks.queryType({})
         .then((res)=>{
           console.log(res.data)
-            this.types = res.data.types
+            this.types = res.data
+            
         })
         .catch(err=>{
           
         })
-      this.$api.tasks.queryTypeSuggestion({})
+      this.$api.tasks.queryTypeSuggestion({page:this.page})
         .then((res)=>{
           console.log(res.data)
             this.typeSuggestions = res.data.suggestions

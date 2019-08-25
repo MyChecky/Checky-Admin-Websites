@@ -26,19 +26,19 @@ export default {
     },
     // 查询单个用户任务
     queryUserTask: (data) => {
-      return post('/admin/tasks', data)
+      return post('/admin/task/tasks', data)
     }
   },
 // 动态
   essays: {
     getEssays : data=>{
-      return post('/admin/essays',data)
+      return post('/admin/essay/all',data)
     }
   },
 // 任务
   tasks : {
     getTasks: (data) => {
-      return post('/admin/tasks',data)
+      return post('/admin/task/tasks',data)
     },
     // 获取任务类型
     queryType: (data) => {
@@ -46,21 +46,21 @@ export default {
     },
 
     queryTypeSuggestion: data =>{
-      return post('/taskType/suggestions',data)
+      return post('/admin/suggestion/all',data)
     },
 
     queryTask: data => {
-      return post('/task/queryTask',data)
+      return post('/admin/task/detail',data)
     },
 
     getTaskSupervisors: data => {
-      return post('/admin/supervisors',data)
+      return post('/admin/task/supervisors',data)
     }
   },
 
   checks : {
     getTaskChecks: data => {
-      return post('/admin/checks',data)
+      return post('/admin/task/check',data)
     }
   },
 
@@ -74,13 +74,13 @@ export default {
 // 申诉
   appeal: {
     getAppeals: data =>{
-      return post('/admin/appeals',data)
+      return post('/admin/appeal/all',data)
     }
   },
 // 举报
   report: {
     getReports: data => {
-      return post('/admin/reports',data)
+      return post('/admin/report/all',data)
     }
   }
 }

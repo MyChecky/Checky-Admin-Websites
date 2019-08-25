@@ -27,35 +27,35 @@ mock.mock(`${base}/taskType/allType`,'post',()=>{
 mock.mock(`${base}/admin/moneyFlows`,'post',()=>{
   return money.UserMoney
 })
-mock.mock(`${base}/admin/tasks`,'post',() => {
+mock.mock(`${base}/admin/task/tasks`,'post',() => {
   return tasks.TasksList
 })
 
-mock.mock(`${base}/task/queryTask`,'post',()=>{
+mock.mock(`${base}/admin/task/detail`,'post',()=>{
   return tasks.taskDetail
 })
 
 
-mock.mock(`${base}/admin/supervisors`,'post',()=>{
+mock.mock(`${base}/admin/task/supervisors`,'post',()=>{
   return supervisor.SupervisorsLists
 })
 
-mock.mock(`${base}/admin/checks`,'post',()=>{
+mock.mock(`${base}/admin/task/check`,'post',()=>{
   return check.TaskChecks
 })
 
-mock.mock(`${base}/admin/essays`,'post',()=>{
+mock.mock(`${base}/admin/essay/all`,'post',()=>{
   return essay.EssayList
 })
 
-mock.mock(`${base}/taskType/suggestions`,'post',()=>{
+mock.mock(`${base}/admin/suggestion/all`,'post',()=>{
   return tasks.SuggestionList
 })
 
-mock.mock(`${base}/admin/appeals`,'post',()=>{
+mock.mock(`${base}/admin/appeal/all`,'post',()=>{
   return appeal.AppealList
 })
 
-mock.mock(`${base}/admin/reports`,'post',()=>{
+mock.mock(`${base}/admin/report/all`,'post',()=>{
   return report.ReportList
 })

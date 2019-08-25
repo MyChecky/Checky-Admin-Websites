@@ -159,7 +159,7 @@
 
         columns.push({
           title: '分成',
-          key: 'benifit',
+          key: 'benefit',
           align: 'center',
           sortable: true
         });
@@ -242,18 +242,19 @@
       }
     },
     beforeMount() {
-      let id = this.$route.params.id;
-      this.$api.tasks.queryTask(id)
+      let id = this.$route.params.taskId;
+      this.$api.tasks.queryTask({taskId:id})
         .then((res)=>{
           console.log(res.data)
           this.taskInfo = res.data.task
           this.taskInfo.taskState = this.$translator.translator('taskState',this.taskInfo.taskState)
         })
         .catch((err)=>{
-          exist=false
-        })
+          console.log(err)
+      })
       this.$api.tasks.getTaskSupervisors({
-        taskId: id  
+        taskId: id,
+        page:this.page  
       })
       .then((res)=>{
         console.log(res.data)
@@ -264,7 +265,8 @@
       })
 
       this.$api.checks.getTaskChecks({
-        taskId: id
+        taskId: id,
+        page:this.page
       })
       .then((res)=>{
         console.log(res.data)
