@@ -55,6 +55,10 @@ export default {
 
     getTaskSupervisors: data => {
       return post('/admin/task/supervisors',data)
+    },
+
+    suggestionDeal: data => {
+      return post('/admin/suggestion/deal',data)
     }
   },
 
@@ -79,12 +83,20 @@ export default {
   appeal: {
     getAppeals: data =>{
       return post('/admin/appeal/all',data)
+    },
+
+    deal: data => {
+      return post('/admin/appeal/deal',data)
     }
   },
 // 举报
   report: {
     getReports: data => {
       return post('/admin/report/all',data)
+    },
+
+    deal: data => {
+      return post('/admin/report/deal',data)
     }
   }
 }

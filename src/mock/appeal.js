@@ -14,6 +14,10 @@ const AppealList = Mock.mock({
     }]
 })
 
+const DealResp = Mock.mock({
+    state: 'ok'
+})
+
 export {
-    AppealList
+    AppealList, DealResp
 }

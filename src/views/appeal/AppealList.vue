@@ -114,7 +114,12 @@
                         },
                         on: {
                             click: () => {
-                                this.show(params.index)
+                                this.$api.appeal.deal({
+                                  flag: 0,
+                                  appealId: this.tableData[params.index].appealId
+                                }).then(res=>{
+                                  if(res.data.state === 'ok') this.tableData.splice(params.index,1)
+                                })
                             }
                         }
                     }, '通过'),
@@ -125,7 +130,12 @@
                         },
                         on: {
                             click: () => {
-                                this.remove(params.index)
+                                this.$api.appeal.deal({
+                                  flag: 1,
+                                  appealId: this.tableData[params.index].appealId
+                                }).then(res=>{
+                                  if(res.data.state === 'ok') this.tableData.splice(params.index,1)
+                                })
                             }
                         }
                     }, '拒绝')

@@ -7,7 +7,9 @@ const UserMoney = Mock.mock({
     {
       "flowId":"@guid",
       "fromUserId":"@guid",
+      "fromUserName":"@name",
       "toUserId":"@guid",
+      "toUserName":"@name",
       "taskId":"@guid",
       "flowMoney|0-200.1-2": 1,
       "flowTime":"@date('yyyy-MM-dd')"
