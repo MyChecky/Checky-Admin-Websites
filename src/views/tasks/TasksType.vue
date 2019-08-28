@@ -21,7 +21,6 @@
 </template>
 
 <script>
-  import API from '../../utils/api'
   export default {
     data () {
       return {
@@ -64,7 +63,7 @@
           key: 'typeContent',
           width: 200
         });
-        
+
         columns.push({
           title: '操作',
           key: 'action',
@@ -179,17 +178,19 @@
     beforeMount: function(){
       this.$api.tasks.queryType({})
         .then((res)=>{
-          console.log(res.data)
-            this.types = res.data.taskTypes? res.data.taskTypes:res.data
-            
+          console.log(res.data);
+          this.types = res.data.taskTypes? res.data.taskTypes:res.data;
         })
         .catch(err=>{
-          
-        })
+          console.log(err)
+        });
       this.$api.tasks.queryTypeSuggestion({page:this.page})
         .then((res)=>{
-          console.log(res.data)
-            this.typeSuggestions = res.data.suggestions
+          console.log(res.data);
+          this.typeSuggestions = res.data.suggestions;
+        })
+        .catch(err=>{
+          console.log(err)
         })
     },
     mounted(){
@@ -201,7 +202,6 @@
       // }
       changePage(e){
         this.page = e
-        
       }
     }
   }

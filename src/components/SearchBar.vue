@@ -1,24 +1,34 @@
 <template>
-    <div :class="['container',status?'on':'']">
-      <input type="text" :class="['search-input',status?'on1':'off1']"/>
+    <div :class="['search-container',status?'on':'']">
+      <input type="text" :class="['search-input',status?'on1':'off1']" v-model="keyword"/>
       <button :class="['fa', 'fa-search', 'search-button',status?'on2':'off2']" @click="status=!status"></button>
     </div>
 </template>
 
 <script>
     export default {
-        name: "SearchBar",
+      name: "SearchBar",
+      props:["search"],
       data(){
           return{
             keyword: '',
             status: true
           }
+      },
+      watch:{
+        keyword:{
+          handler:function(){
+            this.search(this.keyword)
+          }
+        }
+      },
+      methods:{
       }
     }
 </script>
 
 <style scoped>
-  .container{
+  .search-container{
     width: auto;
     max-width: 300px;
     display: flex;
@@ -26,11 +36,11 @@
     align-items: center;
     height: 30px;
     border-radius: 15px;
-    padding: 5px;
+    padding: 3px;
     transition: 0.3s  ease-in-out;
   }
-  .container:hover{
-    border: 1px solid dodgerblue;
+  .search-container:hover{
+    box-shadow: 1px 1px 5px 0px rgba(100,100,100,0.3);
   }
   .on{
     border: 1px solid dodgerblue;

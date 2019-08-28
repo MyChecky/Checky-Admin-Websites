@@ -4,7 +4,7 @@
       <div class="table-header">
         <span class="card-title">用户列表</span>
         <span class="total">总数：{{usersSize}}</span>
-        <div class="search-div"></div>
+        <div class="search-div"><SearchBar :search="search"></SearchBar></div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
@@ -13,12 +13,13 @@
 </template>
 
 <script>
+  import SearchBar from '../components/SearchBar'
   import API from '../utils/api'
   import Credit from '../components/Credit'
   import Avatar from '../components/Avatar'
   export default {
     name: "UsersInfoTable",
-    components: {Credit: Credit,Avatar: Avatar},
+    components: {Credit: Credit,Avatar: Avatar,SearchBar:SearchBar},
     data () {
       return {
         showBorder:false,
@@ -163,7 +164,7 @@
     },
     beforeMount: function(){
       // 请求所有用户信息
-      API.users.queryUsersInfo({"page":this.page}).then((res)=>{
+      this.$api.users.queryUsersInfo({"page":this.page}).then((res)=>{
         res.data.users.map(item=>{
           item.userGender = item.userGender===1?'男':'女'
         });
@@ -177,9 +178,17 @@
       this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods:{
-      // detail(index){
-      //   console.log(this.tableData.indexOf(index));
-      // }
+      search:function(keyword){
+        console.log(keyword)
+        this.$api.users.queryByKeyword({page:1,keyword:keyword})
+          .then(res=>{
+            console.log(res)
+            this.tableData = res.data.users
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+      },
       changePage(e){
         this.page = e
         API.users.queryUsersInfo({"page":this.page}).then((res)=>{
@@ -199,7 +208,14 @@
 
 <style scoped>
   .table-header{
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .search-div{
+    flex-grow: 5;
+    display: flex;
+    justify-content: flex-end;
   }
   .table{
     margin: auto 0px;
@@ -211,10 +227,10 @@
     justify-content: center;
     margin: 5px auto;
   }
-  .card-title{
+  .card-title {
     font-weight: 600;
     color: #333;
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-right: 10px;
   }
 </style>

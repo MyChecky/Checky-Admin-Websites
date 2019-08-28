@@ -8,7 +8,7 @@
           <Button class="quit-button" @click="quit">注销</Button>
         </div>
         <div class="avatar-div">
-          欢迎你：{{username}}
+          欢迎你：username
         </div>
       </div>
     </div>
@@ -19,7 +19,7 @@
         name: "Header",
       data(){
           return{
-            username:''
+            username:null
           }
       },
       beforeCreate(){
@@ -30,14 +30,14 @@
           this.$api.login.logout({sessionKey:this.$Store.getters.getAttr('sessionKey')})
           .then((res)=>{
             this.$Store.commit('$_removeStorage');
-            this.$router.push('/login');  
+            this.$router.push('/login');
           })
           .catch((res)=>{
               this.$Store.commit('$_removeStorage');
-            this.$router.push('/login'); 
+            this.$router.push('/login');
             console.log(res)
           })
-          
+
         }
       }
     }

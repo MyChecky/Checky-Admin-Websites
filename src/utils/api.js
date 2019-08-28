@@ -27,6 +27,10 @@ export default {
     // 查询单个用户任务
     queryUserTask: (data) => {
       return post('/admin/task/tasks', data)
+    },
+    // 搜索
+    queryByKeyword: (data) =>{
+      return post('admin/user/queryByKeyWord',data)
     }
   },
 // 动态

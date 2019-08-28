@@ -38,11 +38,14 @@ const UserDetail = Mock.mock({
 const UserTask = Mock.mock({
   state: 'ok',
   type: 'userId',
-  "tasks|5-10": [
+  "tasks|20": [
     {
       "taskId": "@guid",
       "userId": "@guid",
       "typeId": "@guid",
+      "typeContent|1":[
+        "健身","早起","学习","冥想","测试1","测试2","测试3","测试4"
+      ],
       "taskTitle": "@cword(5,10)",
       "taskContent": "@cword(0,100)",
       "taskStartTime": "@date('yyyy-MM-dd')",
@@ -60,7 +63,22 @@ const UserTask = Mock.mock({
     }
   ]
 });
-
+const queryResult = function() {
+  return Mock.mock({
+    "users|5": [
+      {
+        "userId|1": "@guid",
+        "userAvatar": "@dataImage()",
+        "userName|1": "@name",
+        "userGender|1-2": 1,
+        "userTime|1": "@date('yyyy-MM-dd')",
+        "taskNum|0-9": 1,
+        "superviseNum|0-9": 1,
+        "userCredit|1-100": 0
+      }
+    ]
+  });
+};
 export {
-  UsersList, UserDetail, UserTask
+  UsersList, UserDetail, UserTask,queryResult
 }

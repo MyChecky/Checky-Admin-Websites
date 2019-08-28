@@ -17,7 +17,9 @@
         </Card>
         <Card>
           <span class="card-title">兴趣爱好</span>
-          <div class="inner-card"></div>
+          <div style="flex-grow: 2;height: 100%;">
+            <PieChart :width="300" :chartData=tasks></PieChart>
+          </div>
         </Card>
         <Card>
           <div style="display: flex;flex-direction: column;justify-content: space-between;height: 100%;">
@@ -75,13 +77,15 @@
   import Credit from '../../components/Credit'
   import SearchBar from '../../components/SearchBar'
   import MoneyTag from '../../components/MoneyTag'
+  import PieChart from '../../components/PieChart'
   export default {
     name: "UserDetail",
     components: {
       Avatar: Avatar,
       Credit: Credit,
       SearchBar: SearchBar,
-      MoneyTag: MoneyTag
+      MoneyTag: MoneyTag,
+      PieChart: PieChart
     },
     data() {
       return {
@@ -129,7 +133,7 @@
         });
         columns.push({
           title: '类型',
-          key: 'typeId',
+          key: 'typeContent',
           align: 'center'
         });
         columns.push({
@@ -230,7 +234,7 @@
     },
     beforeMount() {
       let id = this.$route.params.userId;
-      
+
       console.log(`查询用户:${id}`);
       this.$api.users.queryUserInfo({
         userId:id,
@@ -249,7 +253,6 @@
         .then((res) => {
           res.data.tasks.map(item => {
             item.taskState = this.$translator.translator('taskState', item.taskState)
-            item.taskType = this.$translator.translator('taskType', item.taskType)
           })
           console.log(res)
           this.tasks = res.data.tasks
