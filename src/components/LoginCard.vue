@@ -41,7 +41,6 @@
           .then((res)=>{
               console.log(res.data.state);
             if (res.data.state==='ok') {
-              
               this.$Message.success('登陆成功!');
               this.$Store.commit('$_setStorage', {
                   user: this.loginInfo.username,

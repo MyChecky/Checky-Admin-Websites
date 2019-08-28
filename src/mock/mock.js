@@ -16,14 +16,16 @@ mock.mock(`${base}/admin/user/all`,'post',()=>{
 mock.mock(`${base}/admin/user/query`,'post',() => {
   return users.UserDetail
 })
-mock.mock(`${base}/admin/tasks`,'post',()=>{
+mock.mock(`${base}/admin/task/tasks`,'post',()=>{
   return users.UserTask
 })
 
 mock.mock(`${base}/taskType/allType`,'post',()=>{
   return tasks.TaskType
 })
-
+mock.mock(`${base}/admin/user/queryByKeyWord`,'post',()=>{
+  return users.queryResult()
+})
 mock.mock(`${base}/admin/moneyFlows`,'post',()=>{
   return money.UserMoney
 })

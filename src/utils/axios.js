@@ -4,7 +4,7 @@ import router from '../router/index'
 import store from '../store/index'
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'http://localhost:8080';
+  axios.defaults.baseURL = 'http://192.168.1.104:8080';
 }
 else if (process.env.NODE_ENV === 'debug') {
   axios.defaults.baseURL = '';
@@ -41,7 +41,7 @@ service.interceptors.response.use(
   error => {
     if (error.response && error.response.status === 404) {
       router.push('/404')
-    }else if(error.response && error.response.status === 403){      
+    }else if(error.response && error.response.status === 403){
       store.commit('$_removeStorage')
       alert('登录失效，请重新登录！')
       router.push('/login')

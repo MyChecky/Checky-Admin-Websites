@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="refresh">
+  <div class="credit-container" v-if="refresh">
     <div class="score" v-for="item of spanList"
          :class="[size,item===1?'scored':'un-scored',item===1&&score===1?'warning':'',item===1&&score<=3?'info':'']"></div>
   </div>
@@ -33,7 +33,7 @@
 </script>
 
 <style scoped>
-  .container {
+  .credit-container {
     display: flex;
     flex-direction: row;
   }
