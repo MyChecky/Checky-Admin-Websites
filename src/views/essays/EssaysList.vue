@@ -14,7 +14,11 @@
 
 <script>
   import API from '../../utils/api'
+  import PicViewer from '../../components/PicViewer'
   export default {
+    components:{
+      PicViewer:PicViewer
+    },
     data () {
       return {
         showBorder:false,
@@ -61,7 +65,7 @@
         columns.push({
           title: '文本',
           key: 'essayContent',
-          width: 400,
+          width: 250,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -77,9 +81,9 @@
                   }
               }, this.tableData[params.index].essayContent)
           ]);
-            
+
         }
-          
+
         });
         columns.push({
           title: '时间',
@@ -87,11 +91,17 @@
           sortable: true,
           width: 200
         });
-        // columns.push({
-        //   title: '附件',
-        //   key: 'userTime',
-        //   sortable: true
-        // });
+        columns.push({
+          title: '附件',
+          key: '',
+          render: (h,params) => {
+            return h(
+              PicViewer,{
+
+              }
+            )
+          }
+        });
         columns.push({
           title: '点赞数',
           key: 'likeNum',
@@ -100,7 +110,6 @@
           title: '评论数',
           key: 'commentNum',
         });
-        
         columns.push({
           title: '操作',
           key: 'action',
@@ -111,27 +120,27 @@
               {
                 style:{
                   padding: '5px 10px',
-                  backgroundColor: '#2b85e4',
+                  backgroundColor: '#e83015',
                   color: '#fff',
                   border: 'none',
                   borderRadius: '2px',
                   cursor: 'pointer'
                 },
                 domProps: {
-                  innerText: '详情'
+                  innerText: '删除'
                 },
-                class:['fa','fa-caret-right'],
+                class:['fa','fa-trash-o'],
                 attrs: {
                   userId: this.tableData[params.index].essayId,
                 },
                 on:{
                   click:(e)=>{// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    this.$router.push(`/users/id=${e.target.attributes.essayId.nodeValue}`);
+                   console.log(e.target.attributes.essayId.nodeValue);
                   }
                 }
               },
-              "详情"
+              "删除"
             );
           }
         });

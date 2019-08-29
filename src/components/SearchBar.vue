@@ -12,13 +12,25 @@
       data(){
           return{
             keyword: '',
-            status: true
+            status: true,
+            timer:null
           }
       },
       watch:{
         keyword:{
           handler:function(){
-            this.search(this.keyword)
+            // 通过计时器减少请求次数
+            if(this.timer){
+              clearTimeout(this.timer);
+            }
+            if(this.keyword){
+              this.timer = setTimeout(() => {
+                this.search(this.keyword,1)
+              }, 500)
+            }else{
+              // 输入框中的内容被删为空时触发，此时会清除之前展示的搜索结果
+              this.search(this.keyword,1)
+            }
           }
         }
       },

@@ -17,6 +17,7 @@
   import API from '../utils/api'
   import Credit from '../components/Credit'
   import Avatar from '../components/Avatar'
+  import axios from 'axios';
   export default {
     name: "UsersInfoTable",
     components: {Credit: Credit,Avatar: Avatar,SearchBar:SearchBar},
@@ -34,7 +35,9 @@
         page: 0,
         usersSize: 0,
         tableData: [
-        ]
+        ],
+        cancel:null,
+        kw:""
       }
     },
     computed: {
@@ -178,9 +181,20 @@
       this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods:{
-      search:function(keyword){
-        console.log(keyword)
-        this.$api.users.queryByKeyword({page:1,keyword:keyword})
+      search:function(keyword,page){
+        this.page = page;
+        this.kw = keyword;
+        // 解决异步问题
+        if (this.cancel){// 存在上一次请求则取消
+          this.cancel();
+        }
+        console.log(`搜索${this.kw},页码${this.page}`);
+        // 定义CancelToken，它是axios的一个属性，且是一个构造函数
+        let CancelToken = axios.CancelToken;
+
+        this.$api.users.queryByKeyword({page:this.page,keyword:this.kw},new CancelToken((c) => {
+          this.cancel = c;
+        }))
           .then(res=>{
             console.log(res)
             this.tableData = res.data.users
@@ -189,18 +203,24 @@
             console.log(err)
           })
       },
-      changePage(e){
+      changePage(e) {
         this.page = e
-        API.users.queryUsersInfo({"page":this.page}).then((res)=>{
-          res.data.users.map(item=>{
-            item.userGender = item.userGender===1?'男':'女'
-          });
-          console.log(res.data.users);
-          this.usersSize = res.data.usersSize;
-          this.tableData = res.data.users;
-        }).catch((err)=>{
-          console.log(err);
-        })
+        if (this.kw) {
+          this.search(this.kw,this.page)
+        }
+        else {
+          console.log(`查询全部${this.kw},页码${this.page}`);
+          this.$api.users.queryUsersInfo({"page": this.page}).then((res) => {
+            res.data.users.map(item => {
+              item.userGender = item.userGender === 1 ? '男' : '女'
+            });
+            console.log(res.data.users);
+            this.usersSize = res.data.usersSize;
+            this.tableData = res.data.users;
+          }).catch((err) => {
+            console.log(err);
+          })
+        }
       }
     }
   }

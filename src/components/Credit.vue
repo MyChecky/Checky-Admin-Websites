@@ -1,7 +1,7 @@
 <template>
   <div class="credit-container" v-if="refresh">
     <div class="score" v-for="item of spanList"
-         :class="[size,item===1?'scored':'un-scored',item===1&&score===1?'warning':'',item===1&&score<=3?'info':'']"></div>
+         :class="[localSize,item===1?'scored':'un-scored',item===1&&score===1?'warning':'',item===1&&score<=3?'info':'']"></div>
   </div>
 </template>
 
@@ -14,11 +14,12 @@
     data() {
       return {
         spanList: [0, 0, 0, 0, 0],
-        refresh: true
+        refresh: true,
+        localSize:this.size
       }
     },
     beforeMount() {
-      if (!this.size) this.size = 'small';
+      if (!this.localSize) this.localSize = 'small';
       for (let i = 0; i < this.score; i++) {
         this.spanList[i] = 1;
       }
