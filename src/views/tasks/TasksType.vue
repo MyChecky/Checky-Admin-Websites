@@ -1,12 +1,14 @@
 <template>
   <div>
-    <Card>
+    <Card style="margin-bottom: 10px">
       <div class="table-header">
         <span class="card-title">现有类型</span>
         <span class="total"> 总数：{{types.length}}</span>
         <div class="search-div"></div>
       </div>
-      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="types" :columns="typeColumn"></Table>
+      <div class="types-div">
+        <typeDiv v-for="(item,index) in types" :typeItem = item :i=index :key="item.typeId" :callback="deleteType"></typeDiv>
+      </div>
     </Card>
     <Card>
       <div class="table-header">
@@ -16,12 +18,15 @@
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="typeSuggestions" :columns="suggestionColumn"></Table>
     </Card>
-    <!-- <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page> -->
   </div>
 </template>
 
 <script>
+  import TypeDiv from '../../components/TypeDiv'
   export default {
+    components:{
+      TypeDiv:TypeDiv
+    },
     data () {
       return {
         showBorder:false,
@@ -42,64 +47,6 @@
       }
     },
     computed: {
-      typeColumn () {
-        let columns = [];
-        if (this.showCheckbox) {
-          columns.push({
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          })
-        }
-        if (this.showIndex) {
-          columns.push({
-            type: 'index',
-            width: 60,
-            align: 'center'
-          })
-        }
-        columns.push({
-          title: '类别',
-          key: 'typeContent',
-          width: 200
-        });
-
-        columns.push({
-          title: '操作',
-          key: 'action',
-          align: 'center',
-          render: (h, params) => {
-                return h('div', [
-                    h('Button', {
-                        props: {
-                            type: 'primary',
-                            size: 'small'
-                        },
-                        style: {
-                            marginRight: '5px'
-                        },
-                        on: {
-                            click: () => {
-                                this.show(params.index)
-                            }
-                        }
-                    }, '修改'),
-                    h('Button', {
-                        props: {
-                            type: 'error',
-                            size: 'small'
-                        },
-                        on: {
-                            click: () => {
-                                this.remove(params.index)
-                            }
-                        }
-                    }, '删除')
-                ]);
-            }
-        });
-        return columns;
-      },
       suggestionColumn () {
         let columns = [];
         if (this.showCheckbox) {
@@ -137,7 +84,6 @@
           title: '建议时间',
           key: 'suggestionTime',
         });
-
         columns.push({
           title: '操作',
           key: 'action',
@@ -188,8 +134,8 @@
     beforeMount: function(){
       this.$api.tasks.queryType({})
         .then((res)=>{
-          console.log(res.data);
           this.types = res.data.taskTypes? res.data.taskTypes:res.data;
+          console.log(this.types);
         })
         .catch(err=>{
           console.log(err)
@@ -207,9 +153,20 @@
       //this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods:{
-      // detail(index){
-      //   console.log(this.tableData.indexOf(index));
-      // }
+      deleteType(id){
+        this.$api.tasks.deleteType({typeId:id}).then(res=> {
+          let temp =this.types;
+          for (let n = 0;n<temp.length;n++) {
+            if (temp[n].typeId === id){
+              temp.splice(n, 1);
+              break;
+            }
+          }
+
+          this.types = temp
+        }).catch(err=>{
+        });
+      },
       changePage(e){
         this.page = e
       }
@@ -224,6 +181,11 @@
   .table{
     margin: auto 0px;
     height: 100%;
+  }
+  .types-div{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
   .pager{
     display: flex;

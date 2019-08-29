@@ -4,7 +4,7 @@ import router from '../router/index'
 import store from '../store/index'
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'http://192.168.1.104:8080';
+  axios.defaults.baseURL = 'http://192.168.1.106:8080';
 }
 else if (process.env.NODE_ENV === 'debug') {
   axios.defaults.baseURL = '';
@@ -21,7 +21,7 @@ const service = axios.create({
 });
 
 // 项目地址加端口
-export const base = service.defaults.baseURL;
+export const base = axios.defaults.baseURL;
 
 // request拦截器
 service.interceptors.request.use(

@@ -48,6 +48,9 @@ mock.mock(`${base}/admin/task/check`,'post',()=>{
 mock.mock(`${base}/admin/suggestion/all`,'post',()=>{
   return tasks.SuggestionList
 })
+mock.mock(`${base}/admin/taskType/delete`,'post',()=>{
+  return {status:'OK'}
+})
 //essays
 mock.mock(`${base}/admin/essay/all`,'post',()=>{
   return essay.EssayList

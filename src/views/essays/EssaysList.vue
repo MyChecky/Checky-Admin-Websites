@@ -93,11 +93,13 @@
         });
         columns.push({
           title: '附件',
-          key: '',
+          key: 'img',
           render: (h,params) => {
             return h(
               PicViewer,{
-
+                props:{
+                  picList: params.row.img
+                }
               }
             )
           }

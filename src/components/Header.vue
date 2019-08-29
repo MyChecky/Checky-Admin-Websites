@@ -8,7 +8,7 @@
           <Button class="quit-button" @click="quit">注销</Button>
         </div>
         <div class="avatar-div">
-          欢迎你：username
+          欢迎你：{{username}}
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
             username:null
           }
       },
-      beforeCreate(){
+      beforeMount(){
           this.username = this.$Store.getters.getAttr('user');
       },
       methods:{

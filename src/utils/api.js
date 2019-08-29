@@ -32,7 +32,7 @@ export default {
     // 为了避免多次搜索导致的结果返回异步的问题
     // 采用axios的cancel token来取消上一次搜索请求
     queryByKeyword: (data,cancelToken) =>{
-      return get('admin/user/queryByKeyWord',{params: data,cancelToken:cancelToken})
+      return post('admin/user/queryByKeyWord',{params:data,c:cancelToken})
     }
   },
 // 动态
@@ -63,8 +63,16 @@ export default {
       return post('/admin/task/supervisors',data)
     },
 
-    suggestionDeal: data => {
-      return post('/admin/suggestion/deal',data)
+    suggestionPass: data => {
+      return post('/admin/suggestion/pass',data)
+    },
+
+    suggestionDeny: data => {
+      return post('/admin/suggestion/deny',data)
+    },
+
+    deleteType:data=>{
+      return post('/admin/taskType/delete',data)
     }
   },
 

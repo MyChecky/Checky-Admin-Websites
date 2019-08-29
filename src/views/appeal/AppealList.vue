@@ -21,7 +21,7 @@
         showStripe:false,
         showHeader:true,
         showIndex:false,
-        showCheckbox:true,
+        showCheckbox:false,
         fixedHeader:false,
         tableHeight: 600,
         pageSize: 10,
@@ -88,9 +88,9 @@
                   }
               }, this.tableData[params.index].appealContent)
           ]);
-            
+
         }
-          
+
         });
         columns.push({
           title: '申诉时间',
@@ -115,7 +115,7 @@
                         on: {
                             click: () => {
                                 this.$api.appeal.deal({
-                                  flag: 0,
+                                  result: "pass",
                                   appealId: this.tableData[params.index].appealId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.tableData.splice(params.index,1)
@@ -131,7 +131,7 @@
                         on: {
                             click: () => {
                                 this.$api.appeal.deal({
-                                  flag: 1,
+                                  result: "deny",
                                   appealId: this.tableData[params.index].appealId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.tableData.splice(params.index,1)

@@ -21,7 +21,7 @@
         showStripe:false,
         showHeader:true,
         showIndex:false,
-        showCheckbox:true,
+        showCheckbox:false,
         fixedHeader:false,
         tableHeight: 600,
         pageSize: 10,
@@ -70,7 +70,7 @@
           title: '举报对象ID',
           key: 'objectId',
         });
-        
+
         columns.push({
           title: '举报内容',
           key: 'reportContent',
@@ -90,9 +90,9 @@
                   }
               }, this.tableData[params.index].reportContent)
           ]);
-            
+
         }
-          
+
         });
         columns.push({
           title: '举报时间',
@@ -117,7 +117,7 @@
                         on: {
                             click: () => {
                                 this.$api.report.deal({
-                                  flag: 0,
+                                  result: "pass",
                                   reportId: this.tableData[params.index].reportId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.tableData.splice(params.index,1)
@@ -133,7 +133,7 @@
                         on: {
                             click: () => {
                                 this.$api.report.deal({
-                                  flag: 1,
+                                  result: "deny",
                                   reportId: this.tableData[params.index].reportId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.tableData.splice(params.index,1)

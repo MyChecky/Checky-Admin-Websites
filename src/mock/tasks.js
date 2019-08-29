@@ -169,7 +169,7 @@ const TasksList = {
    ]
 }
 const TaskType = Mock.mock({
-  "taskTypes|1-10":[
+  "taskTypes|10":[
     {
       "typeId": "@guid",
       'typeContent': "@cword(2,3)"
