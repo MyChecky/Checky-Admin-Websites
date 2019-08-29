@@ -80,7 +80,7 @@
                         },
                         on: {
                             click: () => {
-                                this.show(params.index)
+                                
                             }
                         }
                     }, '修改'),
@@ -91,7 +91,11 @@
                         },
                         on: {
                             click: () => {
-                                this.remove(params.index)
+                                this.$api.tasks.delType({
+                                  typeId: this.types[params.index].typeId
+                                }).then(res=>{
+                                  if(res.data.state==='ok') this.types.splice(params.index,1)
+                                })
                             }
                         }
                     }, '删除')
@@ -154,9 +158,9 @@
                         },
                         on: {
                             click: () => {
-                                this.$api.tasks.suggestionDeal({
-                                  flag: 0,
-                                  suggestionId: this.typeSuggestions[params.index].suggestionId
+                                this.$api.tasks.passSuggestion({
+                                  suggestionId: this.typeSuggestions[params.index].suggestionId,
+                                  typeContent: this.typeSuggestions[params.index].suggestionContent
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)
                                 })
@@ -170,8 +174,7 @@
                         },
                         on: {
                             click: () => {
-                                this.$api.tasks.suggestionDeal({
-                                  flag: 1,
+                                this.$api.tasks.denySuggestion({
                                   suggestionId: this.typeSuggestions[params.index].suggestionId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)
