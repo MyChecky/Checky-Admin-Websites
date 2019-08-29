@@ -23,7 +23,7 @@ const UsersList = function () {
 }
 
 const UserDetail = Mock.mock({
-  userInfo: {
+  user: {
     "userId|1": "@guid",
     "userAvatar": "@dataImage()",
     "userName|1": "@name",

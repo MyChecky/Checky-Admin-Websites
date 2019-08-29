@@ -116,7 +116,12 @@
                         },
                         on: {
                             click: () => {
-                                this.show(params.index)
+                                this.$api.report.deal({
+                                  flag: 0,
+                                  reportId: this.tableData[params.index].reportId
+                                }).then(res=>{
+                                  if(res.data.state === 'ok') this.tableData.splice(params.index,1)
+                                })
                             }
                         }
                     }, '通过'),
@@ -127,7 +132,12 @@
                         },
                         on: {
                             click: () => {
-                                this.remove(params.index)
+                                this.$api.report.deal({
+                                  flag: 1,
+                                  reportId: this.tableData[params.index].reportId
+                                }).then(res=>{
+                                  if(res.data.state === 'ok') this.tableData.splice(params.index,1)
+                                })
                             }
                         }
                     }, '拒绝')

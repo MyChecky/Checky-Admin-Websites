@@ -60,3 +60,15 @@ mock.mock(`${base}/admin/appeal/all`,'post',()=>{
 mock.mock(`${base}/admin/report/all`,'post',()=>{
   return report.ReportList
 })
+
+mock.mock(`${base}/admin/appeal/deal`,'post',()=>{
+  return appeal.DealResp
+})
+
+mock.mock(`${base}/admin/report/deal`,'post',()=>{
+  return appeal.DealResp
+})
+
+mock.mock(`${base}/admin/suggestion/deal`,'post',()=>{
+  return appeal.DealResp
+})

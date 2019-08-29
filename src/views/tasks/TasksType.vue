@@ -154,7 +154,12 @@
                         },
                         on: {
                             click: () => {
-                                this.show(params.index)
+                                this.$api.tasks.suggestionDeal({
+                                  flag: 0,
+                                  suggestionId: this.typeSuggestions[params.index].suggestionId
+                                }).then(res=>{
+                                  if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)
+                                })
                             }
                         }
                     }, '通过'),
@@ -165,7 +170,12 @@
                         },
                         on: {
                             click: () => {
-                                this.remove(params.index)
+                                this.$api.tasks.suggestionDeal({
+                                  flag: 1,
+                                  suggestionId: this.typeSuggestions[params.index].suggestionId
+                                }).then(res=>{
+                                  if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)
+                                })
                             }
                         }
                     }, '拒绝')

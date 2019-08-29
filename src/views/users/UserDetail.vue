@@ -202,11 +202,11 @@
           key: 'taskId'
         });
         columns.push({
-          title: '来源',
+          title: '来源用户ID',
           key: 'fromUserId'
         });
         columns.push({
-          title: '去向',
+          title: '去向用户ID',
           key: 'toUserId',
         });
         columns.push({
