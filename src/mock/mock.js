@@ -64,14 +64,22 @@ mock.mock(`${base}/admin/report/all`,'post',()=>{
   return report.ReportList
 })
 
-mock.mock(`${base}/admin/appeal/deal`,'post',()=>{
+mock.mock(`${base}/admin/appeal/process`,'post',()=>{
   return appeal.DealResp
 })
 
-mock.mock(`${base}/admin/report/deal`,'post',()=>{
+mock.mock(`${base}/admin/report/process`,'post',()=>{
   return appeal.DealResp
 })
 
-mock.mock(`${base}/admin/suggestion/deal`,'post',()=>{
+mock.mock(`${base}/admin/suggestion/pass`,'post',()=>{
+  return appeal.DealResp
+})
+
+mock.mock(`${base}/admin/suggestion/deny`,'post',()=>{
+  return appeal.DealResp
+})
+
+mock.mock(`${base}/admin/taskType/delete`,'post',()=>{
   return appeal.DealResp
 })

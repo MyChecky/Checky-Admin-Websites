@@ -18,6 +18,7 @@
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="typeSuggestions" :columns="suggestionColumn"></Table>
     </Card>
+    <!-- <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page> -->
   </div>
 </template>
 
@@ -100,9 +101,9 @@
                         },
                         on: {
                             click: () => {
-                                this.$api.tasks.suggestionDeal({
-                                  flag: 0,
-                                  suggestionId: this.typeSuggestions[params.index].suggestionId
+                                this.$api.tasks.passSuggestion({
+                                  suggestionId: this.typeSuggestions[params.index].suggestionId,
+                                  typeContent: this.typeSuggestions[params.index].suggestionContent
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)
                                 })
@@ -116,8 +117,7 @@
                         },
                         on: {
                             click: () => {
-                                this.$api.tasks.suggestionDeal({
-                                  flag: 1,
+                                this.$api.tasks.denySuggestion({
                                   suggestionId: this.typeSuggestions[params.index].suggestionId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)

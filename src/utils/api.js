@@ -63,15 +63,19 @@ export default {
       return post('/admin/task/supervisors',data)
     },
 
-    suggestionPass: data => {
+    suggestionDeal: data => {
+      return post('/admin/suggestion/deal',data)
+    },
+
+    passSuggestion: data => {
       return post('/admin/suggestion/pass',data)
     },
 
-    suggestionDeny: data => {
+    denySuggestion: data => {
       return post('/admin/suggestion/deny',data)
     },
 
-    deleteType:data=>{
+    delType: data => {
       return post('/admin/taskType/delete',data)
     }
   },
@@ -100,7 +104,7 @@ export default {
     },
 
     deal: data => {
-      return post('/admin/appeal/deal',data)
+      return post('/admin/appeal/process',data)
     }
   },
 // 举报
@@ -110,7 +114,7 @@ export default {
     },
 
     deal: data => {
-      return post('/admin/report/deal',data)
+      return post('/admin/report/process',data)
     }
   }
 }

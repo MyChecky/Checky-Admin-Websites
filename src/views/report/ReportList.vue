@@ -117,7 +117,7 @@
                         on: {
                             click: () => {
                                 this.$api.report.deal({
-                                  result: "pass",
+                                  result: 'pass',
                                   reportId: this.tableData[params.index].reportId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.tableData.splice(params.index,1)
@@ -133,7 +133,7 @@
                         on: {
                             click: () => {
                                 this.$api.report.deal({
-                                  result: "deny",
+                                  result: 'deny',
                                   reportId: this.tableData[params.index].reportId
                                 }).then(res=>{
                                   if(res.data.state === 'ok') this.tableData.splice(params.index,1)
