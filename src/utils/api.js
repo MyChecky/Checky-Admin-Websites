@@ -83,6 +83,11 @@ export default {
 
     delType: data => {
       return post('/admin/taskType/delete',data)
+    },
+
+    queryByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/task/query',data)
     }
   },
 

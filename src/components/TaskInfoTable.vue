@@ -3,12 +3,12 @@
     <Card>
       <div class="table-header">
         <span class="card-title">任务列表</span>
-        <span class="total">总数：{{usersSize}}</span>
+        <span class="total">总数：{{tasksSize}}</span>
         <div class="search-div"><SearchBar :search="search"></SearchBar></div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
-    <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <Page class="pager" :total="tasksSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -18,6 +18,8 @@
   import Avatar from '../components/Avatar'
   import router from '../router/index'
   import SearchBar from '../components/SearchBar'
+  import axios from 'axios'
+
   export default {
     name: "UsersInfoTable",
     components: {Credit: Credit,Avatar: Avatar,SearchBar:SearchBar},
@@ -40,7 +42,10 @@
             'nomatch': '未匹配'
         },
         tableData: [
-        ]
+        ],
+        tasksSize : 0,
+        cancel:null,
+        kw:""
       }
     },
     computed: {
@@ -63,18 +68,19 @@
         columns.push({
           title: '任务ID',
           key: 'taskId',
-          width: 200
+          width: 180
         });
 
         columns.push({
           title: '用户ID',
           key: 'userId',
-          width: 200
+          width: 180
         });
 
         columns.push({
           title: '用户昵称',
           key: 'userName',
+          width: 100,
           render: (h,params) => {
             return h(
               "a",
@@ -187,19 +193,48 @@
         });
         console.log(res.data.tasks);
         this.tableData = res.data.tasks;
+        this.tasksSize = res.data.tasksSize
       }).catch((err)=>{
         console.log(err);
       })
     },
     mounted(){
-      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 80;
+      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 120;
     },
     methods:{
       // detail(index){
       //   console.log(this.tableData.indexOf(index));
       // }
-      changePage(){
+      search:function(keyword,page){
+        this.page = page;
+        this.kw = keyword;
+        // 解决异步问题
+        if (this.cancel){// 存在上一次请求则取消
+          this.cancel();
+        }
+        console.log(`搜索${this.kw},页码${this.page}`);
+        // 定义CancelToken，它是axios的一个属性，且是一个构造函数
+        let CancelToken = axios.CancelToken;
 
+        this.$api.tasks.queryByKeyword({username:keyword},new CancelToken((c) => {
+          this.cancel = c;
+        }))
+          .then(res=>{
+            console.log(res)
+            this.tableData = res.data.tasks
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+      },
+      changePage(e){
+        this.page = e
+        this.$api.appeal.getAppeals({page:e})
+        .then(res=>{
+            console.log(res.data)
+            this.tableData = res.data.tasks
+            this.tasksSize = res.data.tasksSize
+        })
       }
     }
   }
