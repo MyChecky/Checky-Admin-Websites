@@ -3,12 +3,12 @@
     <Card>
       <div class="table-header">
         <span class="card-title">举报列表</span>
-        <span class="total">总数：{{tableData.length}}</span>
+        <span class="total">总数：{{reportsSize}}</span>
         <div class="search-div"></div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
-    <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <Page class="pager" :total="reportsSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -24,10 +24,10 @@
         showCheckbox:false,
         fixedHeader:false,
         tableHeight: 600,
-        pageSize: 10,
+        pageSize: 5,
         tableSize: 'default',
         page: 0,
-        essaysSize: 0,
+        reportsSize: 0,
         tableData: [
         ]
       }
@@ -155,6 +155,7 @@
                 item.reportType = this.$translator.translator('reportType',item.reportType)
             })
             this.tableData = res.data.reports
+            this.reportsSize = res.data.reportsSize
         })
     },
     mounted(){
@@ -166,15 +167,14 @@
       // }
       changePage(e){
         this.page = e
-        API.users.queryUsersInfo({"page":this.page}).then((res)=>{
-          res.data.users.map(item=>{
-            item.userGender = item.userGender===1?'男':'女'
-          });
-          console.log(res.data.users);
-          this.usersSize = res.data.usersSize;
-          this.tableData = res.data.users;
-        }).catch((err)=>{
-          console.log(err);
+        this.$api.report.getReports({page:this.page})
+        .then(res=>{
+            console.log(res.data)
+            res.data.reports.map(item=>{
+                item.reportType = this.$translator.translator('reportType',item.reportType)
+            })
+            this.tableData = res.data.reports
+            this.reportsSize = res.data.reportsSize
         })
       }
     }
