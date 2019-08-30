@@ -1,6 +1,13 @@
 <template>
   <div>
-    <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
+    <Card>
+      <div class="table-header">
+        <span class="card-title">任务列表</span>
+        <span class="total">总数：{{usersSize}}</span>
+        <div class="search-div"><SearchBar :search="search"></SearchBar></div>
+      </div>
+      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
+    </Card>
     <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
@@ -10,9 +17,10 @@
   import Credit from '../components/Credit'
   import Avatar from '../components/Avatar'
   import router from '../router/index'
+  import SearchBar from '../components/SearchBar'
   export default {
     name: "UsersInfoTable",
-    components: {Credit: Credit,Avatar: Avatar},
+    components: {Credit: Credit,Avatar: Avatar,SearchBar:SearchBar},
     data () {
       return {
         showBorder:false,
@@ -57,7 +65,7 @@
           key: 'taskId',
           width: 200
         });
-    
+
         columns.push({
           title: '用户ID',
           key: 'userId',
@@ -70,7 +78,7 @@
           render: (h,params) => {
             return h(
               "a",
-              {               
+              {
                 class:['fa','fa-caret-right'],
                 attrs: {
                   userId: this.tableData[params.index].userId,
@@ -87,30 +95,11 @@
             );
           }
         });
-        // columns.push({
-        //   title: '性别',
-        //   key: 'userGender',
-        //   filterMultiple: false,
-        //   filters: [
-        //     {
-        //       label: '男',
-        //       value: '男'
-        //     },
-        //     {
-        //       label: '女',
-        //       value: '女'
-        //     }
-        //   ],
-        //   filterMethod (value, row) {
-        //     return row.userGender === value;
-        //   }
-        // });
         columns.push({
             title: '任务标题',
             key: 'taskTitle',
             width: 150
         })
-
         columns.push({
           title: '开始时间',
           key: 'taskStartTime',
@@ -123,12 +112,10 @@
           width: 120,
           sortable: true
         });
-       
+
         columns.push({
           title: '监督人数',
           key: 'supervisorNum',
-          
-        //   sortable: true
         });
 
         columns.push({
@@ -153,7 +140,7 @@
             return row.taskState === value;
           }
         });
-        
+
         columns.push({
           title: '操作',
           key: 'action',
@@ -179,6 +166,7 @@
                 },
                 on:{
                   click:(e)=>{// 点击事件， e 为事件参数
+                    console.log(this.tableData[params.index].taskId)
                     e.stopPropagation();
                     this.$router.push('/tasks/id='+this.tableData[params.index].taskId)
                   }
@@ -192,13 +180,12 @@
       },
     },
     beforeMount: function(){
-      // 请求所有用户信息
+      // 请求所有信息
       API.tasks.getTasks({"page":this.page}).then((res)=>{
         res.data.tasks.map(item=>{
           item.taskState = this.stateMapping[item.taskState]
         });
         console.log(res.data.tasks);
-        // this.usersSize = res.data.usersSize;
         this.tableData = res.data.tasks;
       }).catch((err)=>{
         console.log(err);
@@ -228,5 +215,21 @@
     flex-direction: row;
     justify-content: center;
     margin: 5px auto;
+  }
+  .table-header{
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .search-div{
+    flex-grow: 5;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .card-title {
+    font-weight: 600;
+    color: #333;
+    font-size: 20px;
+    margin-right: 10px;
   }
 </style>

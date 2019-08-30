@@ -33,7 +33,11 @@ const MoneyFlowList = Mock.mock({
     }
   ]
 })
-
+const graphData = Mock.mock({
+  "income|12":["@float(10, 30,0,2)"],
+  "benefit|12":["@float(10, 30,0,2)"],
+  "refund|12":["@float(10, 30,0,2)"]
+})
 export {
-  UserMoney, MoneyFlowList
+  UserMoney, MoneyFlowList,graphData
 }

@@ -11,7 +11,7 @@
               <span class="info-item">开始时间：{{taskInfo.taskStartTime}}</span>
               <span class="info-item">结束时间：{{taskInfo.taskEndTime}}</span>
               <span class="info-item">任务标题：{{taskInfo.taskTitle}}</span>
-              
+
             </div>
             <!-- <Avatar :source="userInfo.userAvatar" :size="80"></Avatar> -->
             <div class="info-div">
@@ -90,9 +90,9 @@
   import Credit from '../../components/Credit'
   import SearchBar from '../../components/SearchBar'
   import MoneyTag from '../../components/MoneyTag'
-  
+
   export default {
-    
+
     name: "UserDetail",
     components: {
       Avatar: Avatar,
@@ -149,7 +149,7 @@
           align: 'center',
           sortable: true
         });
-        
+
         columns.push({
           title: '监督次数',
           key: 'superviseNum',
@@ -229,8 +229,8 @@
                 on:{
                   click:(e)=>{// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    console.log(e.target.attributes.checkId);
-                    
+                    console.log(e.target.attributes.checkId.nodeValue);
+                    this.$router.push(`/tasks/check/check=${e.target.attributes.checkId.nodeValue}&task=${this.$route.params.taskId}`)
                   }
                 }
               },
@@ -254,7 +254,7 @@
       })
       this.$api.tasks.getTaskSupervisors({
         taskId: id,
-        page:this.page  
+        page:this.page
       })
       .then((res)=>{
         console.log(res.data)

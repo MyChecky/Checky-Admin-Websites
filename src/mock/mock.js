@@ -19,7 +19,7 @@ mock.mock(`${base}/admin/user/query`,'post',() => {
 mock.mock(`${base}/admin/task/tasks`,'post',()=>{
   return users.UserTask
 })
-mock.mock(`${base}/admin/user/queryByKeyWord`,'get',()=>{
+mock.mock(`${base}/admin/user/queryByKeyWord`,'post',()=>{
   return users.queryResult()
 })
 //money
@@ -28,6 +28,9 @@ mock.mock(`${base}/admin/moneyFlows`,'post',()=>{
 })
 mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
   return money.MoneyFlowList
+})
+mock.mock(`${base}/admin/moneyFlows/graph`,'post',()=>{
+  return money.graphData
 })
 //tasks
 mock.mock(`${base}/taskType/allType`,'post',()=>{
@@ -51,6 +54,12 @@ mock.mock(`${base}/admin/suggestion/all`,'post',()=>{
 mock.mock(`${base}/admin/taskType/delete`,'post',()=>{
   return {status:'OK'}
 })
+mock.mock(`${base}/admin/task/check/detail`,'post',()=>{
+  return tasks.CheckDetail
+})
+// mock.mock(`${base}/admin/check/supervise`,'post',()=>{
+//   return tasks.CheckSupervise
+// })
 //essays
 mock.mock(`${base}/admin/essay/all`,'post',()=>{
   return essay.EssayList

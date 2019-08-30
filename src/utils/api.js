@@ -83,7 +83,13 @@ export default {
   checks : {
     getTaskChecks: data => {
       return post('/admin/task/check',data)
-    }
+    },
+    getCheckDetail:data =>{
+      return post('admin/task/check/detail',data)
+    },
+    // getCheckSupervisor: data =>{
+    //   return post('admin/check/supervise',data)
+    // }
   },
 
 // 资金
@@ -95,6 +101,10 @@ export default {
 
     queryAllMoneyFlow: data => {
       return post('/admin/moneyFlows/all',data)
+    },
+
+    getGraphData: data =>{
+      return post('/admin/moneyFlows/graph',data)
     }
   },
 // 申诉

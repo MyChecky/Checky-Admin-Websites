@@ -1,15 +1,15 @@
 <template>
     <div class="container">
-        <UsersInfoTable></UsersInfoTable>
+        <TaskInfoTable></TaskInfoTable>
     </div>
 </template>
 
 <script>
-    import UsersInfoTable from '../../components/TaskInfoTable.vue'
+    import TaskInfoTable from '../../components/TaskInfoTable.vue'
     export default {
         name: "TasksList",
         components:{
-            UsersInfoTable: UsersInfoTable
+          TaskInfoTable: TaskInfoTable
         },
         data () {
             return {

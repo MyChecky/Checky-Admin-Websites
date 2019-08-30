@@ -76,12 +76,21 @@ export default new Router({
         },
         {
           path: 'tasks/id=:taskId',
-          name: 'task-list',
+          name: 'task-detail',
           meta: {
             title: '',
             auth: false
           },
           components: {content: () => import('@/views/tasks/TaskDetail')}
+        },
+        {
+          path: 'tasks/check/check=:checkId&task=:taskId',
+          name: 'check-detail',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/tasks/CheckDetail')}
         },
         {
           path: 'tasks/type',
