@@ -27,10 +27,10 @@
           }
       },
       beforeMount(){
-          console.log(this.color[this.index%5])
+          // console.log(this.color[this.index%5])
       },
       updated(){
-        console.log(this.content)
+        // console.log(this.content)
       },
       methods:{
         deleteType(){

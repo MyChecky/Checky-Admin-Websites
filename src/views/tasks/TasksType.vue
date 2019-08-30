@@ -18,15 +18,16 @@
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="typeSuggestions" :columns="suggestionColumn"></Table>
     </Card>
-    <!-- <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page> -->
   </div>
 </template>
 
 <script>
   import TypeDiv from '../../components/TypeDiv'
+  import InputBar from '../../components/InputBar'
   export default {
     components:{
-      TypeDiv:TypeDiv
+      TypeDiv:TypeDiv,
+      InputBar:InputBar
     },
     data () {
       return {
@@ -34,7 +35,7 @@
         showStripe:false,
         showHeader:true,
         showIndex:false,
-        showCheckbox:true,
+        showCheckbox:false,
         fixedHeader:false,
         tableHeight: 600,
         pageSize: 10,
@@ -80,6 +81,21 @@
         columns.push({
           title: '内容',
           key: 'suggestionContent',
+          render:(h,params)=>{
+            return h(
+              InputBar,{
+                props: {
+                  text: params.row.suggestionContent
+                },
+                on:{
+                  inputChange:(val)=>{
+                    params.row.suggestionContent = val
+                    this.typeSuggestions[params.index].suggestionContent = val
+                  }
+                }
+              }
+            )
+          }
         });
         columns.push({
           title: '建议时间',
@@ -101,11 +117,16 @@
                         },
                         on: {
                             click: () => {
+                              console.log(this.typeSuggestions[params.index].suggestionContent)
                                 this.$api.tasks.passSuggestion({
                                   suggestionId: this.typeSuggestions[params.index].suggestionId,
                                   typeContent: this.typeSuggestions[params.index].suggestionContent
                                 }).then(res=>{
-                                  if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)
+                                  if(res.data.state === 'ok') {
+                                    let temp = this.typeSuggestions;
+                                    temp.splice(params.index,1)
+                                    this.typeSuggestions = temp
+                                  }
                                 })
                             }
                         }
@@ -120,7 +141,11 @@
                                 this.$api.tasks.denySuggestion({
                                   suggestionId: this.typeSuggestions[params.index].suggestionId
                                 }).then(res=>{
-                                  if(res.data.state === 'ok') this.typeSuggestions.splice(params.index,1)
+                                  if(res.data.state === 'ok') {
+                                    let temp = this.typeSuggestions;
+                                    temp.splice(params.index,1)
+                                    this.typeSuggestions = temp
+                                  }
                                 })
                             }
                         }
