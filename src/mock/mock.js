@@ -23,7 +23,7 @@ mock.mock(`${base}/admin/user/queryByKeyWord`,'post',()=>{
   return users.queryResult()
 })
 //money
-mock.mock(`${base}/admin/moneyFlows`,'post',()=>{
+mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
   return money.UserMoney
 })
 mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{

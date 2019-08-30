@@ -5,8 +5,8 @@
         <Card class="others">
           <div class="table-header">
             <span class="card-title">流水记录</span>
-            <span class="total">总数：{{money.length}}</span>
-            <div class="search-div"><SearchBar></SearchBar></div>
+            <span class="total">总数：{{moneyFlowsSize}}</span>
+            <div class="search-div"><SearchBar :search="search"></SearchBar></div>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
@@ -14,13 +14,16 @@
                    :columns="moneyColumns"></Table>
           </div>
         </Card>
-      </div>    
+        
+      </div>
+      <Page class="pager" :total="moneyFlowsSize" :page-size="pageSize" @on-change="changePage"></Page>    
   </div>
 </template>
 
 <script>
   import SearchBar from '../../components/SearchBar'
   import MoneyTag from '../../components/MoneyTag'
+  import axios from 'axios'
   export default {
     name: "MoneyFlow",
     components: {
@@ -40,8 +43,11 @@
         tableSize: 'default',
         exist: true,
         score: -1,
+        moneyFlowsSize: 0,
         money: [],
-        page: -1
+        page: 0,
+        cancel:null,
+        kw:""
       }
     },
     computed: {
@@ -107,12 +113,56 @@
       })
         .then((res) => {
           this.money = res.data.moneyFlows
+          this.moneyFlowsSize = res.data.moneyFlowsSize
         }).catch((err) => {
         console.log(err)
       })
     },
+
+    mounted() {
+      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 180;
+    },
+
     methods: {
-      search(keyword) {
+      search:function(keyword,page){
+        this.page = page;
+        this.kw = keyword;
+        // 解决异步问题
+        if (this.cancel){// 存在上一次请求则取消
+          this.cancel();
+        }
+        console.log(`搜索${this.kw},页码${this.page}`);
+        // 定义CancelToken，它是axios的一个属性，且是一个构造函数
+        let CancelToken = axios.CancelToken;
+
+        this.$api.money.queryByKeyword({username:keyword},new CancelToken((c) => {
+          this.cancel = c;
+        }))
+          .then(res=>{
+            console.log(res)
+            this.money = res.data.moneyFlows
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+      },
+      changePage(e) {
+        this.page = e
+        if (this.kw) {
+          this.search(this.kw,this.page)
+        }
+        else {
+          console.log(`查询全部${this.kw},页码${this.page}`);
+          this.$api.money.queryAllMoneyFlow({
+          page:this.page
+        })
+        .then((res) => {
+          this.money = res.data.moneyFlows
+          this.moneyFlowsSize = res.data.moneyFlowsSize
+        }).catch((err) => {
+          console.log(err)
+        })
+        }
       }
     }
   }
@@ -238,5 +288,12 @@
   .others {
     display: flex;
     width: 100%;
+  }
+
+  .pager{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 5px auto;
   }
 </style>
