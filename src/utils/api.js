@@ -32,7 +32,8 @@ export default {
     // 为了避免多次搜索导致的结果返回异步的问题
     // 采用axios的cancel token来取消上一次搜索请求
     queryByKeyword: (data,cancelToken) =>{
-      return post('admin/user/queryByKeyWord',{params:data,c:cancelToken})
+      data['c'] = cancelToken
+      return post('admin/user/queryByKeyWord',data)
     }
   },
 // 动态
@@ -94,7 +95,7 @@ export default {
     },
 
     queryAllMoneyFlow: data => {
-      return post('/admin/moneyFlows/all',data)
+      return post('/admin/moneyFlows',data)
     }
   },
 // 申诉

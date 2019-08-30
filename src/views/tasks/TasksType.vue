@@ -154,7 +154,7 @@
     },
     methods:{
       deleteType(id){
-        this.$api.tasks.deleteType({typeId:id}).then(res=> {
+        this.$api.tasks.delType({typeId:id}).then(res=> {
           let temp =this.types;
           for (let n = 0;n<temp.length;n++) {
             if (temp[n].typeId === id){
