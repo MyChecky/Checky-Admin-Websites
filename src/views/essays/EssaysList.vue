@@ -3,8 +3,8 @@
     <Card>
       <div class="table-header">
         <span class="card-title">动态列表</span>
-        <span class="total">总数：{{tableData.length}}</span>
-        <div class="search-div"></div>
+        <span class="total">总数：{{essaysSize}}</span>
+        <div class="search-div"><SearchBar :search="search"></SearchBar></div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
@@ -15,9 +15,13 @@
 <script>
   import API from '../../utils/api'
   import PicViewer from '../../components/PicViewer'
+  import SearchBar from '../../components/SearchBar'
+  import axios from 'axios'
+
   export default {
     components:{
-      PicViewer:PicViewer
+      PicViewer:PicViewer,
+      SearchBar:SearchBar
     },
     data () {
       return {
@@ -28,12 +32,14 @@
         showCheckbox:true,
         fixedHeader:false,
         tableHeight: 600,
-        pageSize: 10,
+        pageSize: 5,
         tableSize: 'default',
         page: 0,
         essaysSize: 0,
         tableData: [
-        ]
+        ],
+        cancel:null,
+        kw:""
       }
     },
     computed: {
@@ -164,17 +170,35 @@
       // detail(index){
       //   console.log(this.tableData.indexOf(index));
       // }
+      search:function(keyword,page){
+        this.page = page;
+        this.kw = keyword;
+        // 解决异步问题
+        if (this.cancel){// 存在上一次请求则取消
+          this.cancel();
+        }
+        console.log(`搜索${this.kw},页码${this.page}`);
+        // 定义CancelToken，它是axios的一个属性，且是一个构造函数
+        let CancelToken = axios.CancelToken;
+
+        this.$api.essays.queryByKeyword({username:keyword},new CancelToken((c) => {
+          this.cancel = c;
+        }))
+          .then(res=>{
+            console.log(res)
+            this.tableData = res.data.essays
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+      },
       changePage(e){
         this.page = e
-        API.users.queryUsersInfo({"page":this.page}).then((res)=>{
-          res.data.users.map(item=>{
-            item.userGender = item.userGender===1?'男':'女'
-          });
-          console.log(res.data.users);
-          this.usersSize = res.data.usersSize;
-          this.tableData = res.data.users;
-        }).catch((err)=>{
-          console.log(err);
+        this.$api.essays.getEssays({page:this.page})
+        .then((res)=>{
+          console.log(res.data)
+          this.essaysSize = res.data.essaysSize
+          this.tableData = res.data.essays
         })
       }
     }
@@ -183,7 +207,14 @@
 
 <style scoped>
   .table-header{
-    margin-bottom: 10px
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
+  }
+  .search-div{
+    flex-grow: 5;
+    display: flex;
+    justify-content: flex-end;
   }
   .table{
     margin: auto 0px;
@@ -195,10 +226,10 @@
     justify-content: center;
     margin: 5px auto;
   }
-  .card-title{
+  .card-title {
     font-weight: 600;
     color: #333;
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-right: 10px;
   }
 </style>

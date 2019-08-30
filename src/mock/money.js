@@ -3,6 +3,7 @@ import Mock from 'mockjs'
 const UserMoney = Mock.mock({
   status: 'OK',
   type: 'userId',
+  moneyFlowsSize: 10,
   "moneyFlows|1-5": [
     {
       "flowId":"@guid",

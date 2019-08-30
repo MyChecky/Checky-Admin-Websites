@@ -32,14 +32,19 @@ export default {
     // 为了避免多次搜索导致的结果返回异步的问题
     // 采用axios的cancel token来取消上一次搜索请求
     queryByKeyword: (data,cancelToken) =>{
-      data['c'] = cancelToken
-      return post('admin/user/queryByKeyWord',data)
+      // data['c'] = cancelToken
+      return post('admin/user/queryByKeyWord',{params:data,c:cancelToken})
     }
   },
 // 动态
   essays: {
     getEssays : data=>{
       return post('/admin/essay/all',data)
+    },
+
+    queryByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/essay/query',data)
     }
   },
 // 任务
@@ -91,11 +96,16 @@ export default {
   money: {
     // 获取单个用户资金记录
     queryUserMoneyFlow: (data) =>{
-      return post('/admin/moneyFlows',data)
+      return post('/admin/moneyFlows/all',data)
     },
 
     queryAllMoneyFlow: data => {
-      return post('/admin/moneyFlows',data)
+      return post('/admin/moneyFlows/all',data)
+    },
+
+    queryByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/moneyFlows/query',data)
     }
   },
 // 申诉
@@ -106,6 +116,11 @@ export default {
 
     deal: data => {
       return post('/admin/appeal/process',data)
+    },
+
+    queryByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/appeal/query',data)
     }
   },
 // 举报
@@ -116,6 +131,11 @@ export default {
 
     deal: data => {
       return post('/admin/report/process',data)
+    },
+
+    queryByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/report/query',data)
     }
   }
 }
