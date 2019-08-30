@@ -37,7 +37,7 @@ mock.mock(`${base}/taskType/allType`,'post',()=>{
   return tasks.TaskType
 })
 mock.mock(`${base}/admin/task/tasks`,'post',() => {
-  return tasks.TasksList
+  return users.UserTask
 })
 mock.mock(`${base}/admin/task/detail`,'post',()=>{
   return tasks.taskDetail

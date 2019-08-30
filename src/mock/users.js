@@ -38,7 +38,7 @@ const UserDetail = Mock.mock({
 const UserTask = Mock.mock({
   state: 'ok',
   type: 'userId',
-  "tasks|20": [
+  "tasks|3-10": [
     {
       "taskId": "@guid",
       "userId": "@guid",

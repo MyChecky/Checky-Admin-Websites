@@ -26,11 +26,11 @@
             <span class="card-title">信用评分</span>
             <span class="credit-span">评分：{{userInfo.userCredit}}</span>
             <Credit v-if='score>=0' size="large" :score="score"></Credit>
-            <div class="credit-button-div">
-              <button class="op-button">举报/申诉</button>
-              <button class="fa fa-eye op-button disabled">恢复</button>
-              <button class="fa fa-exclamation-circle op-button cancel">屏蔽用户</button>
-            </div>
+            <!--<div class="credit-button-div">-->
+              <!--<button class="op-button">举报/申诉</button>-->
+              <!--<button class="fa fa-eye op-button disabled">恢复</button>-->
+              <!--<button class="fa fa-exclamation-circle op-button cancel">屏蔽用户</button>-->
+            <!--</div>-->
           </div>
         </Card>
       </div>
@@ -39,7 +39,6 @@
           <div class="table-header">
             <span class="card-title">资金记录</span>
             <span class="total">总数：{{money.length}}</span>
-            <div class="search-div"><SearchBar></SearchBar></div>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
@@ -53,7 +52,6 @@
           <div class="table-header">
             <span class="card-title">任务列表</span>
             <span class="total">总数：{{tasks.length}}</span>
-            <div class="search-div"><SearchBar></SearchBar></div>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
