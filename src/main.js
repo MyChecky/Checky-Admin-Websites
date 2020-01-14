@@ -34,7 +34,11 @@ router.beforeEach((to, from, next) => {
       iView.LoadingBar.error()
       setTimeout(()=>{
         next({path: '/login'});
+<<<<<<< HEAD
       },80000)
+=======
+      },900000)
+>>>>>>> d0f3f146b719df6140d522a346bec969fc3427d2
     }
   } else {
     // 不需要登录权限的页面

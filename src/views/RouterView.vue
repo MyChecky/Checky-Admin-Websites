@@ -27,6 +27,10 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-refresh"></span>
             <div :class="[display,'item-tag']">流水记录</div>
           </MenuItem>
+          <MenuItem name="recharge" key="3-3" to="/money/recharge">
+            <span :style="iconSize" class="item-icon fa fa-fw fa-money"></span>
+            <div :class="[display,'item-tag']">充值记录</div>
+          </MenuItem>
         </Submenu>
         <Submenu name="tasks" key="4">
           <template slot="title">

@@ -21,6 +21,17 @@ export default new Router({
       components: {container: () => import('@/views/RouterView')},
       children: [
         {
+          path: 'money/recharge',
+          name: 'recharge',
+          meta: {
+            title: '',
+            auth: false // 开发时用false
+          },
+          components: {content: () => import('@/views/money/Recharge')}
+        },
+
+
+        {
           path: 'users',
           name: 'users',
           meta: {
