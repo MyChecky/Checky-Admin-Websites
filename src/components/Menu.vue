@@ -33,6 +33,10 @@
       <Icon type="stats-bars" size="22px"></Icon>
       举报列表
     </MenuItem>
+    <MenuItem name="AuthManage" key="7" to="#">
+      <Icon type="ios-key" size="22px"></Icon>
+      权限管理
+    </MenuItem>
   </Menu>
 </template>
 <script>
