@@ -10,7 +10,7 @@ import store from './store/index'
 import API from './utils/api'
 import * as translator from './utils/translator'
 // 注释以关闭 mock 数据
-//if(process.env.MOCK) require('./mock/mock');
+if(process.env.MOCK) require('./mock/mock');
 
 import  './assets/font-awesome-4.7.0/css/font-awesome.css'
 //升级iview4.0
@@ -38,11 +38,7 @@ router.beforeEach((to, from, next) => {
       iView.LoadingBar.error()
       setTimeout(()=>{
         next({path: '/login'});
-<<<<<<< HEAD
-      },80000)
-=======
       },900000)
->>>>>>> d0f3f146b719df6140d522a346bec969fc3427d2
     }
   } else {
     // 不需要登录权限的页面
