@@ -13,6 +13,7 @@
     "axios": "^0.19.0",
     "echarts": "^4.2.1",
     "iview": "^3.4.2",
+    "view-design": "^4.0.0",
     "mockjs": "^1.0.1-beta3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

@@ -32,6 +32,12 @@ mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
 mock.mock(`${base}/admin/moneyFlows/graph`,'post',()=>{
   return money.graphData
 })
+mock.mock(`${base}/admin/moneyRecharge/RechargeList`,'post',()=>{
+  return money.RechargeList
+})  //test
+
+
+
 //tasks
 mock.mock(`${base}/taskType/allType`,'post',()=>{
   return tasks.TaskType

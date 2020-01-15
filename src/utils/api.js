@@ -121,7 +121,12 @@ export default {
     queryByKeyword: (data,cancelToken) =>{
       data['c'] = cancelToken
       return post('admin/moneyFlows/query',data)
-    }
+    },
+
+    //获取充值提现列表
+    queryAllMoneyRecharge: data => {
+      return post('/admin/moneyRecharge/RechargeList',data)
+    },
   },
 // 申诉
   appeal: {
