@@ -1,10 +1,14 @@
 <template>
   <Menu mode="vertical" active-name="['users']" :open-names="['tasks','money']" style="height: 100%;width: auto;padding-top: 10px;">
     <div class="logo-div">Checky</div>
-    <MenuItem name="users" key="1" to="/users">
-      <Icon type="stats-bars" size="22px"></Icon>
-      用户列表
-    </MenuItem>
+    <Submenu name="users" key="1">
+      <template slot="title">
+        <Icon type="stats-bars" size="22px"></Icon>
+        用户列表
+      </template>
+      <MenuItem name="users" key="1-1" to="/users">用户管理</MenuItem>
+      <MenuItem name="users/AuthManage" key="1-2">权限设置</MenuItem>
+    </Submenu>
     <MenuItem name="essays" key="2" to="/essays">
       <Icon type="stats-bars" size="22px"></Icon>
       动态列表

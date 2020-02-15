@@ -26,11 +26,6 @@
             <span class="card-title">信用评分</span>
             <span class="credit-span">评分：{{userInfo.userCredit}}</span>
             <Credit v-if='score>=0' size="large" :score="score"></Credit>
-            <!--<div class="credit-button-div">-->
-              <!--<button class="op-button">举报/申诉</button>-->
-              <!--<button class="fa fa-eye op-button disabled">恢复</button>-->
-              <!--<button class="fa fa-exclamation-circle op-button cancel">屏蔽用户</button>-->
-            <!--</div>-->
           </div>
         </Card>
       </div>

@@ -29,8 +29,6 @@ export default new Router({
           },
           components: {content: () => import('@/views/money/Recharge')}
         },
-
-
         {
           path: 'users',
           name: 'users',
@@ -39,6 +37,15 @@ export default new Router({
             auth: false // 开发时用false
           },
           components: {content: () => import('@/views/users/UsersList')}
+        },
+        {
+          path: 'users/AuthManage',
+          name: 'AuthManage',
+          meta: {
+            title: '',
+            auth: false // 开发时用false
+          },
+          components:{content: () => import('@/views/users/AuthManage')}
         },
         {
           path: 'users/id=:userId',
