@@ -29,8 +29,6 @@ export default new Router({
           },
           components: {content: () => import('@/views/money/Recharge')}
         },
-
-
         {
           path: 'users',
           name: 'users',
