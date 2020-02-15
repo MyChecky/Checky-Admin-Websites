@@ -10,11 +10,11 @@ import store from './store/index'
 import API from './utils/api'
 import * as translator from './utils/translator'
 // 注释以关闭 mock 数据
-if(process.env.MOCK) require('./mock/mock');
+//if(process.env.MOCK) require('./mock/mock');
 
 import  './assets/font-awesome-4.7.0/css/font-awesome.css'
 //升级iview4.0
-//import  'iview/dist/styles/iview.css'
+import  'iview/dist/styles/iview.css'
 import 'view-design/dist/styles/iview.css';
 import './newtheme/theme.css' // 覆盖原有默认颜色样式出现less文件加载错误，有谁有能力可以后续解决
 

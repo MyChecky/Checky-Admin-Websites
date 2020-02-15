@@ -42,6 +42,23 @@ const MoneyFlowList = Mock.mock({
 })
 
 
+const UserRecharge = Mock.mock({
+  status: 'OK',
+  type: 'userId',
+  moneyRechargeSize: 10,
+  "userRecharge|5-10": [
+    {
+      "chargeId":"@guid",
+      "orderId":"@guid",
+      "userId":"@guid",
+      "rechargeMoney|0-200": 1,
+      "orderType|1":[
+        "充值","提现"],
+      "chargeTime":"@date('yyyy-MM-dd')"
+    }
+  ]
+})
+
 const RechargeList = Mock.mock({
   status: 'OK',
   type: 'userId',
@@ -65,5 +82,5 @@ const graphData = Mock.mock({
   "refund|12":["@float(10, 30,0,2)"]
 })
 export {
-  UserMoney, MoneyFlowList,graphData,RechargeList
+  UserMoney, MoneyFlowList,graphData,RechargeList,UserRecharge
 }
