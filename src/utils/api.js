@@ -36,6 +36,13 @@ export default {
       return post('admin/user/queryByKeyWord',{params:data,c:cancelToken})
     }
   },
+//管理员
+  admins:{
+    //获取所有管理员信息
+    queryAdminsInfo: (data) => {
+      return post('/admin/all', data)
+    },
+  },
 // 动态
   essays: {
     getEssays : data=>{

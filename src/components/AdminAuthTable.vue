@@ -3,7 +3,7 @@
     <Card>
       <div class="table-header">
         <span class="card-title">管理员列表</span>
-        <span class="total">总数：{{usersSize}}</span>
+        <span class="total">总数：{{adminsSize}}</span>
         <div class="search-div">
           <SearchBar :search="search"></SearchBar>
         </div>
@@ -24,7 +24,7 @@
   import Authorize from "./Authorize";
 
   export default {
-    name: "UsersAuthTable",
+    name: "AdminAuthTable",
     components: {Credit: Credit, Avatar: Avatar, SearchBar: SearchBar,Authorize: Authorize},
     data() {
       return {
@@ -38,7 +38,7 @@
         pageSize: 10,
         tableSize: 'default',
         page: 0,
-        usersSize: 0,
+        adminsSize: 0,
         tableData: [],
         cancel: null,
         kw: ""
@@ -67,26 +67,12 @@
           width: 200
         });
         columns.push({
-          title: '头像',
-          key: 'userAvatar',
-          render: (h, params) => {
-            return h(
-              Avatar,
-              {
-                props: {
-                  source: params.row.userAvatar
-                }
-              }
-            )
-          }
-        });
-        columns.push({
           title: '昵称',
           key: 'userName'
         });
         columns.push({
-          title: '角色',
-          key: 'actor',
+          title: '部门',
+          key: 'department',
           align: 'center',
           render: (h, params) => {
             return h(
@@ -103,23 +89,9 @@
           }
         });
         columns.push({
-          title: '性别',
-          key: 'userGender',
-          align: 'center',
-          filterMultiple: false,
-          filters: [
-            {
-              label: '男',
-              value: '男'
-            },
-            {
-              label: '女',
-              value: '女'
-            }
-          ],
-          filterMethod(value, row) {
-            return row.userGender === value;
-          }
+          title: '邮箱',
+          key: 'email',
+          width: 200
         });
         columns.push({
           title: '审核',
@@ -223,12 +195,9 @@
     },
     beforeMount: function () {
       // 请求所有用户信息
-      this.$api.users.queryUsersInfo({"page": this.page}).then((res) => {
-        res.data.users.map(item => {
-          item.userGender = item.userGender === 1 ? '男' : '女'
-        });
-        this.usersSize = res.data.usersSize;
-        this.tableData = res.data.users;
+      this.$api.admins.queryAdminsInfo({"page": this.page}).then((res) => {
+        this.adminsSize = res.data.adminsSize;
+        this.tableData = res.data.admins;
       }).catch((err) => {
         console.log(err);
       })

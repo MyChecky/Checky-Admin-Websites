@@ -1,19 +1,24 @@
 <template>
   <div class="container">
-    <UsersAuthTable></UsersAuthTable>
+    <AdminAuthTable></AdminAuthTable>
   </div>
 </template>
 
 <script>
-  import UsersAuthTable from '../../components/UsersAuthTable'
+  import AdminAuthTable from '../../components/AdminAuthTable'
   export default {
     name: "AuthManage",
     components:{
-      UsersAuthTable: UsersAuthTable
+      AdminAuthTable: AdminAuthTable
     },
     data () {
       return {
       }
+    },
+    methods: {
+      getAuths(){
+
+      },
     }
   }
 </script>
