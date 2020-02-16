@@ -111,6 +111,9 @@
           this.display = '';
           this.rotate = '';
         }
+      },
+      getPermission(){
+
       }
     }
   }

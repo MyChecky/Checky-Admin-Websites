@@ -42,6 +42,9 @@ export default {
     queryAdminsInfo: (data) => {
       return post('/admin/all', data)
     },
+    queryByKeyword: (data,cancelToken) =>{
+      return post('admin/queryByKeyWord',{params:data,c:cancelToken})
+    }
   },
 // 动态
   essays: {

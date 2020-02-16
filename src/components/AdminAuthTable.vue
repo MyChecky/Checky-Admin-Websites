@@ -11,7 +11,7 @@
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
-    <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <Page class="pager" :total="adminsSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -64,33 +64,39 @@
         columns.push({
           title: '用户ID',
           key: 'userId',
-          width: 200
+          align: 'center',
         });
         columns.push({
           title: '昵称',
-          key: 'userName'
+          key: 'userName',
+          align: 'center',
         });
         columns.push({
           title: '部门',
           key: 'department',
           align: 'center',
-          render: (h, params) => {
-            return h(
-              "actor",
-              {
-                domProps: {
-                  innerText: 'admin'
-                },
-                attrs: {
-                  userId: this.tableData[params.index].userId,
-                },
-              }
-            )
-          }
+          // render: (h, params) => {
+          //   return h(
+          //     "actor",
+          //     {
+          //       domProps: {
+          //         innerText: 'admin'
+          //       },
+          //       attrs: {
+          //         userId: this.tableData[params.index].userId,
+          //       },
+          //     }
+          //   )
+          // }
+        });
+        columns.push({
+          title: '电话',
+          key: 'userTel',
+          width: 200
         });
         columns.push({
           title: '邮箱',
-          key: 'email',
+          key: 'userEmail',
           width: 200
         });
         columns.push({
@@ -217,12 +223,12 @@
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.users.queryByKeyword({page: this.page, keyword: this.kw}, new CancelToken((c) => {
+        this.$api.admins.queryByKeyword({page: this.page, keyword: this.kw}, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
             console.log(res)
-            this.tableData = res.data.users
+            this.tableData = res.data.admins
           })
           .catch(err => {
             console.log(err)
