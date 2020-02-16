@@ -4,6 +4,7 @@ import router from '../router/index'
 import store from '../store/index'
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
+
   axios.defaults.baseURL = 'http://192.168.43.8:8080/Checky';
 }
 else if (process.env.NODE_ENV === 'debug') {

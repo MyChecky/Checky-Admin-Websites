@@ -114,7 +114,7 @@ export default {
   money: {
     // 获取单个用户资金记录
     queryUserMoneyFlow: (data) =>{
-      return post('/admin/moneyFlows/all',data)
+      return post('/admin/moneyFlows/user',data)
     },
 
     queryAllMoneyFlow: data => {
@@ -133,6 +133,10 @@ export default {
     //获取充值提现列表
     queryAllMoneyRecharge: data => {
       return post('/admin/moneyRecharge/RechargeList',data)
+    },
+    //获得用户充值提现表
+    queryUserMoneyRecharge: data => {
+      return post('/admin/moneyRecharge/RechargeUser',data)
     },
   },
 // 申诉

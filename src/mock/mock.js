@@ -23,7 +23,7 @@ mock.mock(`${base}/admin/user/queryByKeyWord`,'post',()=>{
   return users.queryResult()
 })
 //money
-mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
+mock.mock(`${base}/admin/moneyFlows/user`,'post',()=>{
   return money.UserMoney
 })
 mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
@@ -32,10 +32,12 @@ mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
 mock.mock(`${base}/admin/moneyFlows/graph`,'post',()=>{
   return money.graphData
 })
+mock.mock(`${base}/admin/moneyRecharge/RechargeUser`,'post',()=>{
+  return money.UserRecharge
+})
 mock.mock(`${base}/admin/moneyRecharge/RechargeList`,'post',()=>{
   return money.RechargeList
-})  //test
-
+})
 
 
 //tasks

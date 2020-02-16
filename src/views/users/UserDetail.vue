@@ -32,13 +32,26 @@
       <div class="inner-div">
         <Card class="others">
           <div class="table-header">
-            <span class="card-title">资金记录</span>
+            <span class="card-title">资金流水</span>
             <span class="total">总数：{{money.length}}</span>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                    :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
                    :columns="moneyColumns"></Table>
+          </div>
+        </Card>
+      </div>
+      <div class="inner-div">
+        <Card class="others">
+          <div class="table-header">
+            <span class="card-title">充值记录</span>
+            <span class="total">总数：{{recharge.length}}</span>
+          </div>
+          <div class="task-list">
+            <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
+                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="recharge"
+                   :columns="rechargeColumns"></Table>
           </div>
         </Card>
       </div>
@@ -96,10 +109,80 @@
         userInfo: {},
         tasks: [],
         money: [],
+        recharge: [],
         page: -1
       }
     },
     computed: {
+      rechargeColumns() {
+        let columns = [];
+        if (this.showCheckbox) {
+          columns.push({
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          })
+        }
+        if (this.showIndex) {
+          columns.push({
+            type: 'index',
+            width: 60,
+            align: 'center'
+          })
+        }
+        columns.push({
+          title: '交易ID',
+          key: 'chargeId'
+        });
+        columns.push({
+          title: '订单编号',
+          key: 'orderId'
+        });
+        columns.push({
+          title: '用户ID',
+          key: 'userId'
+        });
+        columns.push({
+          title: '金额',
+          key: 'rechargeMoney',
+          render: (h, params) => {
+            return h(
+              MoneyTag,
+              {
+                props:{
+                  money: params.row.rechargeMoney     //Todo
+                }
+              }
+            )
+          }
+        });
+        columns.push({
+          title: '交易类型',
+          key: 'orderType',
+          filterMultiple: false,
+          filters: [
+            {
+              label: '充值',
+              value: '充值'
+            },
+            {
+              label: '提现',
+              value: '提现'
+            }
+          ],
+          filterMethod (value, row) {
+            //return row.userGender === value;   //Todo
+            return row.orderType.indexOf(value) > -1;
+          }
+        });
+        columns.push({
+          title: '时间',
+          key: 'chargeTime',
+          align: 'center',
+          sortable: true
+        });
+        return columns;
+      },
       taskColumns() {
         let columns = [];
         if (this.showCheckbox) {
@@ -187,20 +270,52 @@
           })
         }
         columns.push({
-          title: 'ID',
+          title: '流水ID',
           key: 'flowId'
         });
         columns.push({
-          title: '任务',
+          title: '任务ID',
           key: 'taskId'
         });
         columns.push({
-          title: '来源用户ID',
-          key: 'fromUserId'
+          title: '相关用户',
+          key: 'UserName'
         });
         columns.push({
-          title: '去向用户ID',
-          key: 'toUserId',
+          title: '真实货币',
+          key: 'ifRealMoney',
+          filterMultiple: false,
+          filters: [
+            {
+              label: '是',
+              value: '是'
+            },
+            {
+              label: '否',
+              value: '否'
+            }
+          ],
+          filterMethod (value, row) {
+            return row.ifRealMoney.indexOf(value) > -1;
+          }
+        });
+        columns.push({
+          title: '资金流动',
+          key: 'FlowDir',
+          filterMultiple: false,
+          filters: [
+            {
+              label: '入账',
+              value: '入账'
+            },
+            {
+              label: '出账',
+              value: '出账'
+            }
+          ],
+          filterMethod (value, row) {
+            return row.FlowDir.indexOf(value) > -1;
+          }
         });
         columns.push({
           title: '金额',
@@ -214,6 +329,28 @@
                 }
               }
             )
+          }
+        });
+        columns.push({
+          title: '类型',
+          key: 'type',
+          filterMultiple: false,
+          filters: [
+            {
+              label: '支付',
+              value: '支付'
+            },
+            {
+              label: '退款',
+              value: '退款'
+            },
+            {
+              label: '奖励',
+              value: '奖励'
+            }
+          ],
+          filterMethod (value, row) {
+            return row.type.indexOf(value) > -1;
           }
         });
         columns.push({
@@ -258,6 +395,15 @@
       })
         .then((res) => {
           this.money = res.data.moneyFlows
+        }).catch((err) => {
+        console.log(err)
+      })
+      this.$api.money.queryUserMoneyRecharge({
+        userId:id,
+        page:this.page
+      })
+        .then((res) => {
+          this.recharge = res.data.userRecharge
         }).catch((err) => {
         console.log(err)
       })
