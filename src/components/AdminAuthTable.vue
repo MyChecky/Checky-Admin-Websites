@@ -41,7 +41,8 @@
         adminsSize: 0,
         tableData: [],
         cancel: null,
-        kw: ""
+        kw: "",
+        department:""
       }
     },
     computed: {
@@ -92,12 +93,10 @@
         columns.push({
           title: '电话',
           key: 'userTel',
-          width: 200
         });
         columns.push({
           title: '邮箱',
           key: 'userEmail',
-          width: 200
         });
         columns.push({
           title: '审核',
@@ -206,7 +205,12 @@
         this.tableData = res.data.admins;
       }).catch((err) => {
         console.log(err);
-      })
+      });
+      //查询当前登录用户的部门
+      console.log(localStorage.department);
+      if (localStorage.department==='"money"'||localStorage.department==='"task"'){
+        this.$router.push(`/404`)
+      }
     },
     mounted() {
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
@@ -227,7 +231,8 @@
           this.cancel = c;
         }))
           .then(res => {
-            console.log(res)
+            console.log(res);
+            console.log(res.data.admins);
             this.tableData = res.data.admins
           })
           .catch(err => {

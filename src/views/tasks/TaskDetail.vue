@@ -267,8 +267,7 @@
       this.$api.checks.getTaskChecks({
         taskId: id,
         page:this.page
-      })
-      .then((res)=>{
+      }).then((res)=>{
         console.log(res.data)
         this.checks = res.data.checks
         this.checks.map((item)=>{

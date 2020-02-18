@@ -21,7 +21,7 @@ export default {
       return post('/admin/user/all', data)
     },
     // 查询单个用户详情
-    queryUserInfo: (data) => {
+    queryUser: (data) => {
       return post('/admin/user/query', data)
     },
     // 查询单个用户任务
@@ -41,6 +41,10 @@ export default {
     //获取所有管理员信息
     queryAdminsInfo: (data) => {
       return post('/admin/all', data)
+    },
+    // 查询单个用户详情
+    queryAdmin: (data) => {
+      return post('/admin/query', data)
     },
     queryByKeyword: (data,cancelToken) =>{
       return post('admin/queryByKeyWord',{params:data,c:cancelToken})
