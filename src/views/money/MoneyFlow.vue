@@ -82,7 +82,7 @@
         });
         columns.push({
           title: '真实货币',
-          key: 'ifRealMoney',
+          key: 'ifTest',
           filterMultiple: false,
           filters: [
             {
@@ -100,7 +100,7 @@
         });
         columns.push({
           title: '资金流动',
-          key: 'FlowDir',
+          key: 'flowIo',
           filterMultiple: false,
           filters: [
             {
@@ -132,7 +132,7 @@
         });
         columns.push({
           title: '类型',
-          key: 'type',
+          key: 'flowType',
           filterMultiple: false,
           filters: [
             {
