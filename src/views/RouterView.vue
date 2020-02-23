@@ -15,7 +15,7 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-user-circle"></span>
             <div :class="[display,'item-tag']">用户列表</div>
           </MenuItem>
-          <MenuItem name="AuthManage" key="1-2" to="/users/AuthManage">
+          <MenuItem name="AuthManage" key="1-2" to="/users/AuthManage" v-show="Super">
             <span :style="iconSize" class="item-icon fa fa-fw fa-user-secret"></span>
             <div :class="[display,'item-tag']">权限设置</div>
           </MenuItem>
@@ -24,7 +24,7 @@
           <span :style="iconSize" class="item-icon fa fa-fw fa-heart"></span>
           <span :class="[display,'item-tag']">动态列表</span>
         </MenuItem>
-        <Submenu name="money" key="3">
+        <Submenu name="money" key="3" v-show="isMoney">
           <template slot="title">
             <span :style="iconSize" class="item-icon fa fa-fw fa-cny"></span>
             <div :class="[display,'item-tag']">资金管理</div>
@@ -42,7 +42,7 @@
             <div :class="[display,'item-tag']">充值记录</div>
           </MenuItem>
         </Submenu>
-        <Submenu name="tasks" key="4">
+        <Submenu name="tasks" key="4" v-show="isTask">
           <template slot="title">
             <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>
             <div :class="[display,'item-tag']">任务列表</div>
@@ -80,23 +80,33 @@
 
 <script>
   import Header from '../components/Header'
+
   export default {
     name: "BlankView",
-    components:{
-      Header:Header
+    components: {
+      Header: Header
     },
     data() {
       return {
         spanLeft: 3,
         spanRight: 21,
         display: 'item-tag-active',
-        rotate: ''
+        rotate: '',
+        Super: false,
+        isMoney: false,
+        isTask: false
       }
     },
     computed: {
       iconSize() {
         return this.spanLeft === 3 ? 'font-size: 14px' : 'font-size: 24px';
       }
+    },
+    beforeMount: function () {
+      this.Super = localStorage.department === '"super"';
+      this.isMoney = !(localStorage.department === '"task"');
+      this.isTask = !('"money"' === localStorage.department);
+      console.log(Super, isMoney, isTask);
     },
     methods: {
       toggleClick() {
@@ -111,7 +121,7 @@
           this.display = '';
           this.rotate = '';
         }
-      }
+      },
     }
   }
 </script>

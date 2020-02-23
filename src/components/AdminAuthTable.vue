@@ -3,7 +3,7 @@
     <Card>
       <div class="table-header">
         <span class="card-title">管理员列表</span>
-        <span class="total">总数：{{usersSize}}</span>
+        <span class="total">总数：{{adminsSize}}</span>
         <div class="search-div">
           <SearchBar :search="search"></SearchBar>
         </div>
@@ -11,7 +11,7 @@
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
-    <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <Page class="pager" :total="adminsSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -24,7 +24,7 @@
   import Authorize from "./Authorize";
 
   export default {
-    name: "UsersAuthTable",
+    name: "AdminAuthTable",
     components: {Credit: Credit, Avatar: Avatar, SearchBar: SearchBar,Authorize: Authorize},
     data() {
       return {
@@ -38,10 +38,11 @@
         pageSize: 10,
         tableSize: 'default',
         page: 0,
-        usersSize: 0,
+        adminsSize: 0,
         tableData: [],
         cancel: null,
-        kw: ""
+        kw: "",
+        department:""
       }
     },
     computed: {
@@ -64,62 +65,38 @@
         columns.push({
           title: '用户ID',
           key: 'userId',
-          width: 200
-        });
-        columns.push({
-          title: '头像',
-          key: 'userAvatar',
-          render: (h, params) => {
-            return h(
-              Avatar,
-              {
-                props: {
-                  source: params.row.userAvatar
-                }
-              }
-            )
-          }
+          align: 'center',
         });
         columns.push({
           title: '昵称',
-          key: 'userName'
+          key: 'userName',
+          align: 'center',
         });
         columns.push({
-          title: '角色',
-          key: 'actor',
+          title: '部门',
+          key: 'department',
           align: 'center',
-          render: (h, params) => {
-            return h(
-              "actor",
-              {
-                domProps: {
-                  innerText: 'admin'
-                },
-                attrs: {
-                  userId: this.tableData[params.index].userId,
-                },
-              }
-            )
-          }
+          // render: (h, params) => {
+          //   return h(
+          //     "actor",
+          //     {
+          //       domProps: {
+          //         innerText: 'admin'
+          //       },
+          //       attrs: {
+          //         userId: this.tableData[params.index].userId,
+          //       },
+          //     }
+          //   )
+          // }
         });
         columns.push({
-          title: '性别',
-          key: 'userGender',
-          align: 'center',
-          filterMultiple: false,
-          filters: [
-            {
-              label: '男',
-              value: '男'
-            },
-            {
-              label: '女',
-              value: '女'
-            }
-          ],
-          filterMethod(value, row) {
-            return row.userGender === value;
-          }
+          title: '电话',
+          key: 'userTel',
+        });
+        columns.push({
+          title: '邮箱',
+          key: 'userEmail',
         });
         columns.push({
           title: '审核',
@@ -223,15 +200,17 @@
     },
     beforeMount: function () {
       // 请求所有用户信息
-      this.$api.users.queryUsersInfo({"page": this.page}).then((res) => {
-        res.data.users.map(item => {
-          item.userGender = item.userGender === 1 ? '男' : '女'
-        });
-        this.usersSize = res.data.usersSize;
-        this.tableData = res.data.users;
+      this.$api.admins.queryAdminsInfo({"page": this.page}).then((res) => {
+        this.adminsSize = res.data.adminsSize;
+        this.tableData = res.data.admins;
       }).catch((err) => {
         console.log(err);
-      })
+      });
+      //查询当前登录用户的部门
+      console.log(localStorage.department);
+      if (localStorage.department==='"money"'||localStorage.department==='"task"'){
+        this.$router.push(`/404`)
+      }
     },
     mounted() {
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
@@ -248,12 +227,13 @@
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.users.queryByKeyword({page: this.page, keyword: this.kw}, new CancelToken((c) => {
+        this.$api.admins.queryByKeyword({page: this.page, keyword: this.kw}, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
-            console.log(res)
-            this.tableData = res.data.users
+            console.log(res);
+            console.log(res.data.admins);
+            this.tableData = res.data.admins
           })
           .catch(err => {
             console.log(err)

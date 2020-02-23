@@ -9,7 +9,8 @@
         <Input type="password" v-model="loginInfo.password"/>
       </Form-item>
       <Form-item>
-        <Button style="margin-top: 30px; background-color: #e83015;color: #fff;" @click="login('loginInfo')" long>登陆系统</Button>
+        <Button style="margin-top: 30px; background-color: #e83015;color: #fff;" @click="login('loginInfo')" long>登陆系统
+        </Button>
       </Form-item>
     </Form>
   </Card>
@@ -17,6 +18,7 @@
 
 <script>
   import API from '../utils/api'
+
   export default {
     name: "LoginCard",
     data() {
@@ -38,24 +40,26 @@
     methods: {
       login() {
         API.login.login(this.loginInfo)
-          .then((res)=>{
-              console.log(res.data.state);
-            if (res.data.state==='ok') {
+          .then((res) => {
+            console.log(res.data.state);
+            console.log(res.data.department);
+            if (res.data.state === 'ok') {
               this.$Message.success('登陆成功!');
               this.$Store.commit('$_setStorage', {
-                  user: this.loginInfo.username,
-                  sessionKey: res.data.sessionKey,
-                  userId: res.data.userId
-                })
+                user: this.loginInfo.username,
+                sessionKey: res.data.sessionKey,
+                userId: res.data.userId,
+                department:res.data.department
+              })
               this.$Store.commit('$_setLogin', '1')
-              setTimeout(()=>{
+              setTimeout(() => {
                 this.$router.push('/')
-              },800)
+              }, 800)
             } else {
               this.$Message.error('登陆失败!');
             }
           })
-          .catch((err)=>{
+          .catch((err) => {
             console.log(err)
           });
 
@@ -65,7 +69,7 @@
 </script>
 
 <style scoped>
-  .logo-div{
+  .logo-div {
     width: 90%;
     margin: 20px auto;
     height: 80px;
@@ -77,6 +81,7 @@
     letter-spacing: 2px;
     font-family: sans-serif;
   }
+
   .login-card {
     padding: 5px 20px;
     width: 100%;

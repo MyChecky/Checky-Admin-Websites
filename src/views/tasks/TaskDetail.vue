@@ -245,13 +245,13 @@
       let id = this.$route.params.taskId;
       this.$api.tasks.queryTask({taskId:id})
         .then((res)=>{
-          console.log(res.data)
-          this.taskInfo = res.data.task
+          console.log(res.data);
+          this.taskInfo = res.data.task;
           this.taskInfo.taskState = this.$translator.translator('taskState',this.taskInfo.taskState)
         })
         .catch((err)=>{
           console.log(err)
-      })
+      });
       this.$api.tasks.getTaskSupervisors({
         taskId: id,
         page:this.page
@@ -267,8 +267,7 @@
       this.$api.checks.getTaskChecks({
         taskId: id,
         page:this.page
-      })
-      .then((res)=>{
+      }).then((res)=>{
         console.log(res.data)
         this.checks = res.data.checks
         this.checks.map((item)=>{

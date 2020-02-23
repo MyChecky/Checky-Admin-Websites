@@ -366,7 +366,7 @@
       let id = this.$route.params.userId;
 
       console.log(`查询用户:${id}`);
-      this.$api.users.queryUserInfo({
+      this.$api.users.queryUser({
         userId:id,
       })
         .then((res) => {
