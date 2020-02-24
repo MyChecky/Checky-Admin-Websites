@@ -73,17 +73,17 @@
       }
     },
     beforeMount() {
-      let id = $route.params.userId;
-      console.log(`查询用户:${id}`);
-      this.$api.users.queryUser({
-        userId:id,
-      })
-        .then((res) => {
-          console.log(res);
-          //this.userName = res.data.user.userName;
-        }).catch((err) => {
-        console.log(err)
-      })
+      // let id = $route.params.userId;
+      // console.log(`查询用户:${id}`);
+      // this.$api.users.queryUser({
+      //   userId:id,
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //     //this.userName = res.data.user.userName;
+      //   }).catch((err) => {
+      //   console.log(err)
+      // })
     },
     methods:{
         updateAuth:function(){

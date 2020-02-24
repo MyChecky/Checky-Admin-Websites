@@ -119,7 +119,7 @@
                   click: (e) => {// 点击事件， e 为事件参数
                     let id = this.tableData[params.index].userId;
                     e.stopPropagation();
-                    this.$router.push(`/authorize/id=${e.target.attributes.userId.nodeValue}`);
+                    //this.$router.push(`/authorize/id=${e.target.attributes.userId.nodeValue}`);
                     console.log("tableData[params.index]",this.tableData[params.index].userId);
                     this.$api.admins.queryAdmin({
                       userId: id,

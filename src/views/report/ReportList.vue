@@ -4,9 +4,12 @@
       <div class="table-header">
         <span class="card-title">举报列表</span>
         <span class="total">总数：{{reportsSize}}</span>
-        <div class="search-div"><SearchBar :search="search"></SearchBar></div>
+        <div class="search-div">
+          <SearchBar :search="search"></SearchBar>
+        </div>
       </div>
-      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
+      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
+             :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="reportsSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
@@ -16,29 +19,29 @@
   import API from '../../utils/api'
   import SearchBar from '../../components/SearchBar'
   import axios from 'axios'
+
   export default {
-    components:{
-      SearchBar:SearchBar
+    components: {
+      SearchBar: SearchBar
     },
-    data () {
+    data() {
       return {
-        showBorder:false,
-        showStripe:false,
-        showHeader:true,
-        showIndex:false,
-        showCheckbox:false,
-        fixedHeader:false,
+        showBorder: false,
+        showStripe: false,
+        showHeader: true,
+        showIndex: false,
+        showCheckbox: false,
+        fixedHeader: false,
         tableHeight: 600,
         pageSize: 5,
         tableSize: 'default',
         page: 0,
         reportsSize: 0,
-        tableData: [
-        ]
+        tableData: []
       }
     },
     computed: {
-      tableColumns () {
+      tableColumns() {
         let columns = [];
         if (this.showCheckbox) {
           columns.push({
@@ -83,20 +86,20 @@
           render: (h, params) => {
             return h('div', [
               h('span', {
-                  style: {
-                      display: 'inline-block',
-                      width: '100%',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                      title: this.tableData[params.index].reportContent
-                  }
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: this.tableData[params.index].reportContent
+                }
               }, this.tableData[params.index].reportContent)
-          ]);
+            ]);
 
-        }
+          }
 
         });
         columns.push({
@@ -110,125 +113,139 @@
           align: 'center',
           width: 200,
           render: (h, params) => {
-                return h('div', [
-                    h('Button', {
-                        props: {
-                            type: 'primary',
-                            size: 'small'
-                        },
-                        style: {
-                            marginRight: '5px'
-                        },
-                        on: {
-                            click: () => {
-                                this.$api.report.deal({
-                                  result: 'pass',
-                                  reportId: this.tableData[params.index].reportId
-                                }).then(res=>{
-                                  if(res.data.state === 'ok') this.tableData.splice(params.index,1)
-                                })
-                            }
-                        }
-                    }, '通过'),
-                    h('Button', {
-                        props: {
-                            type: 'error',
-                            size: 'small'
-                        },
-                        on: {
-                            click: () => {
-                                this.$api.report.deal({
-                                  result: 'deny',
-                                  reportId: this.tableData[params.index].reportId
-                                }).then(res=>{
-                                  if(res.data.state === 'ok') this.tableData.splice(params.index,1)
-                                })
-                            }
-                        }
-                    }, '拒绝')
-                ]);
-            }
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.$api.report.deal({
+                      result: 'pass',
+                      reportId: this.tableData[params.index].reportId
+                    }).then(res => {
+                      if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
+                    })
+                  }
+                }
+              }, '通过'),
+              h('Button', {
+                props: {
+                  type: 'error',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    this.$api.report.deal({
+                      result: 'deny',
+                      reportId: this.tableData[params.index].reportId
+                    }).then(res => {
+                      if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
+                    })
+                  }
+                }
+              }, '拒绝')
+            ]);
+          }
         });
         return columns;
       },
     },
-    beforeMount: function(){
-      this.$api.report.getReports({page:this.page})
-        .then(res=>{
-            console.log(res.data)
-            res.data.reports.map(item=>{
-                item.reportType = this.$translator.translator('reportType',item.reportType)
-            })
-            this.tableData = res.data.reports
-            this.reportsSize = res.data.reportsSize
+    beforeMount: function () {
+      this.$api.report.getReports({page: this.page})
+        .then(res => {
+          res.data.reports.map(item => {
+            item.reportType = this.$translator.translator('reportType', item.reportType)
+          });
+          let tempData = [];
+          tempData = res.data.reports;
+          console.log(tempData);
+          let j = 0;
+          for (let i = 0; i < res.data.reportsSize; i++) {
+            if (tempData[i].reportState === 'toProcess') {
+              this.tableData[j] = tempData[i];
+              j = j + 1;
+            }
+          }
+          this.reportsSize = this.tableData.length;
+          console.log(this.reportsSize);
+          console.log(this.tableData);
         })
     },
-    mounted(){
-      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
+    mounted() {
+      this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
-    methods:{
+    methods: {
       // detail(index){
       //   console.log(this.tableData.indexOf(index));
       // }
-      search:function(keyword,page){
+      search: function (keyword, page) {
         this.page = page;
         this.kw = keyword;
         // 解决异步问题
-        if (this.cancel){// 存在上一次请求则取消
+        if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
         console.log(`搜索${this.kw},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.report.queryByKeyword({username:keyword},new CancelToken((c) => {
+        this.$api.report.queryByKeyword({username: keyword}, new CancelToken((c) => {
           this.cancel = c;
         }))
-          .then(res=>{
+          .then(res => {
             console.log(res)
             this.tableData = res.data.reports
           })
-          .catch(err=>{
+          .catch(err => {
             console.log(err)
           })
       },
-      changePage(e){
+      changePage(e) {
         this.page = e
-        this.$api.report.getReports({page:this.page})
-        .then(res=>{
+        this.$api.report.getReports({page: this.page})
+          .then(res => {
             console.log(res.data)
-            res.data.reports.map(item=>{
-                item.reportType = this.$translator.translator('reportType',item.reportType)
+            res.data.reports.map(item => {
+              item.reportType = this.$translator.translator('reportType', item.reportType)
             })
             this.tableData = res.data.reports
             this.reportsSize = res.data.reportsSize
-        })
+          })
       }
     }
   }
 </script>
 
 <style scoped>
-  .table-header{
+  .table-header {
     margin-bottom: 10px;
     display: flex;
     align-items: flex-end;
   }
-  .search-div{
+
+  .search-div {
     flex-grow: 5;
     display: flex;
     justify-content: flex-end;
   }
-  .table{
+
+  .table {
     margin: auto 0px;
     height: 100%;
   }
-  .pager{
+
+  .pager {
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin: 5px auto;
   }
+
   .card-title {
     font-weight: 600;
     color: #333;
