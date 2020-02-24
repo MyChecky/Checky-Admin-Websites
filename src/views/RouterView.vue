@@ -42,20 +42,14 @@
             <div :class="[display,'item-tag']">充值记录</div>
           </MenuItem>
         </Submenu>
-        <Submenu name="tasks" key="4" v-show="isTask">
-          <template slot="title">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>
-            <div :class="[display,'item-tag']">任务列表</div>
-          </template>
-          <MenuItem name="tasks-list" key="4-1" to="/tasks/list">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-bars"></span>
-            <div :class="[display,'item-tag']">任务列表</div>
-          </MenuItem>
-          <MenuItem name="type" key="4-2" to="/tasks/type">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-envelope"></span>
-            <div :class="[display,'item-tag']">类型建议</div>
-          </MenuItem>
-        </Submenu>
+        <MenuItem name="tasks" key="4-1" v-show="isTask" to="/tasks/list">
+          <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>
+          <span :class="[display,'item-tag']">任务列表</span>
+        </MenuItem>
+        <MenuItem name="type" key="4-2" v-show="isTask" to="/tasks/type">
+          <span :style="iconSize" class="item-icon fa fa-fw fa-envelope"></span>
+          <span :class="[display,'item-tag']">类型建议</span>
+        </MenuItem>
         <MenuItem name="appeal" key="5" to="/appeal">
           <span :style="iconSize" class="item-icon fa fa-fw fa-hand-paper-o"></span>
           <div :class="[display,'item-tag']">申诉列表</div>

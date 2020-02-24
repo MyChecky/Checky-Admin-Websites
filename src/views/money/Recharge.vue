@@ -161,6 +161,10 @@
           }).catch((err) => {
           console.log(err)
         })
+        //查询当前登录用户的部门
+        if (localStorage.department === '"task"') {
+          this.$router.push(`/404`)
+        }
       },
 
       mounted() {

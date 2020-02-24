@@ -25,8 +25,8 @@
 
   export default {
     name: "AdminAuthTable",
-    components: {Credit: Credit, Avatar: Avatar, SearchBar: SearchBar,Authorize: Authorize},
-    data() {
+    components: {Credit: Credit, Avatar: Avatar, SearchBar: SearchBar, Authorize: Authorize},
+    data: function () {
       return {
         showBorder: false,
         showStripe: false,
@@ -42,7 +42,8 @@
         tableData: [],
         cancel: null,
         kw: "",
-        department:""
+        department: "",
+        formData: []
       }
     },
     computed: {
@@ -58,7 +59,7 @@
         if (this.showIndex) {
           columns.push({
             type: 'index',
-            width: 60,
+            width: 90,
             align: 'center'
           })
         }
@@ -66,132 +67,75 @@
           title: '用户ID',
           key: 'userId',
           align: 'center',
+          width: 150
         });
         columns.push({
           title: '昵称',
           key: 'userName',
           align: 'center',
+          width: 150
         });
         columns.push({
           title: '部门',
           key: 'department',
           align: 'center',
-          // render: (h, params) => {
-          //   return h(
-          //     "actor",
-          //     {
-          //       domProps: {
-          //         innerText: 'admin'
-          //       },
-          //       attrs: {
-          //         userId: this.tableData[params.index].userId,
-          //       },
-          //     }
-          //   )
-          // }
+          width: 150
         });
         columns.push({
           title: '电话',
           key: 'userTel',
+          align: 'center',
+          width: 200
         });
         columns.push({
           title: '邮箱',
           key: 'userEmail',
-        });
-        columns.push({
-          title: '审核',
-          key: 'qualify',
           align: 'center',
-          render: (h, params) => {
-            return h(
-              "qualify",
-              {
-                style: {
-                  padding: '5px 10px',
-                  backgroundColor: '#2b85e4',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '2px',
-                  cursor: 'pointer'
-                },
-                domProps: {
-                  innerText: ' ✔ '
-                },
-                //class:['fa','fa-caret-right'],
-                attrs: {
-                  userId: this.tableData[params.index].userId,
-                },
-              },
-            )
-          }
-        });
-        columns.push({
-          title: '删除',
-          key: 'delete',
-          align: 'center',
-          render: (h, params) => {
-            return h
-            (
-              "delete",
-              {
-                style: {
-                  padding: '5px 10px',
-                  backgroundColor: '#c00b07',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '2px',
-                  cursor: 'pointer'
-                },
-                domProps: {
-                  innerText: ' X '
-                },
-                //class:['fa','fa-caret-right'],
-                attrs: {
-                  userId: this.tableData[params.index].userId,
-                },
-              },
-            );
-          }
-        });
-        columns.push({
-          title: '查看',
-          key: 'view',
-          align: 'center',
-          render: (h, params) => {
-            return h(
-              "qualify",
-              {
-                style: {
-                  padding: '5px 10px',
-                  backgroundColor: '#2b85e4',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '2px',
-                  cursor: 'pointer'
-                },
-                domProps: {
-                  innerText: ' ✔ '
-                },
-                //class:['fa','fa-caret-right'],
-                attrs: {
-                  userId: this.tableData[params.index].userId,
-                },
-              },
-            )
-          }
+          width: 200
         });
         columns.push({
           title: '授权',
           key: 'authorize',
           align: 'center',
-          render: (h, params) => {
+          render: (h,params) => {
             return h(
               Authorize,
               {
-                props:{
-                  sources: params.Authorize
+                style:{
+                  backgroundColor: '#2b85e4',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '2px',
+                  cursor: 'pointer'
+                },
+                class:'fa',
+                Props:{
+                  sources:params.Authorize
+                },
+                attrs: {
+                  userId: this.tableData[params.index].userId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    let id = this.tableData[params.index].userId;
+                    e.stopPropagation();
+                    this.$router.push(`/authorize/id=${e.target.attributes.userId.nodeValue}`);
+                    console.log("tableData[params.index]",this.tableData[params.index].userId);
+                    this.$api.admins.queryAdmin({
+                      userId: id,
+                    })
+                      .then(res => {
+                        console.log("res",res.data.admin);
+                        this.formData = res.data.admin;
+                        console.log("formData",this.formData);
+                      })
+                      .catch(err => {
+                        console.log(err)
+                      })
+                  }
                 }
-              }
+              },
+              "更改权限"
             );
           }
         });
@@ -207,8 +151,7 @@
         console.log(err);
       });
       //查询当前登录用户的部门
-      console.log(localStorage.department);
-      if (localStorage.department==='"money"'||localStorage.department==='"task"'){
+      if (localStorage.department === '"money"' || localStorage.department === '"task"') {
         this.$router.push(`/404`)
       }
     },
@@ -256,6 +199,19 @@
             console.log(err);
           })
         }
+      },
+      getAdminFormData: function (id) {
+        this.$api.admins.queryAdmin({
+          userId: id,
+        })
+          .then(res => {
+            console.log("res",res.data.admins);
+            this.formData = res.data.admins;
+            console.log("formData",this.formData);
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     }
   }

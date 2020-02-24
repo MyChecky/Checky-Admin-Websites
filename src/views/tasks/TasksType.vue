@@ -157,6 +157,10 @@
       }
     },
     beforeMount: function(){
+      //查询当前登录用户的部门
+      if (localStorage.department === '"money"') {
+        this.$router.push(`/404`)
+      }
       this.$api.tasks.queryType({})
         .then((res)=>{
           this.types = res.data.taskTypes? res.data.taskTypes:res.data;

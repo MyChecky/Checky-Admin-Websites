@@ -242,6 +242,10 @@
       }
     },
     beforeMount() {
+      //查询当前登录用户的部门
+      if (localStorage.department === '"money"') {
+        this.$router.push(`/404`)
+      }
       let id = this.$route.params.taskId;
       this.$api.tasks.queryTask({taskId:id})
         .then((res)=>{

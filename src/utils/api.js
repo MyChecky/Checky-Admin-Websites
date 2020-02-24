@@ -28,6 +28,10 @@ export default {
     queryUserTask: (data) => {
       return post('/admin/task/tasks', data)
     },
+    //更改用户单个权限
+    changeUserAuth:(data)=>{
+      return post('/admin/user/changeauth',data)
+    },
     // 搜索
     // 为了避免多次搜索导致的结果返回异步的问题
     // 采用axios的cancel token来取消上一次搜索请求
