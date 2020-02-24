@@ -9,12 +9,12 @@ const UserMoney = Mock.mock({
       "flowId":"@guid",
       "taskId":"@guid",
       "UserName":"@guid",
-      "ifRealMoney|1":[
+      "ifTest|1":[
         "是","否"],
-      "FlowDir|1":[
+      "flowIo|1":[
         "入账","出账"],
       "flowMoney|0-200": 1,
-      "type|1":[
+      "flowType|1":[
         "支付","退款","奖励"],
       "flowTime":"@date('yyyy-MM-dd')"
     }
@@ -29,12 +29,12 @@ const MoneyFlowList = Mock.mock({
       "flowId":"@guid",
       "taskId":"@guid",
       "UserName":"@guid",
-      "ifRealMoney|1":[
+      "ifTest|1":[
         "是","否"],
-      "FlowDir|1":[
+      "flowIo|1":[
         "入账","出账"],
       "flowMoney|0-200": 1,
-      "type|1":[
+      "flowType|1":[
         "支付","退款","奖励"],
       "flowTime":"@date('yyyy-MM-dd')"
     }
