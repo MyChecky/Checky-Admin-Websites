@@ -4,15 +4,10 @@ import router from '../router/index'
 import store from '../store/index'
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
-<<<<<<< HEAD
 
   axios.defaults.baseURL = 'http://192.168.43.8:8080/Checky';
 
   //axios.defaults.baseURL = 'http://localhost:8080/Checky';
-
-=======
-  axios.defaults.baseURL = 'http://localhost:8080/Checky';
->>>>>>> e7bfb8b90d69b7b13f729c7e0e2ebdf13f56ec1c
 }
 else if (process.env.NODE_ENV === 'debug') {
   axios.defaults.baseURL = '';

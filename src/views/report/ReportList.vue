@@ -162,27 +162,25 @@
             item.reportType = this.$translator.translator('reportType', item.reportType)
           });
           let tempData = [];
+          let tempData1 = [];
           tempData = res.data.reports;
-          console.log(tempData);
           let j = 0;
           for (let i = 0; i < res.data.reportsSize; i++) {
-            if (tempData[i].reportState === 'toProcess') {
-              this.tableData[j] = tempData[i];
+            if (tempData[i].reportState === "toProcess") {
+              tempData1[j] = tempData[i];
               j = j + 1;
             }
           }
+          console.log("tempData1: ", tempData1);
+          this.tableData = tempData1;
           this.reportsSize = this.tableData.length;
-          console.log(this.reportsSize);
-          console.log(this.tableData);
+          console.log("tableData: ", this.tableData)
         })
     },
     mounted() {
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods: {
-      // detail(index){
-      //   console.log(this.tableData.indexOf(index));
-      // }
       search: function (keyword, page) {
         this.page = page;
         this.kw = keyword;

@@ -159,17 +159,19 @@
       this.$api.appeal.getAppeals({page: this.page})
         .then(res => {
           let tempData = [];
+          let tempData1 = [];
           tempData = res.data.appeals;
-          console.log(tempData[0].appealState);
+
           let j = 0;
           for (let i = 0; i < res.data.appealsSize; i++) {
             if (tempData[i].appealState === null) {
-              this.tableData[j] = tempData[i];
+              tempData1[j] = tempData[i];
               j = j + 1;
             }
           }
+          this.tableData = tempData1;
           this.appealsSize = this.tableData.length;
-          //console.log(this.tableData)
+          console.log("tableData: ", this.tableData)
         })
     },
     mounted() {

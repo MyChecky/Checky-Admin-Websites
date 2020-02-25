@@ -4,11 +4,25 @@
       <div class="table-header">
         <span class="card-title">动态列表</span>
         <span class="total">总数：{{essaysSize}}</span>
-        <div class="search-div"><SearchBar :search="search"></SearchBar></div>
+        <div class="search-div">
+          <SearchBar :search="search"></SearchBar>
+        </div>
       </div>
-      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
+      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
+             :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <div class="cover" v-if="show" @click="show=!show"></div>
+    <div :class="['outer-div',]" v-if="show">
+      <div class="pics">
+        <img :src="this.baseURL+this.picList[0].fileAddr" alt="pic" class="pic-img">
+      </div>
+      <div class="button-bar">
+        <button class="turn-button fa fa-angle-left" @click="last"></button>
+        <span class="index-tag">附件 {{index+1}}</span>
+        <button class="turn-button fa fa-angle-right" @click="next"></button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,33 +31,36 @@
   import PicViewer from '../../components/PicViewer'
   import SearchBar from '../../components/SearchBar'
   import axios from 'axios'
+  import {base} from '../../utils/axios'
 
   export default {
-    components:{
-      PicViewer:PicViewer,
-      SearchBar:SearchBar
+    components: {
+      PicViewer: PicViewer,
+      SearchBar: SearchBar
     },
-    data () {
+    data() {
       return {
-        showBorder:false,
-        showStripe:false,
-        showHeader:true,
-        showIndex:false,
-        showCheckbox:true,
-        fixedHeader:false,
+        showBorder: false,
+        showStripe: false,
+        showHeader: true,
+        showIndex: false,
+        showCheckbox: true,
+        fixedHeader: false,
         tableHeight: 600,
         pageSize: 5,
         tableSize: 'default',
         page: 0,
         essaysSize: 0,
-        tableData: [
-        ],
-        cancel:null,
-        kw:""
+        tableData: [],
+        cancel: null,
+        kw: "",
+        baseURL: base+'/',
+        show:false,
+        picList:[],
       }
     },
     computed: {
-      tableColumns () {
+      tableColumns() {
         let columns = [];
         if (this.showCheckbox) {
           columns.push({
@@ -75,20 +92,20 @@
           render: (h, params) => {
             return h('div', [
               h('span', {
-                  style: {
-                      display: 'inline-block',
-                      width: '100%',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                  },
-                  domProps: {
-                      title: this.tableData[params.index].essayContent
-                  }
+                style: {
+                  display: 'inline-block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: this.tableData[params.index].essayContent
+                }
               }, this.tableData[params.index].essayContent)
-          ]);
+            ]);
 
-        }
+          }
 
         });
         columns.push({
@@ -100,11 +117,39 @@
         columns.push({
           title: '附件',
           key: 'img',
-          render: (h,params) => {
+          render: (h, params) => {
             return h(
-              PicViewer,{
-                props:{
+              // PicViewer, {
+              //   props: {
+              //     picList: params.row.img
+              //   },
+              //   on: {
+              //     click: (e) => {
+              //       console.log("params.row.img ",params.row.img)
+              //     }
+              //   }
+              // }
+              "button", {
+                attrs: {
                   picList: params.row.img
+                },
+                style:{
+                  border: "none",
+                  backgroundColor: 'transparent',
+                  textDecoration: 'underline',
+                  color: 'dodgerblue',
+                  cursor: 'pointer',
+                },
+                domProps: {
+                  innerText: '预览'
+                },
+                on: {
+                  click: (e) => {
+                    this.show=!this.show;
+                    this.picList=params.row.img;
+                    console.log("picList",this.picList);
+                    console.log("url ",this.baseURL+this.picList[0].fileAddr)
+                  }
                 }
               }
             )
@@ -122,11 +167,11 @@
           title: '操作',
           key: 'action',
           align: 'center',
-          render: (h,params) => {
+          render: (h, params) => {
             return h(
               "button",
               {
-                style:{
+                style: {
                   padding: '5px 10px',
                   backgroundColor: '#e83015',
                   color: '#fff',
@@ -137,14 +182,14 @@
                 domProps: {
                   innerText: '删除'
                 },
-                class:['fa','fa-trash-o'],
+                class: ['fa', 'fa-trash-o'],
                 attrs: {
                   userId: this.tableData[params.index].essayId,
                 },
-                on:{
-                  click:(e)=>{// 点击事件， e 为事件参数
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
-                   console.log(e.target.attributes.essayId.nodeValue);
+                    console.log(e.target.attributes.essayId.nodeValue);
                   }
                 }
               },
@@ -155,81 +200,122 @@
         return columns;
       },
     },
-    beforeMount: function(){
-      this.$api.essays.getEssays({page:this.page})
-        .then((res)=>{
+    beforeMount: function () {
+      this.$api.essays.getEssays({page: this.page})
+        .then((res) => {
           console.log(res.data)
           this.essaysSize = res.data.essaysSize
           this.tableData = res.data.essays
         })
     },
-    mounted(){
-      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
+    mounted() {
+      this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
-    methods:{
+    methods: {
       // detail(index){
       //   console.log(this.tableData.indexOf(index));
       // }
-      search:function(keyword,page){
+      search: function (keyword, page) {
         this.page = page;
         this.kw = keyword;
         // 解决异步问题
-        if (this.cancel){// 存在上一次请求则取消
+        if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
         console.log(`搜索${this.kw},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.essays.queryByKeyword({username:keyword},new CancelToken((c) => {
+        this.$api.essays.queryByKeyword({username: keyword}, new CancelToken((c) => {
           this.cancel = c;
         }))
-          .then(res=>{
+          .then(res => {
             console.log(res)
             this.tableData = res.data.essays
           })
-          .catch(err=>{
+          .catch(err => {
             console.log(err)
           })
       },
-      changePage(e){
+      changePage(e) {
         this.page = e
-        this.$api.essays.getEssays({page:this.page})
-        .then((res)=>{
-          console.log(res.data)
-          this.essaysSize = res.data.essaysSize
-          this.tableData = res.data.essays
-        })
+        this.$api.essays.getEssays({page: this.page})
+          .then((res) => {
+            console.log(res.data)
+            this.essaysSize = res.data.essaysSize
+            this.tableData = res.data.essays
+          })
       }
     }
   }
 </script>
 
 <style scoped>
-  .table-header{
+  .table-header {
     margin-bottom: 10px;
     display: flex;
     align-items: flex-end;
   }
-  .search-div{
+
+  .search-div {
     flex-grow: 5;
     display: flex;
     justify-content: flex-end;
   }
-  .table{
+
+  .table {
     margin: auto 0px;
     height: 100%;
   }
-  .pager{
+
+  .pager {
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin: 5px auto;
   }
+
   .card-title {
     font-weight: 600;
     color: #333;
     font-size: 20px;
     margin-right: 10px;
+  }
+
+  .cover{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: rgba(100,100,100,0.2);
+  }
+  .button-bar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .turn-button{
+    border: none;
+    padding: 2px 10px;
+    background-color: #fff;
+    color: dodgerblue;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 2px 5px;
+    border-radius: 5px;
+  }
+  .turn-button:hover{
+    background-color: dodgerblue;
+    color: #fff;
+  }
+  .pics{
+    margin-bottom: 2px;
+  }
+  .pic-img{
+    width: 300px;
+    height: 400px;
+    background-size: cover;
   }
 </style>
