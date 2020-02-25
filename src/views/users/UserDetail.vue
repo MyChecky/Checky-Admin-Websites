@@ -110,7 +110,7 @@
         tasks: [],
         money: [],
         recharge: [],
-        page: -1
+        page: 1
       }
     },
     computed: {
@@ -364,8 +364,8 @@
     },
     beforeMount() {
       let id = this.$route.params.userId;
-
       console.log(`查询用户:${id}`);
+      console.log(this.page);
       this.$api.users.queryUser({
         userId:id,
       })
@@ -384,17 +384,17 @@
           res.data.tasks.map(item => {
             item.taskState = this.$translator.translator('taskState', item.taskState)
           })
-          console.log(res)
+          console.log(res.data);
           this.tasks = res.data.tasks
         }).catch((err) => {
         console.log(err)
       })
       this.$api.money.queryUserMoneyFlow({
         userId:id,
-        page:this.page
       })
         .then((res) => {
-          this.money = res.data.moneyFlows
+          console.log(res.data);
+          this.money = res.data
         }).catch((err) => {
         console.log(err)
       })
@@ -403,7 +403,9 @@
         page:this.page
       })
         .then((res) => {
-          this.recharge = res.data.userRecharge
+          console.log("id: ",id);
+          console.log(res.data);
+          this.recharge = res.data
         }).catch((err) => {
         console.log(err)
       })

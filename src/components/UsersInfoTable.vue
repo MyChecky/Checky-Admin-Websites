@@ -214,7 +214,6 @@
             res.data.users.map(item => {
               item.userGender = item.userGender === 1 ? '男' : '女'
             });
-            console.log(res.data.users);
             this.usersSize = res.data.usersSize;
             this.tableData = res.data.users;
           }).catch((err) => {

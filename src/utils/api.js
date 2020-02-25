@@ -28,7 +28,7 @@ export default {
     queryUserTask: (data) => {
       return post('/admin/task/tasks', data)
     },
-    //更改用户单个权限
+    //编辑用户权限
     changeUserAuth:(data)=>{
       return post('/admin/user/changeauth',data)
     },
@@ -52,6 +52,10 @@ export default {
     },
     queryByKeyword: (data,cancelToken) =>{
       return post('admin/queryByKeyWord',{params:data,c:cancelToken})
+    },
+    //更改admin信息
+    updateAdmin:(data)=>{
+      return post('/admin/updateAdmin',data)
     }
   },
 // 动态
@@ -147,7 +151,7 @@ export default {
     },
     //获得用户充值提现表
     queryUserMoneyRecharge: data => {
-      return post('/admin/moneyRecharge/RechargeUser',data)
+      return post('/admin/moneyRecharge/rechargeUser',data)
     },
   },
 // 申诉

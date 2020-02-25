@@ -57,15 +57,6 @@ export default new Router({
           components: {content: () => import('@/views/users/UserDetail')}
         },
         {
-          path: 'authorize/id=:userId',
-          name: 'authorize',
-          meta: {
-            title: '',
-            auth: false // 开发时用false
-          },
-          components: {content: () => import('@/components/Authorize')}
-        },
-        {
           path: 'essays',
           name: 'essays',
           meta: {

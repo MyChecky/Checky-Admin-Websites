@@ -149,8 +149,6 @@
           return columns;
         }
       },
-
-
       beforeMount() {
         this.$api.money.queryAllMoneyRecharge({
           page:this.page
@@ -171,48 +169,47 @@
         this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 180;
       },
 
-      // methods: {
-      //   search: function (keyword, page) {
-      //     this.page = page;
-      //     this.kw = keyword;
-      //     // 解决异步问题
-      //     if (this.cancel) {// 存在上一次请求则取消
-      //       this.cancel();
-      //     }
-      //     console.log(`搜索${this.kw},页码${this.page}`);
-      //     // 定义CancelToken，它是axios的一个属性，且是一个构造函数
-      //     let CancelToken = axios.CancelToken;
-      //
-      //     this.$api.money.queryByKeyword({username: keyword}, new CancelToken((c) => {
-      //       this.cancel = c;
-      //     }))
-      //       .then(res => {
-      //         console.log(res)
-      //         this.money = res.data.moneyFlows
-      //       })
-      //       .catch(err => {
-      //         console.log(err)
-      //       })
-      //   },
-      //   changePage(e) {
-      //     this.page = e
-      //     if (this.kw) {
-      //       this.search(this.kw, this.page)
-      //     } else {
-      //       console.log(`查询全部${this.kw},页码${this.page}`);
-      //       this.$api.money.queryAllMoneyFlow({
-      //         page: this.page
-      //       })
-      //         .then((res) => {
-      //           this.money = res.data.moneyFlows
-      //           this.moneyFlowsSize = res.data.moneyFlowsSize
-      //         }).catch((err) => {
-      //         console.log(err)
-      //       })
-      //     }
-      //   }
+      methods: {
+        search: function (keyword, page) {
+          this.page = page;
+          this.kw = keyword;
+          // 解决异步问题
+          if (this.cancel) {// 存在上一次请求则取消
+            this.cancel();
+          }
+          console.log(`搜索${this.kw},页码${this.page}`);
+          // 定义CancelToken，它是axios的一个属性，且是一个构造函数
+          let CancelToken = axios.CancelToken;
 
-      // }
+          this.$api.money.queryByKeyword({username: keyword}, new CancelToken((c) => {
+            this.cancel = c;
+          }))
+            .then(res => {
+              console.log(res)
+              this.money = res.data.moneyFlows
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        changePage(e) {
+          this.page = e
+          if (this.kw) {
+            this.search(this.kw, this.page)
+          } else {
+            console.log(`查询全部${this.kw},页码${this.page}`);
+            this.$api.money.queryAllMoneyFlow({
+              page: this.page
+            })
+              .then((res) => {
+                this.money = res.data.moneyFlows
+                this.moneyFlowsSize = res.data.moneyFlowsSize
+              }).catch((err) => {
+              console.log(err)
+            })
+          }
+        }
+      }
   }
 </script>
 
