@@ -7,7 +7,7 @@ if (process.env.NODE_ENV === 'development') {
 
   axios.defaults.baseURL = 'http://192.168.43.8:8080/Checky';
 
-  //axios.defaults.baseURL = 'http://localhost:8080/Checky';
+
 }
 else if (process.env.NODE_ENV === 'debug') {
   axios.defaults.baseURL = '';

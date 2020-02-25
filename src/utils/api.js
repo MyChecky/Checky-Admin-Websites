@@ -147,7 +147,7 @@ export default {
 
     //获取充值提现列表
     queryAllMoneyRecharge: data => {
-      return post('/admin/moneyRecharge/RechargeList',data)
+      return post('/admin/moneyRecharge/rechargeList',data)
     },
     //获得用户充值提现表
     queryUserMoneyRecharge: data => {
