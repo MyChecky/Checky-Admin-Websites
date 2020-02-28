@@ -50,32 +50,6 @@
           cancel:null,
           kw:"",       //?
 
-          data1: [
-            {
-              chargeId: 'John Brown',
-              orderId: "18",
-              userId: 'New York No. 1 Lake Park',
-              rechargeMoney: '20',
-              orderType: '充值',
-              chargeTime: '2016-10-03'
-            },
-            {
-              chargeId: 'John Brown',
-              orderId: "18",
-              userId: 'New York No. 1 Lake Park',
-              rechargeMoney: '20',
-              orderType: '提现',
-              chargeTime: '2016-10-03'
-            },
-            {
-              chargeId: 'John Brown',
-              orderId: "18",
-              userId: 'New York No. 1 Lake Park',
-              rechargeMoney: '20',
-              orderType: '充值',
-              chargeTime: '2016-10-03'
-            }
-          ],
         }
       },
       computed: {
@@ -97,25 +71,25 @@
           }
           columns.push({
             title: '交易ID',
-            key: 'chargeId'
+            key: 'payId'
           });
           columns.push({
             title: '订单编号',
-            key: 'orderId'
+            key: 'payOrderinfo'
           });
           columns.push({
             title: '用户ID',
-            key: 'userId'
+            key: 'payUserid'
           });
           columns.push({
             title: '金额',
-            key: 'rechargeMoney',
+            key: 'payMoney',
             render: (h, params) => {
               return h(
                 MoneyTag,
                 {
                   props:{
-                    money: params.row.rechargeMoney     //Todo
+                    money: params.row.payMoney     //Todo
                   }
                 }
               )
@@ -123,26 +97,38 @@
           });
           columns.push({
             title: '交易类型',
-            key: 'orderType',
+            key: 'payType',
             filterMultiple: false,
             filters: [
               {
                 label: '充值',
-                value: '充值'
+                value: 'pay'
               },
               {
                 label: '提现',
-                value: '提现'
+                value: 'withdraw'
               }
             ],
             filterMethod (value, row) {
               //return row.userGender === value;   //Todo
-              return row.orderType.indexOf(value) > -1;
-            }
+              return row.payType === value;
+            },
+            render: (h, params) => {
+              let _this = this;
+              let texts = '';
+              if(params.row.payType == "pay"){
+                texts = "充值"
+              }else if(params.row.payType == "withdraw"){
+                texts = "提现"
+              }
+              return h('div', {
+                props: {
+                },
+              },texts)}
           });
           columns.push({
             title: '时间',
-            key: 'chargeTime',
+            key: 'payTime',
             align: 'center',
             sortable: true
           });
@@ -154,7 +140,7 @@
           page:this.page
         })
           .then((res) => {
-            this.money = res.data.moneyRecharge
+            this.money = res.data.pays
             this.moneyRechargeSize = res.data.moneyRechargeSize
           }).catch((err) => {
           console.log(err)

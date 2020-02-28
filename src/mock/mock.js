@@ -32,10 +32,10 @@ mock.mock(`${base}/admin/moneyFlows/all`,'post',()=>{
 mock.mock(`${base}/admin/moneyFlows/graph`,'post',()=>{
   return money.graphData
 })
-mock.mock(`${base}/admin/moneyRecharge/RechargeUser`,'post',()=>{
+mock.mock(`${base}/admin/moneyRecharge/rechargeUser`,'post',()=>{
   return money.UserRecharge
 })
-mock.mock(`${base}/admin/moneyRecharge/RechargeList`,'post',()=>{
+mock.mock(`${base}/admin/moneyRecharge/rechargeList`,'post',()=>{
   return money.RechargeList
 })
 
