@@ -264,6 +264,7 @@
           .then((res) => {
             this.tableData = res.data;
             console.log(this.tableData)
+            this.$Message.warning('刷新后更新数据');
           })
           .catch((err) => {
             console.log(err)
