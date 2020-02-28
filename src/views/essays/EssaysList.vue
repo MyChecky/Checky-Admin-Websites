@@ -151,13 +151,13 @@
                     this.picList=params.row.img;
                     console.log("picList",this.picList);
                     this.imgUrl=this.baseURL+this.picList[this.index].fileAddr;
-                    if (this.picList[this.index].recordType==="audio/mpeg"){
+                    if (this.picList[this.index].recordType==="audio"){
                       this.showItem.audioShow=true;
                     }
-                    else if (this.picList[this.index].recordType==="video/mp4"){
+                    else if (this.picList[this.index].recordType==="video"){
                       this.showItem.videoShow=true;
                     }
-                    else if(this.picList[this.index].recordType==="image/png"){
+                    else if(this.picList[this.index].recordType==="image"){
                       this.showItem.imgShow=true
                     }
                     console.log(this.showItem);
@@ -282,13 +282,13 @@
           this.index = (this.index-1)%this.picList.length
         this.imgUrl=this.baseURL+this.picList[this.index].fileAddr
         console.log(this.imgUrl);
-        if (this.picList[this.index].recordType==="audio/mpeg"){
+        if (this.picList[this.index].recordType==="audio"){
           this.showItem.audioShow=true;
         }
-        else if (this.picList[this.index].recordType==="video/mp4"){
+        else if (this.picList[this.index].recordType==="video"){
           this.showItem.videoShow=true;
         }
-        else if(this.picList[this.index].recordType==="image/png"){
+        else if(this.picList[this.index].recordType==="image"){
           this.showItem.imgShow=true
         }
       },
