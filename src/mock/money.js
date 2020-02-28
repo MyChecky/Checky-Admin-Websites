@@ -10,12 +10,12 @@ const UserMoney = Mock.mock({
       "taskId":"@guid",
       "UserName":"@guid",
       "ifTest|1":[
-        "是","否"],
+        "1","0"],
       "flowIo|1":[
-        "入账","出账"],
+        "I","O"],
       "flowMoney|0-200": 1,
       "flowType|1":[
-        "支付","退款","奖励"],
+        "pay","refund","award"],
       "flowTime":"@date('yyyy-MM-dd')"
     }
   ]
@@ -30,12 +30,12 @@ const MoneyFlowList = Mock.mock({
       "taskId":"@guid",
       "UserName":"@guid",
       "ifTest|1":[
-        "是","否"],
+        "1","0"],
       "flowIo|1":[
-        "入账","出账"],
+        "I","O"],
       "flowMoney|0-200": 1,
       "flowType|1":[
-        "支付","退款","奖励"],
+        "pay","refund","award"],
       "flowTime":"@date('yyyy-MM-dd')"
     }
   ]
@@ -53,7 +53,7 @@ const UserRecharge = Mock.mock({
       "userId":"@guid",
       "rechargeMoney|0-200": 1,
       "orderType|1":[
-        "充值","提现"],
+        "pay","withdraw"],
       "chargeTime":"@date('yyyy-MM-dd')"
     }
   ]
@@ -70,16 +70,19 @@ const RechargeList = Mock.mock({
       "userId":"@guid",
       "rechargeMoney|0-200": 1,
       "orderType|1":[
-        "充值","提现"],
+        "pay","withdraw"],
       "chargeTime":"@date('yyyy-MM-dd')"
     }
   ]
 })
 
 const graphData = Mock.mock({
-  "income|12":["@float(10, 30,0,2)"],
-  "benefit|12":["@float(10, 30,0,2)"],
-  "refund|12":["@float(10, 30,0,2)"]
+  "trueIncomeList|12":["@float(10, 30,0,2)"],
+  "trueRefundList|12":["@float(10, 30,0,2)"],
+  "trueBenefitList|12":["@float(10, 30,0,2)"],
+  "testRefundList|12":["@float(10, 30,0,2)"],
+  "testIncomeList|12":["@float(10, 30,0,2)"],
+  "testBenefitList|12":["@float(10, 30,0,2)"],
 })
 export {
   UserMoney, MoneyFlowList,graphData,RechargeList,UserRecharge
