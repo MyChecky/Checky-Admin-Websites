@@ -12,15 +12,19 @@
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page>
-    <div class="cover" v-if="show" @click="show=!show"></div>
-    <div :class="['outer-div',]" v-if="show">
-      <div class="pics">
-        <img :src="this.baseURL+this.picList[0].fileAddr" alt="pic" class="pic-img">
-      </div>
-      <div class="button-bar">
-        <button class="turn-button fa fa-angle-left" @click="last"></button>
-        <span class="index-tag">附件 {{index+1}}</span>
-        <button class="turn-button fa fa-angle-right" @click="next"></button>
+    <div class="pic-container" v-if="show" >
+      <div class="cover" @click="showing"></div>
+      <div :class="['outer-div',]">
+        <div class="pics">
+          <img :src="this.imgUrl" alt="pic" class="pic-img" v-if="this.showItem.imgShow">
+          <audio :src="this.imgUrl" controls="controls" alt="audio" class="pic-audio" v-if="this.showItem.audioShow"></audio>
+          <video :src="this.imgUrl" controls="controls" alt="video" class="pic-video" v-if="this.showItem.videoShow"></video>
+        </div>
+        <div class="button-bar">
+          <button class="turn-button fa fa-angle-left" @click="last"></button>
+          <span class="index-tag">附件 {{this.index+1}}</span>
+          <button class="turn-button fa fa-angle-right" @click="next"></button>
+        </div>
       </div>
     </div>
   </div>
@@ -57,6 +61,13 @@
         baseURL: base+'/',
         show:false,
         picList:[],
+        index:0,
+        imgUrl:'',
+        showItem:{
+          imgShow:false,
+          audioShow:false,
+          videoShow:false,
+        }
       }
     },
     computed: {
@@ -119,16 +130,6 @@
           key: 'img',
           render: (h, params) => {
             return h(
-              // PicViewer, {
-              //   props: {
-              //     picList: params.row.img
-              //   },
-              //   on: {
-              //     click: (e) => {
-              //       console.log("params.row.img ",params.row.img)
-              //     }
-              //   }
-              // }
               "button", {
                 attrs: {
                   picList: params.row.img
@@ -145,11 +146,24 @@
                 },
                 on: {
                   click: (e) => {
-                    this.show=!this.show;
+                    this.index=0//index置0
+                    this.show=true;
                     this.picList=params.row.img;
                     console.log("picList",this.picList);
-                    console.log("url ",this.baseURL+this.picList[0].fileAddr)
+                    this.imgUrl=this.baseURL+this.picList[this.index].fileAddr;
+                    if (this.picList[this.index].recordType==="audio"){
+                      this.showItem.audioShow=true;
+                    }
+                    else if (this.picList[this.index].recordType==="video"){
+                      this.showItem.videoShow=true;
+                    }
+                    else if(this.picList[this.index].recordType==="image"){
+                      this.showItem.imgShow=true
+                    }
+                    console.log(this.showItem);
+
                   }
+
                 }
               }
             )
@@ -190,6 +204,16 @@
                   click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
                     console.log(e.target.attributes.essayId.nodeValue);
+                    console.log(this.tableData[params.index].essayId);
+                    this.$api.essays.deleteById({
+                      essayId:this.tableData[params.index].essayId
+                    })
+                      .then(res=>{
+                        console.log("删除",res.data.state)
+                      })
+                      .catch(err=>{
+                        console.log(err)
+                      })
                   }
                 }
               },
@@ -245,6 +269,34 @@
             this.essaysSize = res.data.essaysSize
             this.tableData = res.data.essays
           })
+      },
+      next(){
+        this.index = (this.index+1)%this.picList.length
+        this.imgUrl=this.baseURL+this.picList[this.index].fileAddr
+        console.log(this.imgUrl);
+      },
+      last(){
+        if (this.index===0)
+          this.index = this.picList.length-1
+        else
+          this.index = (this.index-1)%this.picList.length
+        this.imgUrl=this.baseURL+this.picList[this.index].fileAddr
+        console.log(this.imgUrl);
+        if (this.picList[this.index].recordType==="audio"){
+          this.showItem.audioShow=true;
+        }
+        else if (this.picList[this.index].recordType==="video"){
+          this.showItem.videoShow=true;
+        }
+        else if(this.picList[this.index].recordType==="image"){
+          this.showItem.imgShow=true
+        }
+      },
+      showing(){
+        this.show=false;
+        this.showItem.imgShow=false;
+        this.showItem.audioShow=false;
+        this.showItem.videoShow=false;
       }
     }
   }
@@ -282,6 +334,20 @@
     margin-right: 10px;
   }
 
+  .pic-container{}
+  .outer-div{
+    position: fixed;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 15px 2px rgba(200,200,200,0.8);
+    z-index: 1001;
+    padding: 5px;
+    width: auto;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
   .cover{
     position: fixed;
     top: 0;
@@ -314,8 +380,13 @@
     margin-bottom: 2px;
   }
   .pic-img{
-    width: 300px;
-    height: 400px;
+    max-width: 300px;
+    max-height: 400px;
+    background-size: cover;
+  }
+  .pic-video{
+    max-width: 450px;
+    max-height: 600px;
     background-size: cover;
   }
 </style>

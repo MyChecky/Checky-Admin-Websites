@@ -161,18 +161,18 @@
           res.data.reports.map(item => {
             item.reportType = this.$translator.translator('reportType', item.reportType)
           });
-          let tempData = [];
-          let tempData1 = [];
-          tempData = res.data.reports;
-          let j = 0;
-          for (let i = 0; i < res.data.reportsSize; i++) {
-            if (tempData[i].reportState === "toProcess") {
-              tempData1[j] = tempData[i];
-              j = j + 1;
-            }
-          }
-          console.log("tempData1: ", tempData1);
-          this.tableData = tempData1;
+          // let tempData = [];
+          // let tempData1 = [];
+          // tempData = res.data.reports;
+          // let j = 0;
+          // for (let i = 0; i < res.data.reportsSize; i++) {
+          //   if (tempData[i].reportState === "toProcess") {
+          //     tempData1[j] = tempData[i];
+          //     j = j + 1;
+          //   }
+          // }
+          // console.log("tempData1: ", tempData1);
+          this.tableData = res.data.reports;
           this.reportsSize = this.tableData.length;
           console.log("tableData: ", this.tableData)
         })

@@ -65,8 +65,11 @@ export default {
     },
 
     queryByKeyword: (data,cancelToken) =>{
-      data['c'] = cancelToken
+      data['c'] = cancelToken;
       return post('admin/essay/query',data)
+    },
+    deleteById:data=>{
+      return post('admin/essay/delete',data)
     }
   },
 // 任务
