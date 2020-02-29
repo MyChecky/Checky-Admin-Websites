@@ -33,13 +33,13 @@
         <Card class="others">
           <div class="table-header">
             <span class="card-title">资金流水</span>
-            <span class="total">总数：{{money.length}}</span>
+            <span class="total">总数：{{this.moneySize}}</span>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                    :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="this.money"
                    :columns="moneyColumns"></Table>
-            <Page class="pager" :total="5" :page-size="pageSize" @on-change="changeMoneyPage"></Page>
+            <Page class="pager" :total="this.moneySize" :page-size="pageSize" @on-change="changeMoneyPage"></Page>
           </div>
         </Card>
       </div>
@@ -47,13 +47,13 @@
         <Card class="others">
           <div class="table-header">
             <span class="card-title">充值记录</span>
-            <span class="total">总数：{{recharge.length}}</span>
+            <span class="total">总数：{{this.rechargeSize}}</span>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                    :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="this.recharge"
                    :columns="rechargeColumns"></Table>
-            <Page class="pager" :total="5" :page-size="pageSize" @on-change="changeRechargePage"></Page>
+            <Page class="pager" :total="this.rechargeSize" :page-size="pageSize" @on-change="changeRechargePage"></Page>
           </div>
         </Card>
 
@@ -62,13 +62,13 @@
         <Card class="others">
           <div class="table-header">
             <span class="card-title">任务列表</span>
-            <span class="total">总数：{{tasks.length}}</span>
+            <span class="total">总数：{{this.taskSize}}</span>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                    :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tasks"
                    :columns="taskColumns"></Table>
-            <Page class="pager" :total="5" :page-size="pageSize" @on-change="changeTaskPage"></Page>
+            <Page class="pager" :total="this.taskSize" :page-size="pageSize" @on-change="changeTaskPage"></Page>
           </div>
         </Card>
       </div>
@@ -106,7 +106,7 @@
         showCheckbox: false,
         fixedHeader: false,
         tableHeight: 400,
-        pageSize: 10,
+        pageSize: 5,
         tableSize: 'default',
         exist: true,
         score: -1,
@@ -116,7 +116,10 @@
         recharge: [],
         moneypage: 0,
         rechargepage:0,
-        taskpage:0
+        taskpage:0,
+        moneySize:0,
+        rechargeSize:0,
+        taskSize:0
       }
     },
     computed: {
@@ -156,7 +159,7 @@
               MoneyTag,
               {
                 props:{
-                  money: params.row.payMoney     
+                  money: params.row.payMoney
                 }
               }
             )
@@ -423,35 +426,41 @@
       })
       this.$api.users.queryUserTask({
         userId:id,
-        page:this.taskpage
+        page:this.taskpage,
+        pageSize: this.pageSize
       })
         .then((res) => {
           console.log("res.data.tasks",res.data.tasks);
           res.data.tasks.map(item => {
             item.taskState = this.$translator.translator('taskState', item.taskState)
-          })
+          });
           console.log(res.data);
           this.tasks = res.data.tasks
+          this.taskSize=res.data.total
         }).catch((err) => {
         console.log(err)
       })
       this.$api.money.queryUserMoneyFlow({
         userId:id,
         page:this.moneypage,
+        pageSize: this.pageSize
       })
         .then((res) => {
           console.log("res.data.moneyFlow",res.data.moneyFlow);
           this.money = res.data.moneyFlow
+          this.moneySize=res.data.total
         }).catch((err) => {
         console.log(err)
       })
       this.$api.money.queryUserMoneyRecharge({
         userId:id,
-        page:this.rechargepage
+        page:this.rechargepage,
+        pageSize: this.pageSize
       })
         .then((res) => {
           console.log("res.data.pays",res.data.pays);
-          this.recharge = res.data.pays
+          this.recharge = res.data.pays;
+          this.rechargeSize=res.data.total
         }).catch((err) => {
         console.log(err)
       })
@@ -465,10 +474,12 @@
         this.$api.money.queryUserMoneyFlow({
           userId:id,
           page:this.moneypage,
+          pageSize: this.pageSize
         })
           .then((res) => {
             console.log("res.data.moneyFlow",res.data.moneyFlow);
             this.money = res.data.moneyFlow
+            this.moneySize=res.data.total
           }).catch((err) => {
           console.log(err)
         })
@@ -478,11 +489,13 @@
         let id = this.$route.params.userId;
         this.$api.money.queryUserMoneyRecharge({
           userId:id,
-          page:this.rechargepage
+          page:this.rechargepage,
+          pageSize: this.pageSize
         })
           .then((res) => {
             console.log("res.data.pays",res.data.pays);
             this.recharge = res.data.pays
+            this.rechargeSize=res.data.total
           }).catch((err) => {
           console.log(err)
         })
@@ -492,7 +505,8 @@
         let id = this.$route.params.userId;
         this.$api.users.queryUserTask({
           userId:id,
-          page:this.taskpage
+          page:this.taskpage,
+          pageSize: this.pageSize
         })
           .then((res) => {
             console.log("res.data.tasks",res.data.tasks);
@@ -500,7 +514,8 @@
               item.taskState = this.$translator.translator('taskState', item.taskState)
             })
             console.log(res.data);
-            this.tasks = res.data.tasks
+            this.tasks = res.data.tasks;
+            this.taskSize=res.data.total
           }).catch((err) => {
           console.log(err)
         })
