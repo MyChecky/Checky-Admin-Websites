@@ -1,22 +1,24 @@
 <template>
   <div class="container">
 
-      <div class="inner-div">
-        <Card class="others">
-          <div class="table-header">
-            <span class="card-title">流水记录</span>
-            <span class="total">总数：{{moneyFlowsSize}}</span>
-            <div class="search-div"><SearchBar :search="search"></SearchBar></div>
+    <div class="inner-div">
+      <Card class="others">
+        <div class="table-header">
+          <span class="card-title">流水记录</span>
+          <span class="total">总数：{{moneyFlowsSize}}</span>
+          <div class="search-div">
+            <SearchBar :search="search"></SearchBar>
           </div>
-          <div class="task-list">
-            <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
-                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
-                   :columns="moneyColumns"></Table>
-          </div>
-        </Card>
+        </div>
+        <div class="task-list">
+          <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
+                 :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
+                 :columns="moneyColumns"></Table>
+        </div>
+      </Card>
 
-      </div>
-      <Page class="pager" :total="moneyFlowsSize" :page-size="pageSize" @on-change="changePage"></Page>
+    </div>
+    <Page class="pager" :total="moneyFlowsSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -24,6 +26,7 @@
   import SearchBar from '../../components/SearchBar'
   import MoneyTag from '../../components/MoneyTag'
   import axios from 'axios'
+
   export default {
     name: "MoneyFlow",
     components: {
@@ -46,8 +49,8 @@
         moneyFlowsSize: 0,
         money: [],
         page: 0,
-        cancel:null,
-        kw:""
+        cancel: null,
+        kw: ""
       }
     },
     computed: {
@@ -78,7 +81,7 @@
         });
         columns.push({
           title: '相关用户',
-          key: 'UserName'
+          key: 'userName'
         });
         columns.push({
           title: '真实货币',
@@ -94,21 +97,21 @@
               value: 0
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             return row.ifTest === value;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if(params.row.ifTest == 0){
+            if (params.row.ifTest == 0) {
               texts = "否"
-            }else if(params.row.ifTest == 1){
+            } else if (params.row.ifTest == 1) {
               texts = "是"
             }
             return h('div', {
-              props: {
-              },
-            },texts)}
+              props: {},
+            }, texts)
+          }
         });
         columns.push({
           title: '资金流动',
@@ -124,21 +127,21 @@
               value: "O"
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             return row.flowIo === value;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if(params.row.flowIo == "I"){
+            if (params.row.flowIo == "I") {
               texts = "入账"
-            }else if(params.row.flowIo == "O"){
+            } else if (params.row.flowIo == "O") {
               texts = "出账"
             }
             return h('div', {
-              props: {
-              },
-            },texts)}
+              props: {},
+            }, texts)
+          }
         });
         columns.push({
           title: '金额',
@@ -147,7 +150,7 @@
             return h(
               MoneyTag,
               {
-                props:{
+                props: {
                   money: params.row.flowMoney
                 }
               }
@@ -172,23 +175,23 @@
               value: "award"
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             return row.flowType === value;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if(params.row.flowType == "pay"){
+            if (params.row.flowType == "pay") {
               texts = "支付"
-            }else if(params.row.flowType == "refund"){
+            } else if (params.row.flowType == "refund") {
               texts = "退款"
-            }else if(params.row.flowType == "award"){
+            } else if (params.row.flowType == "award") {
               texts = "奖励"
             }
             return h('div', {
-              props: {
-              },
-            },texts)}
+              props: {},
+            }, texts)
+          }
         });
         columns.push({
           title: '时间',
@@ -201,11 +204,12 @@
     },
     beforeMount() {
       this.$api.money.queryAllMoneyFlow({
-        page:this.page
+        page: this.page,
+        pageSize: this.pageSize
       })
         .then((res) => {
-          this.money = res.data.moneyFlows
-          this.moneyFlowsSize = res.data.moneyFlowsSize
+          this.money = res.data.moneyFlow;
+          this.moneyFlowsSize = res.data.total
         }).catch((err) => {
         console.log(err)
       })
@@ -216,48 +220,49 @@
     },
 
     mounted() {
-      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 180;
+      this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180;
     },
 
     methods: {
-      search:function(keyword,page){
+      search: function (keyword, page) {
         this.page = page;
         this.kw = keyword;
         // 解决异步问题
-        if (this.cancel){// 存在上一次请求则取消
+        if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
         console.log(`搜索${this.kw},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.money.queryByKeyword({username:keyword},new CancelToken((c) => {
+        this.$api.money.queryByKeyword({username: keyword}, new CancelToken((c) => {
           this.cancel = c;
         }))
-          .then(res=>{
-            console.log(res)
-            this.money = res.data.moneyFlows
+          .then(res => {
+            console.log(res);
+            this.money = res.data.moneyFlow;
+            this.moneyFlowsSize = res.data.total
           })
-          .catch(err=>{
+          .catch(err => {
             console.log(err)
           })
       },
       changePage(e) {
         this.page = e
         if (this.kw) {
-          this.search(this.kw,this.page)
-        }
-        else {
+          this.search(this.kw, this.page)
+        } else {
           console.log(`查询全部${this.kw},页码${this.page}`);
           this.$api.money.queryAllMoneyFlow({
-          page:this.page
-        })
-        .then((res) => {
-          this.money = res.data.moneyFlows
-          this.moneyFlowsSize = res.data.moneyFlowsSize
-        }).catch((err) => {
-          console.log(err)
-        })
+            page: this.page,
+            pageSize: this.pageSize
+          })
+            .then((res) => {
+              this.money = res.data.moneyFlow
+              this.moneyFlowsSize = res.data.total
+            }).catch((err) => {
+            console.log(err)
+          })
         }
       }
     }
@@ -283,11 +288,13 @@
     display: flex;
     align-items: flex-end;
   }
-  .search-div{
+
+  .search-div {
     flex-grow: 5;
     display: flex;
     justify-content: flex-end;
   }
+
   .notice {
     position: absolute;
     left: 50%;
@@ -386,7 +393,7 @@
     width: 100%;
   }
 
-  .pager{
+  .pager {
     display: flex;
     flex-direction: row;
     justify-content: center;

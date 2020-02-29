@@ -37,8 +37,9 @@
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
-                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
+                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="this.money"
                    :columns="moneyColumns"></Table>
+            <Page class="pager" :total="5" :page-size="pageSize" @on-change="changeMoneyPage"></Page>
           </div>
         </Card>
       </div>
@@ -50,10 +51,12 @@
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
-                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="recharge"
+                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="this.recharge"
                    :columns="rechargeColumns"></Table>
+            <Page class="pager" :total="5" :page-size="pageSize" @on-change="changeRechargePage"></Page>
           </div>
         </Card>
+
       </div>
       <div class="inner-div">
         <Card class="others">
@@ -65,6 +68,7 @@
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                    :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tasks"
                    :columns="taskColumns"></Table>
+            <Page class="pager" :total="5" :page-size="pageSize" @on-change="changeTaskPage"></Page>
           </div>
         </Card>
       </div>
@@ -110,7 +114,9 @@
         tasks: [],
         money: [],
         recharge: [],
-        page: 1
+        moneypage: 0,
+        rechargepage:0,
+        taskpage:0
       }
     },
     computed: {
@@ -132,25 +138,25 @@
         }
         columns.push({
           title: '交易ID',
-          key: 'chargeId'
+          key: 'payId'
         });
         columns.push({
           title: '订单编号',
-          key: 'orderId'
+          key: 'payOrderinfo'
         });
         columns.push({
-          title: '用户ID',
-          key: 'userId'
+          title: '用户名',
+          key: 'payUserName'
         });
         columns.push({
           title: '金额',
-          key: 'rechargeMoney',
+          key: 'payMoney',
           render: (h, params) => {
             return h(
               MoneyTag,
               {
                 props:{
-                  money: params.row.rechargeMoney     //Todo
+                  money: params.row.payMoney     
                 }
               }
             )
@@ -158,7 +164,7 @@
         });
         columns.push({
           title: '交易类型',
-          key: 'orderType',
+          key: 'payType',
           filterMultiple: false,
           filters: [
             {
@@ -172,12 +178,12 @@
           ],
           filterMethod (value, row) {
             //return row.userGender === value;   //Todo
-            return row.orderType.indexOf(value) > -1;
+            return row.payType.indexOf(value) > -1;
           }
         });
         columns.push({
           title: '时间',
-          key: 'chargeTime',
+          key: 'payTime',
           align: 'center',
           sortable: true
         });
@@ -279,43 +285,69 @@
         });
         columns.push({
           title: '相关用户',
-          key: 'UserName'
+          key: 'userName'
         });
         columns.push({
           title: '真实货币',
-          key: 'ifRealMoney',
+          key: 'ifTest',
+          align:'center',
           filterMultiple: false,
           filters: [
             {
               label: '是',
-              value: '是'
+              value: 1
             },
             {
               label: '否',
-              value: '否'
+              value: 0
             }
           ],
           filterMethod (value, row) {
             return row.ifRealMoney.indexOf(value) > -1;
-          }
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.ifTest == 0){
+              texts = "否"
+            }else if(params.row.ifTest == 1){
+              texts = "是"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '资金流动',
-          key: 'FlowDir',
+          key: 'flowIo',
+          align:'center',
           filterMultiple: false,
           filters: [
             {
               label: '入账',
-              value: '入账'
+              value: 'I'
             },
             {
               label: '出账',
-              value: '出账'
+              value: 'O'
             }
           ],
           filterMethod (value, row) {
             return row.FlowDir.indexOf(value) > -1;
-          }
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.flowIo == "I"){
+              texts = "入账"
+            }else if(params.row.flowIo == "O"){
+              texts = "出账"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '金额',
@@ -333,25 +365,39 @@
         });
         columns.push({
           title: '类型',
-          key: 'type',
+          key: 'flowType',
           filterMultiple: false,
           filters: [
             {
               label: '支付',
-              value: '支付'
+              value: 'pay'
             },
             {
               label: '退款',
-              value: '退款'
+              value: 'refund'
             },
             {
               label: '奖励',
-              value: '奖励'
+              value: 'award'
             }
           ],
           filterMethod (value, row) {
             return row.type.indexOf(value) > -1;
-          }
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.flowType == "pay"){
+              texts = "支付"
+            }else if(params.row.flowType == "refund"){
+              texts = "退款"
+            }else if(params.row.flowType == "award"){
+              texts = "奖励"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '时间',
@@ -365,12 +411,11 @@
     beforeMount() {
       let id = this.$route.params.userId;
       console.log(`查询用户:${id}`);
-      console.log(this.page);
       this.$api.users.queryUser({
         userId:id,
       })
         .then((res) => {
-          console.log(res);
+          console.log("res.data.user",res.data.user);
           this.userInfo = res.data.user;
           this.score = Math.ceil(this.userInfo.userCredit / 20);
         }).catch((err) => {
@@ -378,9 +423,10 @@
       })
       this.$api.users.queryUserTask({
         userId:id,
-        page:this.page
+        page:this.taskpage
       })
         .then((res) => {
+          console.log("res.data.tasks",res.data.tasks);
           res.data.tasks.map(item => {
             item.taskState = this.$translator.translator('taskState', item.taskState)
           })
@@ -391,28 +437,75 @@
       })
       this.$api.money.queryUserMoneyFlow({
         userId:id,
+        page:this.moneypage,
       })
         .then((res) => {
-          console.log(res.data);
-          this.money = res.data
+          console.log("res.data.moneyFlow",res.data.moneyFlow);
+          this.money = res.data.moneyFlow
         }).catch((err) => {
         console.log(err)
       })
       this.$api.money.queryUserMoneyRecharge({
         userId:id,
-        page:this.page
+        page:this.rechargepage
       })
         .then((res) => {
-          console.log("id: ",id);
-          console.log(res.data);
-          this.recharge = res.data
+          console.log("res.data.pays",res.data.pays);
+          this.recharge = res.data.pays
         }).catch((err) => {
         console.log(err)
       })
     },
     methods: {
       search(keyword) {
+      },
+      changeMoneyPage(e){
+        this.moneypage = e;
+        let id = this.$route.params.userId;
+        this.$api.money.queryUserMoneyFlow({
+          userId:id,
+          page:this.moneypage,
+        })
+          .then((res) => {
+            console.log("res.data.moneyFlow",res.data.moneyFlow);
+            this.money = res.data.moneyFlow
+          }).catch((err) => {
+          console.log(err)
+        })
+      },
+      changeRechargePage(e){
+        this.rechargepage=e;
+        let id = this.$route.params.userId;
+        this.$api.money.queryUserMoneyRecharge({
+          userId:id,
+          page:this.rechargepage
+        })
+          .then((res) => {
+            console.log("res.data.pays",res.data.pays);
+            this.recharge = res.data.pays
+          }).catch((err) => {
+          console.log(err)
+        })
+      },
+      changeTaskPage(e){
+        this.taskpage=e;
+        let id = this.$route.params.userId;
+        this.$api.users.queryUserTask({
+          userId:id,
+          page:this.taskpage
+        })
+          .then((res) => {
+            console.log("res.data.tasks",res.data.tasks);
+            res.data.tasks.map(item => {
+              item.taskState = this.$translator.translator('taskState', item.taskState)
+            })
+            console.log(res.data);
+            this.tasks = res.data.tasks
+          }).catch((err) => {
+          console.log(err)
+        })
       }
+
     }
   }
 </script>
@@ -534,6 +627,12 @@
     width: 100%;
   }
 
+  .pager {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 5px auto;
+  }
   .others {
     display: flex;
     width: 100%;

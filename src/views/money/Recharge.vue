@@ -17,7 +17,7 @@
       </Card>
 
     </div>
-    <Page class="pager" :total="moneyFlowsSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <Page class="pager" :total="moneyRechargeSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -40,11 +40,12 @@
           showCheckbox: false,
           fixedHeader: false,
           tableHeight: 400,
-          pageSize: 10,
+          pageSize: 8,
           tableSize: 'default',
           exist: true,
           score: -1,
           moneyFlowsSize: 0,
+          moneyRechargeSize:0,
           money: [],
           page: 0,
           cancel:null,
@@ -137,14 +138,15 @@
       },
       beforeMount() {
         this.$api.money.queryAllMoneyRecharge({
-          page:this.page
+          page:this.page,
+          pageSize:this.pageSize
         })
           .then((res) => {
-            this.money = res.data.pays
-            this.moneyRechargeSize = res.data.moneyRechargeSize
+            this.money = res.data.pays;
+            this.moneyRechargeSize = res.data.total
           }).catch((err) => {
           console.log(err)
-        })
+        });
         //查询当前登录用户的部门
         if (localStorage.department === '"task"') {
           this.$router.push(`/404`)
@@ -172,7 +174,8 @@
           }))
             .then(res => {
               console.log(res)
-              this.money = res.data.moneyFlows
+              this.money = res.data.moneyFlow
+              this.moneyFlowsSize=res.data.total
             })
             .catch(err => {
               console.log(err)
@@ -184,12 +187,13 @@
             this.search(this.kw, this.page)
           } else {
             console.log(`查询全部${this.kw},页码${this.page}`);
-            this.$api.money.queryAllMoneyFlow({
-              page: this.page
+            this.$api.money.queryAllMoneyRecharge({
+              page:this.page,
+              pageSize:this.pageSize
             })
               .then((res) => {
-                this.money = res.data.moneyFlows
-                this.moneyFlowsSize = res.data.moneyFlowsSize
+                this.money = res.data.pays;
+                this.moneyRechargeSize = res.data.total
               }).catch((err) => {
               console.log(err)
             })

@@ -51,22 +51,22 @@
         showCheckbox: true,
         fixedHeader: false,
         tableHeight: 600,
-        pageSize: 5,
+        pageSize: 10,
         tableSize: 'default',
         page: 0,
         essaysSize: 0,
         tableData: [],
         cancel: null,
         kw: "",
-        baseURL: base+'/',
-        show:false,
-        picList:[],
-        index:0,
-        imgUrl:'',
-        showItem:{
-          imgShow:false,
-          audioShow:false,
-          videoShow:false,
+        baseURL: base + '/',
+        show: false,
+        picList: [],
+        index: 0,
+        imgUrl: '',
+        showItem: {
+          imgShow: false,
+          audioShow: false,
+          videoShow: false,
         }
       }
     },
@@ -134,7 +134,7 @@
                 attrs: {
                   picList: params.row.img
                 },
-                style:{
+                style: {
                   border: "none",
                   backgroundColor: 'transparent',
                   textDecoration: 'underline',
@@ -146,19 +146,17 @@
                 },
                 on: {
                   click: (e) => {
-                    this.index=0//index置0
-                    this.show=true;
-                    this.picList=params.row.img;
-                    console.log("picList",this.picList);
-                    this.imgUrl=this.baseURL+this.picList[this.index].fileAddr;
-                    if (this.picList[this.index].recordType==="audio/mpeg"){
-                      this.showItem.audioShow=true;
-                    }
-                    else if (this.picList[this.index].recordType==="video/mp4"){
-                      this.showItem.videoShow=true;
-                    }
-                    else if(this.picList[this.index].recordType==="image/png"){
-                      this.showItem.imgShow=true
+                    this.index = 0; //index置0
+                    this.show = true;
+                    this.picList = params.row.img;
+                    console.log("picList", this.picList);
+                    this.imgUrl = this.baseURL + this.picList[this.index].fileAddr;
+                    if (this.picList[this.index].recordType === "audio") {
+                      this.showItem.audioShow = true;
+                    } else if (this.picList[this.index].recordType === "video") {
+                      this.showItem.videoShow = true;
+                    } else if (this.picList[this.index].recordType === "image") {
+                      this.showItem.imgShow = true
                     }
                     console.log(this.showItem);
 
@@ -203,15 +201,14 @@
                 on: {
                   click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    console.log(e.target.attributes.essayId.nodeValue);
-                    console.log(this.tableData[params.index].essayId);
                     this.$api.essays.deleteById({
-                      essayId:this.tableData[params.index].essayId
+                      essayId: this.tableData[params.index].essayId
                     })
-                      .then(res=>{
-                        console.log("删除",res.data.state)
+                      .then(res => {
+                        console.log("删除", res.data.state)
+                        if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
                       })
-                      .catch(err=>{
+                      .catch(err => {
                         console.log(err)
                       })
                   }
@@ -225,11 +222,14 @@
       },
     },
     beforeMount: function () {
-      this.$api.essays.getEssays({page: this.page})
+      this.$api.essays.getEssays({
+        page: this.page,
+        pageSize:this.pageSize
+      })
         .then((res) => {
-          console.log(res.data)
-          this.essaysSize = res.data.essaysSize
-          this.tableData = res.data.essays
+          console.log(res.data);
+          this.tableData = res.data.essays;
+          this.essaysSize = res.data.total;
         })
     },
     mounted() {
@@ -263,40 +263,41 @@
       },
       changePage(e) {
         this.page = e
-        this.$api.essays.getEssays({page: this.page})
+        this.$api.essays.getEssays({
+          page: this.page,
+          pageSize:this.pageSize
+        })
           .then((res) => {
             console.log(res.data)
-            this.essaysSize = res.data.essaysSize
+            this.essaysSize = res.data.total
             this.tableData = res.data.essays
           })
       },
-      next(){
-        this.index = (this.index+1)%this.picList.length
-        this.imgUrl=this.baseURL+this.picList[this.index].fileAddr
+      next() {
+        this.index = (this.index + 1) % this.picList.length
+        this.imgUrl = this.baseURL + this.picList[this.index].fileAddr
         console.log(this.imgUrl);
       },
-      last(){
-        if (this.index===0)
-          this.index = this.picList.length-1
+      last() {
+        if (this.index === 0)
+          this.index = this.picList.length - 1
         else
-          this.index = (this.index-1)%this.picList.length
-        this.imgUrl=this.baseURL+this.picList[this.index].fileAddr
+          this.index = (this.index - 1) % this.picList.length
+        this.imgUrl = this.baseURL + this.picList[this.index].fileAddr
         console.log(this.imgUrl);
-        if (this.picList[this.index].recordType==="audio/mpeg"){
-          this.showItem.audioShow=true;
-        }
-        else if (this.picList[this.index].recordType==="video/mp4"){
-          this.showItem.videoShow=true;
-        }
-        else if(this.picList[this.index].recordType==="image/png"){
-          this.showItem.imgShow=true
+        if (this.picList[this.index].recordType === "audio") {
+          this.showItem.audioShow = true;
+        } else if (this.picList[this.index].recordType === "video") {
+          this.showItem.videoShow = true;
+        } else if (this.picList[this.index].recordType === "image") {
+          this.showItem.imgShow = true
         }
       },
-      showing(){
-        this.show=false;
-        this.showItem.imgShow=false;
-        this.showItem.audioShow=false;
-        this.showItem.videoShow=false;
+      showing() {
+        this.show = false;
+        this.showItem.imgShow = false;
+        this.showItem.audioShow = false;
+        this.showItem.videoShow = false;
       }
     }
   }
@@ -334,35 +335,40 @@
     margin-right: 10px;
   }
 
-  .pic-container{}
-  .outer-div{
+  .pic-container {
+  }
+
+  .outer-div {
     position: fixed;
     background-color: #fff;
     border-radius: 5px;
-    box-shadow: 2px 2px 15px 2px rgba(200,200,200,0.8);
+    box-shadow: 2px 2px 15px 2px rgba(200, 200, 200, 0.8);
     z-index: 1001;
     padding: 5px;
     width: auto;
     height: auto;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
   }
-  .cover{
+
+  .cover {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 1000;
-    background-color: rgba(100,100,100,0.2);
+    background-color: rgba(100, 100, 100, 0.2);
   }
-  .button-bar{
+
+  .button-bar {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  .turn-button{
+
+  .turn-button {
     border: none;
     padding: 2px 10px;
     background-color: #fff;
@@ -372,19 +378,23 @@
     margin: 2px 5px;
     border-radius: 5px;
   }
-  .turn-button:hover{
+
+  .turn-button:hover {
     background-color: dodgerblue;
     color: #fff;
   }
-  .pics{
+
+  .pics {
     margin-bottom: 2px;
   }
-  .pic-img{
+
+  .pic-img {
     max-width: 300px;
     max-height: 400px;
     background-size: cover;
   }
-  .pic-video{
+
+  .pic-video {
     max-width: 450px;
     max-height: 600px;
     background-size: cover;

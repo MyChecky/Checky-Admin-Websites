@@ -3,7 +3,7 @@
     <Card>
       <div class="table-header">
         <span class="card-title">管理员列表</span>
-        <span class="total">总数：{{adminsSize}}</span>
+        <span class="total">总数：{{this.adminsSize}}</span>
         <div class="search-div">
           <SearchBar :search="search"></SearchBar>
         </div>
@@ -200,8 +200,11 @@
     },
     beforeMount: function () {
       // 请求所有用户信息
-      this.$api.admins.queryAdminsInfo({"page": this.page}).then((res) => {
-        this.adminsSize = res.data.adminsSize;
+      this.$api.admins.queryAdminsInfo({
+        "page": this.page,
+        "pageSize":this.pageSize
+      }).then((res) => {
+        this.adminsSize = res.data.total;
         this.tableData = res.data.admins;
       }).catch((err) => {
         console.log(err);
@@ -244,8 +247,11 @@
           this.search(this.kw, this.page)
         } else {
           console.log(`查询全部${this.kw},页码${this.page}`);
-          this.$api.admins.queryAdminsInfo({"page": this.page}).then((res) => {
-            this.adminsSize = res.data.adminsSize;
+          this.$api.admins.queryAdminsInfo({
+            "page": this.page,
+            "pageSize":this.pageSize
+          }).then((res) => {
+            this.adminsSize = res.data.total;
             this.tableData = res.data.admins;
           }).catch((err) => {
             console.log(err);

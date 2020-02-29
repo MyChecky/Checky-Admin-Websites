@@ -46,6 +46,7 @@
         ],
         types: [],
         typeSuggestions: [],
+        suggestionsSize:0
       }
     },
     computed: {
@@ -169,10 +170,14 @@
         .catch(err=>{
           console.log(err)
         });
-      this.$api.tasks.queryTypeSuggestion({page:this.page})
+      this.$api.tasks.queryTypeSuggestion({
+        page:this.page,
+        pageSize:this.pageSize
+      })
         .then((res)=>{
           console.log(res.data);
           this.typeSuggestions = res.data.suggestions;
+          this.suggestionsSize=res.data.total
         })
         .catch(err=>{
           console.log(err)
@@ -198,6 +203,18 @@
       },
       changePage(e){
         this.page = e
+        this.$api.tasks.queryTypeSuggestion({
+          page:this.page,
+          pageSize:this.pageSize
+        })
+          .then((res)=>{
+            console.log(res.data);
+            this.typeSuggestions = res.data.suggestions;
+            this.suggestionsSize=res.data.total
+          })
+          .catch(err=>{
+            console.log(err)
+          })
       }
     }
   }

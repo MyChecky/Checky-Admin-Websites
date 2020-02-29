@@ -156,7 +156,10 @@
       },
     },
     beforeMount: function () {
-      this.$api.report.getReports({page: this.page})
+      this.$api.report.getReports({
+        page: this.page,
+        pageSize: this.pageSize
+      })
         .then(res => {
           res.data.reports.map(item => {
             item.reportType = this.$translator.translator('reportType', item.reportType)
@@ -165,7 +168,7 @@
           // let tempData1 = [];
           // tempData = res.data.reports;
           // let j = 0;
-          // for (let i = 0; i < res.data.reportsSize; i++) {
+          // for (let i = 0; i < res.data.total; i++) {
           //   if (tempData[i].reportState === "toProcess") {
           //     tempData1[j] = tempData[i];
           //     j = j + 1;
@@ -173,7 +176,7 @@
           // }
           // console.log("tempData1: ", tempData1);
           this.tableData = res.data.reports;
-          this.reportsSize = this.tableData.length;
+          this.reportsSize = res.data.total;
           console.log("tableData: ", this.tableData)
         })
     },
@@ -205,14 +208,14 @@
       },
       changePage(e) {
         this.page = e
-        this.$api.report.getReports({page: this.page})
+        this.$api.report.getReports({page: this.page,pageSize: this.pageSize})
           .then(res => {
             console.log(res.data)
             res.data.reports.map(item => {
               item.reportType = this.$translator.translator('reportType', item.reportType)
             })
             this.tableData = res.data.reports
-            this.reportsSize = res.data.reportsSize
+            this.reportsSize = res.data.total
           })
       }
     }

@@ -189,13 +189,17 @@
     },
     beforeMount: function () {
       // 请求所有信息
-      API.tasks.getTasks({"page": this.page}).then((res) => {
+      API.tasks.getTasks({
+        "page": this.page,
+        "pageSize":this.pageSize
+      })
+        .then((res) => {
         res.data.tasks.map(item => {
           item.taskState = this.stateMapping[item.taskState]
         });
         console.log(res.data.tasks);
         this.tableData = res.data.tasks;
-        this.tasksSize = res.data.tasksSize
+        this.tasksSize = res.data.total
       }).catch((err) => {
         console.log(err);
       })
@@ -238,7 +242,7 @@
           });
           console.log(res.data.tasks);
           this.tableData = res.data.tasks;
-          this.tasksSize = res.data.tasksSize
+          this.tasksSize = res.data.total
         }).catch((err) => {
           console.log(err);
         })
