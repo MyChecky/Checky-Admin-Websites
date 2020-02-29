@@ -132,25 +132,25 @@
         }
         columns.push({
           title: '交易ID',
-          key: 'chargeId'
+          key: 'payId'
         });
         columns.push({
           title: '订单编号',
-          key: 'orderId'
+          key: 'payOrderinfo'
         });
         columns.push({
           title: '用户ID',
-          key: 'userId'
+          key: 'payUserid'
         });
         columns.push({
           title: '金额',
-          key: 'rechargeMoney',
+          key: 'payMoney',
           render: (h, params) => {
             return h(
               MoneyTag,
               {
                 props:{
-                  money: params.row.rechargeMoney     //Todo
+                  money: params.row.payMoney     //Todo
                 }
               }
             )
@@ -158,26 +158,38 @@
         });
         columns.push({
           title: '交易类型',
-          key: 'orderType',
+          key: 'payType',
           filterMultiple: false,
           filters: [
             {
               label: '充值',
-              value: '充值'
+              value: 'pay'
             },
             {
               label: '提现',
-              value: '提现'
+              value: 'withdraw'
             }
           ],
           filterMethod (value, row) {
             //return row.userGender === value;   //Todo
-            return row.orderType.indexOf(value) > -1;
-          }
+            return row.payType === value;
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.payType == "pay"){
+              texts = "充值"
+            }else if(params.row.payType == "withdraw"){
+              texts = "提现"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '时间',
-          key: 'chargeTime',
+          key: 'payTime',
           align: 'center',
           sortable: true
         });
@@ -283,39 +295,63 @@
         });
         columns.push({
           title: '真实货币',
-          key: 'ifRealMoney',
+          key: 'ifTest',
           filterMultiple: false,
           filters: [
             {
               label: '是',
-              value: '是'
+              value: 1
             },
             {
               label: '否',
-              value: '否'
+              value: 0
             }
           ],
           filterMethod (value, row) {
-            return row.ifRealMoney.indexOf(value) > -1;
-          }
+            return row.ifTest === value;
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.ifTest == 0){
+              texts = "否"
+            }else if(params.row.ifTest == 1){
+              texts = "是"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '资金流动',
-          key: 'FlowDir',
+          key: 'flowIo',
           filterMultiple: false,
           filters: [
             {
               label: '入账',
-              value: '入账'
+              value: "I"
             },
             {
               label: '出账',
-              value: '出账'
+              value: "O"
             }
           ],
           filterMethod (value, row) {
-            return row.FlowDir.indexOf(value) > -1;
-          }
+            return row.flowIo === value;
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.flowIo == "I"){
+              texts = "入账"
+            }else if(params.row.flowIo == "O"){
+              texts = "出账"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '金额',
@@ -333,25 +369,39 @@
         });
         columns.push({
           title: '类型',
-          key: 'type',
+          key: 'flowType',
           filterMultiple: false,
           filters: [
             {
               label: '支付',
-              value: '支付'
+              value: "pay"
             },
             {
               label: '退款',
-              value: '退款'
+              value: "refund"
             },
             {
               label: '奖励',
-              value: '奖励'
+              value: "award"
             }
           ],
           filterMethod (value, row) {
-            return row.type.indexOf(value) > -1;
-          }
+            return row.flowType === value;
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.flowType == "pay"){
+              texts = "支付"
+            }else if(params.row.flowType == "refund"){
+              texts = "退款"
+            }else if(params.row.flowType == "award"){
+              texts = "奖励"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '时间',
@@ -394,7 +444,7 @@
       })
         .then((res) => {
           console.log(res.data);
-          this.money = res.data
+          this.money = res.data.moneyFlows
         }).catch((err) => {
         console.log(err)
       })
@@ -405,7 +455,7 @@
         .then((res) => {
           console.log("id: ",id);
           console.log(res.data);
-          this.recharge = res.data
+          this.recharge = res.data.pays
         }).catch((err) => {
         console.log(err)
       })

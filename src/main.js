@@ -6,7 +6,7 @@ import store from './store/index'
 import API from './utils/api'
 import * as translator from './utils/translator'
 // 注释以关闭 mock 数据
-//if(process.env.MOCK) require('./mock/mock');
+if(process.env.MOCK) require('./mock/mock');
 
 import  './assets/font-awesome-4.7.0/css/font-awesome.css'
 //升级iview4.0

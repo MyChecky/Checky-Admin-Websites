@@ -17,7 +17,7 @@
       </Card>
 
     </div>
-    <Page class="pager" :total="moneyFlowsSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <Page class="pager" :total="moneyRechargeSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -40,7 +40,7 @@
           showCheckbox: false,
           fixedHeader: false,
           tableHeight: 400,
-          pageSize: 10,
+          pageSize: 5,
           tableSize: 'default',
           exist: true,
           score: -1,
@@ -172,7 +172,7 @@
           }))
             .then(res => {
               console.log(res)
-              this.money = res.data.moneyFlows
+              this.money = res.data.pays
             })
             .catch(err => {
               console.log(err)
@@ -188,8 +188,8 @@
               page: this.page
             })
               .then((res) => {
-                this.money = res.data.moneyFlows
-                this.moneyFlowsSize = res.data.moneyFlowsSize
+                this.money = res.data.pays
+                this.moneyFlowsSize = res.data.moneyRechargeSize
               }).catch((err) => {
               console.log(err)
             })
