@@ -42,7 +42,7 @@
         showCheckbox: false,
         fixedHeader: false,
         tableHeight: 400,
-        pageSize: 10,
+        pageSize: 5,
         tableSize: 'default',
         exist: true,
         score: -1,

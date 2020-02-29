@@ -335,10 +335,8 @@
     margin-right: 10px;
   }
 
-  .pic-container {
-  }
-
-  .outer-div {
+  .pic-container{}
+  .outer-div{
     position: fixed;
     background-color: #fff;
     border-radius: 5px;

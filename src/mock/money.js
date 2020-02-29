@@ -3,14 +3,14 @@ import Mock from 'mockjs'
 const UserMoney = Mock.mock({
   status: 'OK',
   type: 'userId',
-  moneyFlowsSize: 10,
-  "moneyFlows|5-10": [
+  moneyFlowsSize: 3,
+  "moneyFlows|3": [
     {
       "flowId":"@guid",
       "taskId":"@guid",
       "UserName":"@guid",
       "ifTest|1":[
-        "1","0"],
+        1,0],
       "flowIo|1":[
         "I","O"],
       "flowMoney|0-200": 1,
@@ -24,13 +24,14 @@ const UserMoney = Mock.mock({
 const MoneyFlowList = Mock.mock({
   status: 'OK',
   type: 'userId',
-  "moneyFlows|5-10": [
+  moneyFlowsSize: 10,
+  "moneyFlows|10": [
     {
       "flowId":"@guid",
       "taskId":"@guid",
       "UserName":"@guid",
       "ifTest|1":[
-        "1","0"],
+        1,0],
       "flowIo|1":[
         "I","O"],
       "flowMoney|0-200": 1,
@@ -45,16 +46,16 @@ const MoneyFlowList = Mock.mock({
 const UserRecharge = Mock.mock({
   status: 'OK',
   type: 'userId',
-  moneyRechargeSize: 10,
-  "userRecharge|5-10": [
+  moneyRechargeSize: 3,
+  "pays|3": [
     {
-      "chargeId":"@guid",
-      "orderId":"@guid",
-      "userId":"@guid",
-      "rechargeMoney|0-200": 1,
-      "orderType|1":[
+      "payId":"@guid",
+      "payOrderinfo":"@guid",
+      "payUserid":"@guid",
+      "payMoney|0-200": 1,
+      "payType|1":[
         "pay","withdraw"],
-      "chargeTime":"@date('yyyy-MM-dd')"
+      "payTime":"@date('yyyy-MM-dd')"
     }
   ]
 })
@@ -63,15 +64,15 @@ const RechargeList = Mock.mock({
   status: 'OK',
   type: 'userId',
   moneyRechargeSize: 10,
-  "moneyRecharge|5-10": [
+  "pays|10": [
     {
-      "chargeId":"@guid",
-      "orderId":"@guid",
-      "userId":"@guid",
-      "rechargeMoney|0-200": 1,
-      "orderType|1":[
+      "payId":"@guid",
+      "payOrderinfo":"@guid",
+      "payUserid":"@guid",
+      "payMoney|0-200": 1,
+      "payType|1":[
         "pay","withdraw"],
-      "chargeTime":"@date('yyyy-MM-dd')"
+      "payTime":"@date('yyyy-MM-dd')"
     }
   ]
 })

@@ -37,7 +37,7 @@
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
-                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="this.money"
+                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
                    :columns="moneyColumns"></Table>
             <Page class="pager" :total="this.moneySize" :page-size="pageSize" @on-change="changeMoneyPage"></Page>
           </div>
@@ -172,17 +172,29 @@
           filters: [
             {
               label: '充值',
-              value: '充值'
+              value: 'pay'
             },
             {
               label: '提现',
-              value: '提现'
+              value: 'withdraw'
             }
           ],
           filterMethod (value, row) {
             //return row.userGender === value;   //Todo
-            return row.payType.indexOf(value) > -1;
-          }
+            return row.payType === value;
+          },
+          render: (h, params) => {
+            let _this = this;
+            let texts = '';
+            if(params.row.payType == "pay"){
+              texts = "充值"
+            }else if(params.row.payType == "withdraw"){
+              texts = "提现"
+            }
+            return h('div', {
+              props: {
+              },
+            },texts)}
         });
         columns.push({
           title: '时间',
@@ -430,7 +442,6 @@
         pageSize: this.pageSize
       })
         .then((res) => {
-          console.log("res.data.tasks",res.data.tasks);
           res.data.tasks.map(item => {
             item.taskState = this.$translator.translator('taskState', item.taskState)
           });
@@ -520,7 +531,6 @@
           console.log(err)
         })
       }
-
     }
   }
 </script>
