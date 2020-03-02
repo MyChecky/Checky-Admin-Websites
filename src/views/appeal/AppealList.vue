@@ -159,17 +159,13 @@
       this.$api.appeal.getAppeals({page: this.page})
         .then(res => {
           let tempData;
-          let tempData1 = [];
-          tempData = res.data.appeals;
-
-          let j = 0;
-          for (let i = 0; i < res.data.total; i++) {
-            if (tempData[i].appealState === null) {
-              tempData1[j] = tempData[i];
-              j = j + 1;
+          tempData=res.data.appeals;
+          tempData.forEach((item, i) => {
+            if (item.appealState === 'toProcess') {
+              console.log(i, item.appealState);
+              this.tableData.splice(0, 0, item)
             }
-          }
-          this.tableData = tempData1;
+          });
           this.appealsSize = this.tableData.length;
           console.log("tableData: ", this.tableData)
         })

@@ -33,7 +33,7 @@
         showCheckbox: false,
         fixedHeader: false,
         tableHeight: 600,
-        pageSize: 5,
+        pageSize: 8,
         tableSize: 'default',
         page: 0,
         reportsSize: 0,
@@ -174,6 +174,8 @@
               console.log(i, item.reportState);
               this.tableData.splice(0, 0, item)
             }
+            else
+              console.log(i, item.reportState);
           });
           this.reportsSize = this.tableData.length;
           console.log("tableData: ", this.tableData)
