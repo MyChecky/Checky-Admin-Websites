@@ -158,12 +158,12 @@
     beforeMount: function () {
       this.$api.appeal.getAppeals({page: this.page})
         .then(res => {
-          let tempData = [];
+          let tempData;
           let tempData1 = [];
           tempData = res.data.appeals;
 
           let j = 0;
-          for (let i = 0; i < res.data.appealsSize; i++) {
+          for (let i = 0; i < res.data.total; i++) {
             if (tempData[i].appealState === null) {
               tempData1[j] = tempData[i];
               j = j + 1;
@@ -201,11 +201,11 @@
           })
       },
       changePage(e) {
-        this.page = e
+        this.page = e;
         this.$api.appeal.getAppeals({page: e})
           .then(res => {
-            console.log(res.data)
-            this.tableData = res.data.appeals
+            console.log(res.data);
+            this.tableData = res.data.appeals;
             this.appealsSize = res.data.appealsSize
           })
       }

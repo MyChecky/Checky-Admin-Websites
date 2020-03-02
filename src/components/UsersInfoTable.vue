@@ -11,11 +11,7 @@
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
-    <div class="button-bar">
-      <button class="turn-button fa fa-angle-left" @click="last"></button>
-      <span class="index-tag">第 {{this.page}} 页</span>
-      <button class="turn-button fa fa-angle-right" @click="next"></button>
-    </div>
+    <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -38,9 +34,9 @@
         showCheckbox: true,
         fixedHeader: false,
         tableHeight: 600,
-        pageSize: 10,
+        pageSize: 9,
         tableSize: 1,
-        page: 1,
+        page: 0,
         usersSize: 0,
         tableData: [],
         cancel: null,
@@ -215,50 +211,22 @@
             console.log(err)
           })
       },
-      next() {
-        if (this.page === this.tableSize)
-          this.page = 1;
-        else
-          this.page = this.page + 1;
-        if (this.page === this.tableSize) {
-          // 请求所有用户信息
-          this.$api.users.queryUsersInfo({
-            "page": this.page,
-            "pageSize": 10,
-          })
-            .then((res) => {
-              res.data.users.map(item => {
-                item.userGender = item.userGender === 1 ? '男' : '女'
-              });
-              this.usersSize = res.data.total;
-              this.tableData = res.data.users;
-            }).catch((err) => {
-            console.log(err);
-          })
-        }
+      changePage(e) {
+        this.page = e;
+        this.$api.users.queryUsersInfo({
+          "page": this.page,
+          "pageSize": this.pageSize,
+        })
+          .then((res) => {
+            res.data.users.map(item => {
+              item.userGender = item.userGender === 1 ? '男' : '女'
+            });
+            this.usersSize = res.data.total;
+            this.tableData = res.data.users;
+          }).catch((err) => {
+          console.log(err);
+        })
       },
-      last() {
-        if (this.page === 1)
-          this.page = this.tableSize;
-        else
-          this.page = this.page - 1;
-        if (this.page === this.tableSize) {
-          // 请求所有用户信息
-          this.$api.users.queryUsersInfo({
-            "page": this.page,
-            "pageSize": 10,
-          })
-            .then((res) => {
-              res.data.users.map(item => {
-                item.userGender = item.userGender === 1 ? '男' : '女'
-              });
-              this.usersSize = res.data.total;
-              this.tableData = res.data.users;
-            }).catch((err) => {
-            console.log(err);
-          })
-        }
-      }
     }
   }
 </script>
@@ -295,25 +263,10 @@
     margin-right: 10px;
   }
 
-  .button-bar {
+  .pager {
     display: flex;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
-  }
-
-  .turn-button {
-    border: none;
-    padding: 2px 10px;
-    background-color: #fff;
-    color: dodgerblue;
-    font-size: 20px;
-    cursor: pointer;
-    margin: 2px 5px;
-    border-radius: 5px;
-  }
-
-  .turn-button:hover {
-    background-color: dodgerblue;
-    color: #fff;
+    margin: 5px auto;
   }
 </style>

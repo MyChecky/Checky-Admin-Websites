@@ -129,6 +129,7 @@
                       reportId: this.tableData[params.index].reportId
                     }).then(res => {
                       if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
+                      this.reportsSize = this.tableData.length;
                     })
                   }
                 }
@@ -145,6 +146,7 @@
                       reportId: this.tableData[params.index].reportId
                     }).then(res => {
                       if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
+                      this.reportsSize = this.tableData.length;
                     })
                   }
                 }
@@ -164,19 +166,16 @@
           res.data.reports.map(item => {
             item.reportType = this.$translator.translator('reportType', item.reportType)
           });
-          // let tempData = [];
-          // let tempData1 = [];
-          // tempData = res.data.reports;
-          // let j = 0;
-          // for (let i = 0; i < res.data.total; i++) {
-          //   if (tempData[i].reportState === "toProcess") {
-          //     tempData1[j] = tempData[i];
-          //     j = j + 1;
-          //   }
-          // }
-          // console.log("tempData1: ", tempData1);
-          this.tableData = res.data.reports;
-          this.reportsSize = res.data.total;
+          console.log(res.data)
+          let tempArr;
+          tempArr = res.data.reports;
+          tempArr.forEach((item, i) => {
+            if (item.reportState === 'toProcess') {
+              console.log(i, item.reportState);
+              this.tableData.splice(0, 0, item)
+            }
+          });
+          this.reportsSize = this.tableData.length;
           console.log("tableData: ", this.tableData)
         })
     },
@@ -208,7 +207,7 @@
       },
       changePage(e) {
         this.page = e
-        this.$api.report.getReports({page: this.page,pageSize: this.pageSize})
+        this.$api.report.getReports({page: this.page, pageSize: this.pageSize})
           .then(res => {
             console.log(res.data)
             res.data.reports.map(item => {
