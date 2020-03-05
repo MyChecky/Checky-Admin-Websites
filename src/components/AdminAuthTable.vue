@@ -93,7 +93,7 @@
         kw: "",
         department: "",
         formData: {
-          userId:'',
+          userId: '',
           userName: '',
           department: '',
           userTel: '',
@@ -199,10 +199,13 @@
       },
     },
     beforeMount: function () {
+      if (localStorage.admin === 'false') {
+        this.$router.push(`/404`)
+      }
       // 请求所有用户信息
       this.$api.admins.queryAdminsInfo({
         "page": this.page,
-        "pageSize":this.pageSize
+        "pageSize": this.pageSize
       }).then((res) => {
         this.adminsSize = res.data.total;
         this.tableData = res.data.admins;
@@ -235,7 +238,8 @@
           .then(res => {
             console.log(res);
             console.log(res.data.admins);
-            this.tableData = res.data.admins
+            this.tableData = res.data.admins;
+            this.adminsSize = res.data.total;
           })
           .catch(err => {
             console.log(err)
@@ -249,9 +253,8 @@
           console.log(`查询全部${this.kw},页码${this.page}`);
           this.$api.admins.queryAdminsInfo({
             "page": this.page,
-            "pageSize":this.pageSize
+            "pageSize": this.pageSize
           }).then((res) => {
-            this.adminsSize = res.data.total;
             this.tableData = res.data.admins;
           }).catch((err) => {
             console.log(err);
@@ -259,7 +262,7 @@
         }
       },
       updateAuth: function () {
-        this.value3=false;
+        this.value3 = false;
         this.$api.admins.updateAdmin({
           userId: this.formData.userId,
           userName: this.formData.userName,

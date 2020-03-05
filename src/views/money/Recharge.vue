@@ -137,6 +137,9 @@
         }
       },
       beforeMount() {
+        if (localStorage.money === 'false') {
+          this.$router.push(`/404`)
+        }
         this.$api.money.queryAllMoneyRecharge({
           page:this.page,
           pageSize:this.pageSize
@@ -169,12 +172,12 @@
           // 定义CancelToken，它是axios的一个属性，且是一个构造函数
           let CancelToken = axios.CancelToken;
 
-          this.$api.money.queryByKeyword({username: keyword}, new CancelToken((c) => {
+          this.$api.money.queryRechargeByKeyword({username: keyword}, new CancelToken((c) => {
             this.cancel = c;
           }))
             .then(res => {
-              console.log(res)
-              this.money = res.data.moneyFlow
+              console.log(res);
+              this.money = res.data.moneyFlow;
               this.moneyFlowsSize=res.data.total
             })
             .catch(err => {
@@ -182,7 +185,7 @@
             })
         },
         changePage(e) {
-          this.page = e
+          this.page = e;
           if (this.kw) {
             this.search(this.kw, this.page)
           } else {

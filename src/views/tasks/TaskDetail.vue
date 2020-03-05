@@ -11,7 +11,6 @@
               <span class="info-item">开始时间：{{taskInfo.taskStartTime}}</span>
               <span class="info-item">结束时间：{{taskInfo.taskEndTime}}</span>
               <span class="info-item">任务标题：{{taskInfo.taskTitle}}</span>
-
             </div>
             <!-- <Avatar :source="userInfo.userAvatar" :size="80"></Avatar> -->
             <div class="info-div">
@@ -243,7 +242,7 @@
     },
     beforeMount() {
       //查询当前登录用户的部门
-      if (localStorage.department === '"money"') {
+      if (localStorage.tasks === 'false') {
         this.$router.push(`/404`)
       }
       let id = this.$route.params.taskId;

@@ -169,10 +169,13 @@
       },
     },
     beforeMount: function () {
+      if (localStorage.users === 'false') {
+        this.$router.push(`/404`)
+      }
       // 请求所有用户信息
       this.$api.users.queryUsersInfo({
         "page": this.page,
-        "pageSize": 10,
+        "pageSize": this.pageSize,
       })
         .then((res) => {
           res.data.users.map(item => {
@@ -180,7 +183,7 @@
           });
           this.usersSize = res.data.total;
           this.tableData = res.data.users;
-          this.tableSize = res.data.size;
+          //this.tableSize = res.data.size;
         }).catch((err) => {
         console.log(err);
       })
@@ -200,12 +203,20 @@
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.users.queryByKeyword({page: this.page, keyword: this.kw}, new CancelToken((c) => {
+        this.$api.users.queryByKeyword({
+          page: this.page,
+          pageSize: 4,
+          keyword: this.kw
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
-            console.log(res)
-            this.tableData = res.data.users
+            console.log(res);
+            res.data.users.map(item => {
+              item.userGender = item.userGender === 1 ? '男' : '女'
+            });
+            this.tableData = res.data.users;
+            this.usersSize = res.data.total
           })
           .catch(err => {
             console.log(err)
@@ -214,14 +225,13 @@
       changePage(e) {
         this.page = e;
         this.$api.users.queryUsersInfo({
-          "page": this.page,
-          "pageSize": this.pageSize,
+          page: this.page,
+          pageSize: this.pageSize,
         })
           .then((res) => {
             res.data.users.map(item => {
               item.userGender = item.userGender === 1 ? '男' : '女'
             });
-            this.usersSize = res.data.total;
             this.tableData = res.data.users;
           }).catch((err) => {
           console.log(err);
@@ -263,10 +273,4 @@
     margin-right: 10px;
   }
 
-  .pager {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin: 5px auto;
-  }
 </style>

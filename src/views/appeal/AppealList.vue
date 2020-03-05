@@ -156,10 +156,13 @@
       },
     },
     beforeMount: function () {
+      if (localStorage.appeal === 'false') {
+        this.$router.push(`/404`)
+      }
       this.$api.appeal.getAppeals({page: this.page})
         .then(res => {
           let tempData;
-          tempData=res.data.appeals;
+          tempData = res.data.appeals;
           tempData.forEach((item, i) => {
             if (item.appealState === 'toProcess') {
               console.log(i, item.appealState);

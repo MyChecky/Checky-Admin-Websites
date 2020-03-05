@@ -11,20 +11,20 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-users"></span>
             <div :class="[display,'item-tag']">用户管理</div>
           </template>
-          <MenuItem name="users" key="1-1" to="/users">
+          <MenuItem name="users" key="1-1" to="/users" v-if="menus.users">
             <span :style="iconSize" class="item-icon fa fa-fw fa-user-circle"></span>
             <div :class="[display,'item-tag']">用户列表</div>
           </MenuItem>
-          <MenuItem name="AuthManage" key="1-2" to="/users/AuthManage" v-show="Super">
+          <MenuItem name="AuthManage" key="1-2" to="/users/AuthManage" v-if="menus.admin">
             <span :style="iconSize" class="item-icon fa fa-fw fa-user-secret"></span>
             <div :class="[display,'item-tag']">权限设置</div>
           </MenuItem>
         </Submenu>
-        <MenuItem name="essays" key="2" to="/essays">
+        <MenuItem name="essays" key="2" to="/essays" v-if="menus.essays">
           <span :style="iconSize" class="item-icon fa fa-fw fa-heart"></span>
           <span :class="[display,'item-tag']">动态列表</span>
         </MenuItem>
-        <Submenu name="money" key="3" v-show="isMoney">
+        <Submenu name="money" key="3" v-if="menus.money">
           <template slot="title">
             <span :style="iconSize" class="item-icon fa fa-fw fa-cny"></span>
             <div :class="[display,'item-tag']">资金管理</div>
@@ -42,19 +42,19 @@
             <div :class="[display,'item-tag']">充值记录</div>
           </MenuItem>
         </Submenu>
-        <MenuItem name="tasks" key="4-1" v-show="isTask" to="/tasks/list">
+        <MenuItem name="tasks" key="4-1" v-if="menus.tasks" to="/tasks/list">
           <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>
           <span :class="[display,'item-tag']">任务列表</span>
         </MenuItem>
-        <MenuItem name="type" key="4-2" v-show="isTask" to="/tasks/type">
+        <MenuItem name="type" key="4-2" v-if="menus.tasks" to="/tasks/type">
           <span :style="iconSize" class="item-icon fa fa-fw fa-envelope"></span>
           <span :class="[display,'item-tag']">类型建议</span>
         </MenuItem>
-        <MenuItem name="appeal" key="5" to="/appeal">
+        <MenuItem name="appeal" key="5" to="/appeal" v-if="menus.appeal">
           <span :style="iconSize" class="item-icon fa fa-fw fa-hand-paper-o"></span>
           <div :class="[display,'item-tag']">申诉列表</div>
         </MenuItem>
-        <MenuItem name="report" key="6" to="/report">
+        <MenuItem name="report" key="6" to="/report" v-if="menus.report">
           <span :style="iconSize" class="item-icon fa fa-fw fa-exclamation-circle"></span>
           <div :class="[display,'item-tag']">举报列表</div>
         </MenuItem>
@@ -86,9 +86,16 @@
         spanRight: 21,
         display: 'item-tag-active',
         rotate: '',
-        Super: false,
-        isMoney: false,
-        isTask: false
+        menus: {
+          users: true,
+          admin: false,
+          essays: false,
+          money: false,
+          tasks: false,
+          parameter: false,
+          appeal: false,
+          report: false,
+        }
       }
     },
     computed: {
@@ -97,10 +104,16 @@
       }
     },
     beforeMount: function () {
-      this.Super = localStorage.department === '"super"';
-      this.isMoney = !(localStorage.department === '"task"');
-      this.isTask = !('"money"' === localStorage.department);
-      console.log(Super, isMoney, isTask);
+      console.log(localStorage);
+      this.menus.users = localStorage.users === "true";
+      this.menus.admin = localStorage.admin === "true";
+      this.menus.essays = localStorage.essays === "true";
+      this.menus.money = localStorage.money === "true";
+      this.menus.tasks = localStorage.tasks === "true";
+      this.menus.parameter = localStorage.parameter === "true";
+      this.menus.appeal = localStorage.appeal === "true";
+      this.menus.report = localStorage.report === "true";
+      console.log(this.menus)
     },
     methods: {
       toggleClick() {

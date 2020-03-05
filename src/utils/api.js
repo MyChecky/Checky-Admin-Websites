@@ -110,7 +110,12 @@ export default {
       return post('/admin/taskType/delete',data)
     },
 
-    queryByKeyword: (data,cancelToken) =>{
+    querySuggestionByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/task/querysuggestion',data)
+    },
+
+    queryTaskByKeyword: (data,cancelToken) =>{
       data['c'] = cancelToken
       return post('admin/task/query',data)
     }
@@ -142,12 +147,17 @@ export default {
     getGraphData: data =>{
       return post('/admin/moneyFlows/graph',data)
     },
-
-    queryByKeyword: (data,cancelToken) =>{
+    //查询用户资金流水
+    queryFlowByKeyword: (data,cancelToken) =>{
       data['c'] = cancelToken
       return post('admin/moneyFlows/query',data)
     },
 
+    //查询用户资金流水
+    queryRechargeByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/moneyRecharge/query',data)
+    },
     //获取充值提现列表
     queryAllMoneyRecharge: data => {
       return post('/admin/moneyRecharge/rechargeList',data)

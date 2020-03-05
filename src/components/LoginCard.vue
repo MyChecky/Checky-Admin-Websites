@@ -42,16 +42,22 @@
         API.login.login(this.loginInfo)
           .then((res) => {
             console.log(res.data.state);
-            console.log(res.data.department);
             if (res.data.state === 'ok') {
               this.$Message.success('登陆成功!');
               this.$Store.commit('$_setStorage', {
                 user: this.loginInfo.username,
                 sessionKey: res.data.sessionKey,
                 userId: res.data.userId,
-                department:res.data.department
-              })
-              this.$Store.commit('$_setLogin', '1')
+                users:res.data.menus.users,
+                admin:res.data.menus.admin,
+                essays:res.data.menus.essays,
+                money:false,
+                tasks:res.data.menus.tasks,
+                parameter:res.data.menus.parameter,
+                appeal:res.data.menus.appeal,
+                report:false,
+              });
+              this.$Store.commit('$_setLogin', '1');
               setTimeout(() => {
                 this.$router.push('/')
               }, 800)

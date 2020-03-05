@@ -222,9 +222,12 @@
       },
     },
     beforeMount: function () {
+      if (localStorage.essays === 'false') {
+        this.$router.push(`/404`)
+      }
       this.$api.essays.getEssays({
         page: this.page,
-        pageSize:this.pageSize
+        pageSize: this.pageSize
       })
         .then((res) => {
           console.log(res.data);
@@ -254,22 +257,23 @@
           this.cancel = c;
         }))
           .then(res => {
-            console.log(res)
-            this.tableData = res.data.essays
+            console.log(res);
+            this.tableData = res.data.essays;
+            this.essaysSize = res.data.total;
           })
           .catch(err => {
             console.log(err)
           })
       },
       changePage(e) {
-        this.page = e
+        this.page = e;
         this.$api.essays.getEssays({
           page: this.page,
-          pageSize:this.pageSize
+          pageSize: this.pageSize
         })
           .then((res) => {
-            console.log(res.data)
-            this.essaysSize = res.data.total
+            console.log(res.data);
+            this.essaysSize = res.data.total;
             this.tableData = res.data.essays
           })
       },
@@ -335,19 +339,7 @@
     margin-right: 10px;
   }
 
-  .pic-container{}
-  .outer-div{
-    position: fixed;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 2px 2px 15px 2px rgba(200, 200, 200, 0.8);
-    z-index: 1001;
-    padding: 5px;
-    width: auto;
-    height: auto;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .pic-container {
   }
 
   .cover {

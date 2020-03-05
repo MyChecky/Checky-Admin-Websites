@@ -128,7 +128,7 @@
       },
       beforeMount(){
         //查询当前登录用户的部门
-        if (localStorage.department === '"money"') {
+        if (localStorage.tasks === 'false') {
           this.$router.push(`/404`)
         }
           this.$api.checks.getCheckDetail({taskId:this.$route.params.taskId,checkId:this.$route.params.checkId})

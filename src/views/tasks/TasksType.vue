@@ -15,7 +15,9 @@
       <div class="table-header">
         <span class="card-title">建议列表</span>
         <span class="total">总数：{{suggestionsSize}}</span>
-        <div class="search-div"></div>
+        <div class="search-div">
+          <SearchBar :search="search"></SearchBar>
+        </div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="typeSuggestions" :columns="suggestionColumn"></Table>
@@ -42,7 +44,7 @@
         showCheckbox: false,
         fixedHeader: false,
         tableHeight: 600,
-        pageSize: 10,
+        pageSize: 8,
         tableSize: 'default',
         page: 0,
         essaysSize: 0,
@@ -163,8 +165,7 @@
       }
     },
     beforeMount: function () {
-      //查询当前登录用户的部门
-      if (localStorage.department === '"money"') {
+      if (localStorage.tasks === 'false') {
         this.$router.push(`/404`)
       }
       this.$api.tasks.queryType({})
@@ -200,6 +201,37 @@
       //this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods: {
+      search: function (keyword, page) {
+        this.page = page;
+        this.kw = keyword;
+        // 解决异步问题
+        if (this.cancel) {// 存在上一次请求则取消
+          this.cancel();
+        }
+        console.log(`搜索${this.kw},页码${this.page}`);
+        // 定义CancelToken，它是axios的一个属性，且是一个构造函数
+        let CancelToken = axios.CancelToken;
+
+        this.$api.tasks.querySuggestionByKeyword({username: keyword}, new CancelToken((c) => {
+          this.cancel = c;
+        }))
+          .then((res) => {
+            let tempArr;
+            tempArr = res.data.suggestions;
+            console.log("before", tempArr, tempArr.length);
+            tempArr.forEach((item, i) => {
+              if (item.suggestionState === 'waiting') {
+                console.log(i, item.suggestionState);
+                this.typeSuggestions.splice(0, 0, item)
+              }
+            });
+            console.log("after", this.typeSuggestions, this.typeSuggestions.length);
+            this.suggestionsSize = this.typeSuggestions.length;
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
       deleteType(id) {
         this.$api.tasks.delType({typeId: id}).then(res => {
           let temp = this.types;
@@ -215,15 +247,23 @@
         });
       },
       changePage(e) {
-        this.page = e
+        this.page = e;
         this.$api.tasks.queryTypeSuggestion({
           page: this.page,
           pageSize: this.pageSize
         })
           .then((res) => {
-            console.log(res.data.total);
-            this.typeSuggestions = res.data.suggestions;
-            this.suggestionsSize = res.data.total
+            let tempArr;
+            tempArr = res.data.suggestions;
+            console.log("before", tempArr, tempArr.length);
+            tempArr.forEach((item, i) => {
+              if (item.suggestionState === 'waiting') {
+                console.log(i, item.suggestionState);
+                this.typeSuggestions.splice(0, 0, item)
+              }
+            });
+            console.log("after", this.typeSuggestions, this.typeSuggestions.length);
+            this.suggestionsSize = this.typeSuggestions.length;
           })
           .catch(err => {
             console.log(err)
@@ -236,6 +276,12 @@
 <style scoped>
   .table-header {
     margin-bottom: 10px
+  }
+
+  .search-div {
+    flex-grow: 5;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .table {
@@ -263,10 +309,4 @@
     margin-bottom: 10px;
   }
 
-  .pager {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin: 5px auto;
-  }
 </style>

@@ -158,6 +158,9 @@
       },
     },
     beforeMount: function () {
+      if (localStorage.report === 'false') {
+        this.$router.push(`/404`)
+      }
       this.$api.report.getReports({
         page: this.page,
         pageSize: this.pageSize
@@ -173,8 +176,7 @@
             if (item.reportState === 'toProcess') {
               console.log(i, item.reportState);
               this.tableData.splice(0, 0, item)
-            }
-            else
+            } else
               console.log(i, item.reportState);
           });
           this.reportsSize = this.tableData.length;
@@ -200,8 +202,9 @@
           this.cancel = c;
         }))
           .then(res => {
-            console.log(res)
-            this.tableData = res.data.reports
+            console.log(res);
+            this.tableData = res.data.reports;
+            this.reportsSize = res.data.total;
           })
           .catch(err => {
             console.log(err)

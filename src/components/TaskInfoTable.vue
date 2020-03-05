@@ -188,19 +188,22 @@
       },
     },
     beforeMount: function () {
+      if (localStorage.tasks === 'false') {
+        this.$router.push(`/404`)
+      }
       // 请求所有信息
       API.tasks.getTasks({
         "page": this.page,
-        "pageSize":this.pageSize
+        "pageSize": this.pageSize
       })
         .then((res) => {
-        res.data.tasks.map(item => {
-          item.taskState = this.stateMapping[item.taskState]
-        });
-        console.log(res.data.tasks);
-        this.tableData = res.data.tasks;
-        this.tasksSize = res.data.total
-      }).catch((err) => {
+          res.data.tasks.map(item => {
+            item.taskState = this.stateMapping[item.taskState]
+          });
+          console.log(res.data.tasks);
+          this.tableData = res.data.tasks;
+          this.tasksSize = res.data.total
+        }).catch((err) => {
         console.log(err);
       })
     },
@@ -222,12 +225,13 @@
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.tasks.queryByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.tasks.queryTaskByKeyword({username: keyword}, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
-            console.log(res)
-            this.tableData = res.data.tasks
+            console.log(res);
+            this.tableData = res.data.tasks;
+            this.tasksSize = res.data.total;
           })
           .catch(err => {
             console.log(err)
@@ -236,7 +240,7 @@
       changePage(e) {
         this.page = e;
         console.log(this.page);
-        this.$api.tasks.getTasks({"page":this.page}).then((res)=>{
+        this.$api.tasks.getTasks({"page": this.page, "pageSize": this.pageSize}).then((res) => {
           res.data.tasks.map(item => {
             item.taskState = this.stateMapping[item.taskState]
           });

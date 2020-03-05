@@ -13,6 +13,11 @@
                 :class="['fa',userInfo.userGender===1?'fa-mars':'fa-venus',userInfo.userGender===1?'mars':'venus']"></i></span>
               <span class="info-item">创建时间：{{userInfo.userTime}}</span>
             </div>
+            <div class="info-div">
+              <span class="info-item">总收入：{{userIncome}}</span>
+              <span class="info-item">总支出：{{userExpenditure}}</span>
+              <span class="info-item">余额：{{userBalance}}</span>
+            </div>
           </div>
         </Card>
         <Card>
@@ -88,6 +93,7 @@
   import SearchBar from '../../components/SearchBar'
   import MoneyTag from '../../components/MoneyTag'
   import PieChart from '../../components/PieChart'
+
   export default {
     name: "UserDetail",
     components: {
@@ -115,11 +121,14 @@
         money: [],
         recharge: [],
         moneypage: 0,
-        rechargepage:0,
-        taskpage:0,
-        moneySize:0,
-        rechargeSize:0,
-        taskSize:0
+        rechargepage: 0,
+        taskpage: 0,
+        moneySize: 0,
+        rechargeSize: 0,
+        taskSize: 0,
+        userExpenditure: 100,
+        userIncome: 300,
+        userBalance: 200
       }
     },
     computed: {
@@ -158,7 +167,7 @@
             return h(
               MoneyTag,
               {
-                props:{
+                props: {
                   money: params.row.payMoney
                 }
               }
@@ -179,22 +188,22 @@
               value: 'withdraw'
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             //return row.userGender === value;   //Todo
             return row.payType === value;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if(params.row.payType == "pay"){
+            if (params.row.payType == "pay") {
               texts = "充值"
-            }else if(params.row.payType == "withdraw"){
+            } else if (params.row.payType == "withdraw") {
               texts = "提现"
             }
             return h('div', {
-              props: {
-              },
-            },texts)}
+              props: {},
+            }, texts)
+          }
         });
         columns.push({
           title: '时间',
@@ -305,7 +314,7 @@
         columns.push({
           title: '真实货币',
           key: 'ifTest',
-          align:'center',
+          align: 'center',
           filterMultiple: false,
           filters: [
             {
@@ -317,26 +326,26 @@
               value: 0
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             return row.ifRealMoney.indexOf(value) > -1;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if(params.row.ifTest == 0){
+            if (params.row.ifTest == 0) {
               texts = "否"
-            }else if(params.row.ifTest == 1){
+            } else if (params.row.ifTest == 1) {
               texts = "是"
             }
             return h('div', {
-              props: {
-              },
-            },texts)}
+              props: {},
+            }, texts)
+          }
         });
         columns.push({
           title: '资金流动',
           key: 'flowIo',
-          align:'center',
+          align: 'center',
           filterMultiple: false,
           filters: [
             {
@@ -348,21 +357,21 @@
               value: 'O'
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             return row.FlowDir.indexOf(value) > -1;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if(params.row.flowIo == "I"){
+            if (params.row.flowIo == "I") {
               texts = "入账"
-            }else if(params.row.flowIo == "O"){
+            } else if (params.row.flowIo == "O") {
               texts = "出账"
             }
             return h('div', {
-              props: {
-              },
-            },texts)}
+              props: {},
+            }, texts)
+          }
         });
         columns.push({
           title: '金额',
@@ -371,7 +380,7 @@
             return h(
               MoneyTag,
               {
-                props:{
+                props: {
                   money: params.row.flowMoney
                 }
               }
@@ -396,23 +405,23 @@
               value: 'award'
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             return row.type.indexOf(value) > -1;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if(params.row.flowType == "pay"){
+            if (params.row.flowType == "pay") {
               texts = "支付"
-            }else if(params.row.flowType == "refund"){
+            } else if (params.row.flowType == "refund") {
               texts = "退款"
-            }else if(params.row.flowType == "award"){
+            } else if (params.row.flowType == "award") {
               texts = "奖励"
             }
             return h('div', {
-              props: {
-              },
-            },texts)}
+              props: {},
+            }, texts)
+          }
         });
         columns.push({
           title: '时间',
@@ -424,21 +433,27 @@
       }
     },
     beforeMount() {
+      if (localStorage.users === 'false') {
+        this.$router.push(`/404`)
+      }
       let id = this.$route.params.userId;
       console.log(`查询用户:${id}`);
       this.$api.users.queryUser({
-        userId:id,
+        userId: id,
       })
         .then((res) => {
-          console.log("res.data.user",res.data.user);
+          console.log("res.data.user", res.data.user);
           this.userInfo = res.data.user;
           this.score = Math.ceil(this.userInfo.userCredit / 20);
+          this.userExpenditure = res.data.totalTrueOut;
+          this.userIncome = res.data.totalTrueIn;
+          this.userBalance = res.data.totalTrueIn - res.data.totalTrueOut;
         }).catch((err) => {
         console.log(err)
-      })
+      });
       this.$api.users.queryUserTask({
-        userId:id,
-        page:this.taskpage,
+        userId: id,
+        page: this.taskpage,
         pageSize: this.pageSize
       })
         .then((res) => {
@@ -446,32 +461,32 @@
             item.taskState = this.$translator.translator('taskState', item.taskState)
           });
           console.log(res.data);
-          this.tasks = res.data.tasks
-          this.taskSize=res.data.total
+          this.tasks = res.data.tasks;
+          this.taskSize = res.data.total
         }).catch((err) => {
         console.log(err)
       })
       this.$api.money.queryUserMoneyFlow({
-        userId:id,
-        page:this.moneypage,
+        userId: id,
+        page: this.moneypage,
         pageSize: this.pageSize
       })
         .then((res) => {
-          console.log("res.data.moneyFlow",res.data.moneyFlow);
+          console.log("res.data.moneyFlow", res.data.moneyFlow);
           this.money = res.data.moneyFlow
-          this.moneySize=res.data.total
+          this.moneySize = res.data.total
         }).catch((err) => {
         console.log(err)
       })
       this.$api.money.queryUserMoneyRecharge({
-        userId:id,
-        page:this.rechargepage,
+        userId: id,
+        page: this.rechargepage,
         pageSize: this.pageSize
       })
         .then((res) => {
-          console.log("res.data.pays",res.data.pays);
+          console.log("res.data.pays", res.data.pays);
           this.recharge = res.data.pays;
-          this.rechargeSize=res.data.total
+          this.rechargeSize = res.data.total
         }).catch((err) => {
         console.log(err)
       })
@@ -479,54 +494,51 @@
     methods: {
       search(keyword) {
       },
-      changeMoneyPage(e){
+      changeMoneyPage(e) {
         this.moneypage = e;
         let id = this.$route.params.userId;
         this.$api.money.queryUserMoneyFlow({
-          userId:id,
-          page:this.moneypage,
+          userId: id,
+          page: this.moneypage,
           pageSize: this.pageSize
         })
           .then((res) => {
-            console.log("res.data.moneyFlow",res.data.moneyFlow);
-            this.money = res.data.moneyFlow
-            this.moneySize=res.data.total
+            console.log("res.data.moneyFlow", res.data.moneyFlow);
+            this.money = res.data.moneyFlow;
           }).catch((err) => {
           console.log(err)
         })
       },
-      changeRechargePage(e){
-        this.rechargepage=e;
+      changeRechargePage(e) {
+        this.rechargepage = e;
         let id = this.$route.params.userId;
         this.$api.money.queryUserMoneyRecharge({
-          userId:id,
-          page:this.rechargepage,
+          userId: id,
+          page: this.rechargepage,
           pageSize: this.pageSize
         })
           .then((res) => {
-            console.log("res.data.pays",res.data.pays);
+            console.log("res.data.pays", res.data.pays);
             this.recharge = res.data.pays
-            this.rechargeSize=res.data.total
           }).catch((err) => {
           console.log(err)
         })
       },
-      changeTaskPage(e){
-        this.taskpage=e;
+      changeTaskPage(e) {
+        this.taskpage = e;
         let id = this.$route.params.userId;
         this.$api.users.queryUserTask({
-          userId:id,
-          page:this.taskpage,
+          userId: id,
+          page: this.taskpage,
           pageSize: this.pageSize
         })
           .then((res) => {
-            console.log("res.data.tasks",res.data.tasks);
+            console.log("res.data.tasks", res.data.tasks);
             res.data.tasks.map(item => {
               item.taskState = this.$translator.translator('taskState', item.taskState)
-            })
+            });
             console.log(res.data);
             this.tasks = res.data.tasks;
-            this.taskSize=res.data.total
           }).catch((err) => {
           console.log(err)
         })
@@ -554,11 +566,13 @@
     display: flex;
     align-items: flex-end;
   }
-  .search-div{
+
+  .search-div {
     flex-grow: 5;
     display: flex;
     justify-content: flex-end;
   }
+
   .notice {
     position: absolute;
     left: 50%;
@@ -658,6 +672,7 @@
     justify-content: center;
     margin: 5px auto;
   }
+
   .others {
     display: flex;
     width: 100%;

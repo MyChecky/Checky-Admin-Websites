@@ -42,7 +42,7 @@
         showCheckbox: false,
         fixedHeader: false,
         tableHeight: 400,
-        pageSize: 5,
+        pageSize: 7,
         tableSize: 'default',
         exist: true,
         score: -1,
@@ -203,6 +203,9 @@
       }
     },
     beforeMount() {
+      if (localStorage.money === 'false') {
+        this.$router.push(`/404`)
+      }
       this.$api.money.queryAllMoneyFlow({
         page: this.page,
         pageSize: this.pageSize
@@ -212,17 +215,15 @@
           this.moneyFlowsSize = res.data.total
         }).catch((err) => {
         console.log(err)
-      })
+      });
       //查询当前登录用户的部门
       if (localStorage.department === '"task"') {
         this.$router.push(`/404`)
       }
     },
-
     mounted() {
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180;
     },
-
     methods: {
       search: function (keyword, page) {
         this.page = page;
@@ -234,8 +235,7 @@
         console.log(`搜索${this.kw},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
-
-        this.$api.money.queryByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.money.queryFlowByKeyword({username: keyword}, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
@@ -248,22 +248,17 @@
           })
       },
       changePage(e) {
-        this.page = e
-        if (this.kw) {
-          this.search(this.kw, this.page)
-        } else {
-          console.log(`查询全部${this.kw},页码${this.page}`);
-          this.$api.money.queryAllMoneyFlow({
-            page: this.page,
-            pageSize: this.pageSize
-          })
-            .then((res) => {
-              this.money = res.data.moneyFlow
-              this.moneyFlowsSize = res.data.total
-            }).catch((err) => {
-            console.log(err)
-          })
-        }
+        this.page = e;
+        this.$api.money.queryAllMoneyFlow({
+          page: this.page,
+          pageSize: this.pageSize
+        })
+          .then((res) => {
+            this.money = res.data.moneyFlow
+            this.moneyFlowsSize = res.data.total
+          }).catch((err) => {
+          console.log(err)
+        })
       }
     }
   }

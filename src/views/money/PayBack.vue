@@ -9,7 +9,7 @@
         name: "PayBack",
       beforeMount() {
         //查询当前登录用户的部门
-        if (localStorage.department === '"task"') {
+        if (localStorage.money === 'false') {
           this.$router.push(`/404`)
         }
       }
