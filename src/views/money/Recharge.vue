@@ -49,7 +49,7 @@
           money: [],
           page: 0,
           cancel:null,
-          kw:"",       //?
+          kw:"",
 
         }
       },
@@ -80,7 +80,30 @@
           });
           columns.push({
             title: '用户ID',
-            key: 'payUserid'
+            key: 'payUserid',
+            render: (h, params) => {
+              return h(
+                "a",
+                {
+                  class: ['fa'],
+                  attrs: {
+                    userId: this.money[params.index].payUserid,
+                  },
+                  on: {
+                    click: (e) => {// 点击事件， e 为事件参数
+                      e.stopPropagation();
+                      console.log(e.target.attributes.userId);
+                      this.$router.push('/users/id=' + this.money[params.index].payUserid)
+                    }
+                  }
+                },
+                this.money[params.index].payUserid,
+              );
+            }
+          });
+          columns.push({
+            title: '用户昵称',
+            key: 'payUserName',
           });
           columns.push({
             title: '金额',

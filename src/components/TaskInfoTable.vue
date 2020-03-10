@@ -72,7 +72,6 @@
           key: 'taskId',
           width: 180
         });
-
         columns.push({
           title: '用户ID',
           key: 'userId',
@@ -87,7 +86,7 @@
             return h(
               "a",
               {
-                class: ['fa', 'fa-caret-right'],
+                class: ['fa'],
                 attrs: {
                   userId: this.tableData[params.index].userId,
                 },
@@ -95,7 +94,7 @@
                   click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
                     console.log(e.target.attributes.userId);
-                    router.push('/users/id=' + this.tableData[params.index].userId)
+                    this.$router.push('/users/id=' + this.tableData[params.index].userId)
                   }
                 }
               },
@@ -107,7 +106,7 @@
           title: '任务标题',
           key: 'taskTitle',
           width: 150
-        })
+        });
         columns.push({
           title: '开始时间',
           key: 'taskStartTime',
@@ -174,7 +173,7 @@
                 },
                 on: {
                   click: (e) => {// 点击事件， e 为事件参数
-                    console.log(this.tableData[params.index].taskId)
+                    console.log(this.tableData[params.index].taskId);
                     e.stopPropagation();
                     this.$router.push('/tasks/id=' + this.tableData[params.index].taskId)
                   }

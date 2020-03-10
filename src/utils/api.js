@@ -68,9 +68,14 @@ export default {
       data['c'] = cancelToken;
       return post('admin/essay/query',data)
     },
+
     deleteById:data=>{
       return post('admin/essay/delete',data)
-    }
+    },
+
+    queryEssay: (data) => {
+      return post('/admin/essay/query', data)
+    },
   },
 // 任务
   tasks : {

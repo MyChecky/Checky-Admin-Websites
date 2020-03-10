@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card style="margin-bottom: 10px">
+    <Card style="margin-bottom: 0.2rem">
       <div class="table-header">
         <span class="card-title">现有类型</span>
         <span class="total"> 总数：{{types.length}}</span>
@@ -15,14 +15,12 @@
       <div class="table-header">
         <span class="card-title">建议列表</span>
         <span class="total">总数：{{suggestionsSize}}</span>
-        <div class="search-div">
-          <SearchBar :search="search"></SearchBar>
-        </div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="typeSuggestions" :columns="suggestionColumn"></Table>
+      <Page class="pager" :total="suggestionsSize" :page-size="pageSize" @on-change="changePage"></Page>
     </Card>
-    <Page class="pager" :total="suggestionsSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <BackTop></BackTop>
   </div>
 </template>
 
@@ -74,15 +72,34 @@
         columns.push({
           title: '建议ID',
           key: 'suggestionId',
-          width: 200
         });
         columns.push({
           title: '建议人ID',
           key: 'userId',
+          render: (h, params) => {
+            return h(
+              "a",
+              {
+                class: ['fa'],
+                attrs: {
+                  userId: this.typeSuggestions[params.index].userId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    console.log(e.target.attributes.userId);
+                    this.$router.push('/users/id=' + this.typeSuggestions[params.index].userId)
+                  }
+                }
+              },
+              this.typeSuggestions[params.index].userId,
+            );
+          }
         });
         columns.push({
           title: '建议人用户名',
           key: 'userName',
+          align: 'center',
         });
         columns.push({
           title: '内容',
@@ -91,11 +108,11 @@
             return h(
               InputBar, {
                 props: {
-                  text: params.row.suggestionContent
+                  text: params.row.suggestionContent,
                 },
                 on: {
                   inputChange: (val) => {
-                    params.row.suggestionContent = val
+                    params.row.suggestionContent = val;
                     this.typeSuggestions[params.index].suggestionContent = val
                   }
                 }
@@ -305,7 +322,7 @@
   .card-title {
     font-weight: 600;
     color: #333;
-    font-size: 20px;
+    font-size: 0.4rem;
     margin-bottom: 10px;
   }
 

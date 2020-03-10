@@ -159,7 +159,6 @@
                       this.showItem.imgShow = true
                     }
                     console.log(this.showItem);
-
                   }
 
                 }
@@ -205,7 +204,7 @@
                       essayId: this.tableData[params.index].essayId
                     })
                       .then(res => {
-                        console.log("删除", res.data.state)
+                        console.log("删除", res.data.state);
                         if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
                       })
                       .catch(err => {
@@ -215,6 +214,40 @@
                 }
               },
               "删除"
+            );
+          }
+        });
+        columns.push({
+          title: '详情',
+          key: 'detail',
+          align: 'center',
+          render: (h, params) => {
+            return h(
+              "button",
+              {
+                style: {
+                  padding: '5px 10px',
+                  backgroundColor: '#2b85e4',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '2px',
+                  cursor: 'pointer'
+                },
+                domProps: {
+                  innerText: '详情'
+                },
+                class: ['fa', 'fa-caret-right'],
+                attrs: {
+                  userId: this.tableData[params.index].essayId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    this.$router.push(`/essays/id=${e.target.attributes.essayId.nodeValue}`);
+                  }
+                }
+              },
+              "详情"
             );
           }
         });

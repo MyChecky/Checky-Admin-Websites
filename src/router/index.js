@@ -66,6 +66,15 @@ export default new Router({
           components: {content: () => import('@/views/essays/EssaysList')}
         },
         {
+          path: 'essays/id=:essayId',
+          name: 'essays-detail',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/essays/EssayDetail')}
+        },
+        {
           path: 'money/chart',
           name: 'chart',
           meta: {

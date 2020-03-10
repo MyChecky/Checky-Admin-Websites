@@ -12,6 +12,7 @@
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="appealsSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <BackTop></BackTop>
   </div>
 </template>
 
@@ -43,7 +44,7 @@
       }
     },
     computed: {
-      tableColumns() {
+      tableColumns: function () {
         let columns = [];
         if (this.showCheckbox) {
           columns.push({
@@ -62,10 +63,52 @@
         columns.push({
           title: '申诉ID',
           key: 'appealId',
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: ['inline-block', 'flex'],
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: this.tableData[params.index].appealId
+                }
+              }, this.tableData[params.index].appealId)
+            ]);
+          }
         });
         columns.push({
           title: '申诉用户ID',
           key: 'userId',
+          render: (h, params) => {
+            return h('div', [
+              h('a', {
+                style: {
+                  display: ['inline-block', 'flex'],
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: this.tableData[params.index].appealId
+                },
+                attrs: {
+                  userId: this.tableData[params.index].userId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    console.log(e.target.attributes.userId);
+                    this.$router.push('/users/id=' + this.tableData[params.index].userId)
+                  }
+                }
+              }, this.tableData[params.index].userId)
+            ]);
+          }
         });
         columns.push({
           title: '昵称',
@@ -74,20 +117,55 @@
         columns.push({
           title: '任务ID',
           key: 'taskId',
+          render: (h, params) => {
+            return h(
+              "a",
+              {
+                class: ['fa'],
+                attrs: {
+                  taskId: this.tableData[params.index].taskId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    console.log(e.target.attributes.userId);
+                    this.$router.push('/tasks/id=' + this.tableData[params.index].taskId)
+                  }
+                }
+              },
+              this.tableData[params.index].taskId,
+            );
+          }
         });
         columns.push({
           title: '打卡ID',
           key: 'checkId',
-        });
-        columns.push({
-          title: '申诉内容',
-          key: 'appealContent',
-          width: 300,
           render: (h, params) => {
             return h('div', [
               h('span', {
                 style: {
-                  display: 'inline-block',
+                  display: ['inline-block', 'flex'],
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: this.tableData[params.index].checkId
+                }
+              }, this.tableData[params.index].checkId)
+            ]);
+
+          }
+        });
+        columns.push({
+          title: '申诉内容',
+          key: 'appealContent',
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: ['inline-block', 'flex'],
                   width: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -100,18 +178,34 @@
             ]);
 
           }
-
         });
         columns.push({
           title: '申诉时间',
           key: 'appealTime',
           sortable: true,
+          render: (h, params) => {
+            return h('div', [
+              h('span', {
+                style: {
+                  display: ['inline-block', 'flex'],
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                },
+                domProps: {
+                  title: this.tableData[params.index].appealTime
+                }
+              }, this.tableData[params.index].appealTime)
+            ]);
+
+          }
         });
         columns.push({
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 200,
+          width: 180,
           render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -228,6 +322,7 @@
   .table {
     margin: auto 0px;
     height: 100%;
+    display: flex;
   }
 
   .pager {

@@ -77,7 +77,26 @@
         });
         columns.push({
           title: '任务ID',
-          key: 'taskId'
+          key: 'taskId',
+          render: (h, params) => {
+            return h(
+              "a",
+              {
+                class: ['fa'],
+                attrs: {
+                  taskId: this.money[params.index].taskId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    console.log(e.target.attributes.taskId);
+                    this.$router.push('/tasks/id=' + this.money[params.index].taskId)
+                  }
+                }
+              },
+              this.money[params.index].taskId,
+            );
+          }
         });
         columns.push({
           title: '相关用户',

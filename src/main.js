@@ -5,6 +5,7 @@ import iView from 'view-design'
 import store from './store/index'
 import API from './utils/api'
 import * as translator from './utils/translator'
+import 'lib-flexible'
 // 注释以关闭 mock 数据
 //if(process.env.MOCK) require('./mock/mock');
 

@@ -12,6 +12,7 @@
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="reportsSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <BackTop></BackTop>
   </div>
 </template>
 
@@ -65,6 +66,26 @@
         columns.push({
           title: '举报用户ID',
           key: 'userId',
+          width: 200,
+          render: (h, params) => {
+            return h(
+              "a",
+              {
+                class: ['fa'],
+                attrs: {
+                  userId: this.tableData[params.index].userId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    console.log(e.target.attributes.userId);
+                    this.$router.push('/users/id=' + this.tableData[params.index].userId)
+                  }
+                }
+              },
+              this.tableData[params.index].userId,
+            );
+          }
         });
         columns.push({
           title: '昵称',
@@ -77,12 +98,30 @@
         columns.push({
           title: '举报对象ID',
           key: 'objectId',
+          width: 200,
+          render: (h, params) => {
+            return h(
+              "a",
+              {
+                class: ['fa'],
+                attrs: {
+                  objectId: this.tableData[params.index].objectId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    console.log(e.target.attributes.objectId);
+                    this.$router.push('/users/id=' + this.tableData[params.index].objectId)
+                  }
+                }
+              },
+              this.tableData[params.index].objectId,
+            );
+          }
         });
-
         columns.push({
           title: '举报内容',
           key: 'reportContent',
-          width: 300,
           render: (h, params) => {
             return h('div', [
               h('span', {

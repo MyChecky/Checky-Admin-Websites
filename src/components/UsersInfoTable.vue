@@ -63,7 +63,7 @@
         columns.push({
           title: '用户ID',
           key: 'userId',
-          width: 200
+          width:200
         });
         columns.push({
           title: '头像',
@@ -90,11 +90,11 @@
           filters: [
             {
               label: '男',
-              value: '男'
+              value: '0'
             },
             {
               label: '女',
-              value: '女'
+              value: '1'
             }
           ],
           filterMethod(value, row) {
@@ -104,6 +104,7 @@
         columns.push({
           title: '创建时间',
           key: 'userTime',
+          width:200,
           sortable: true
         });
         columns.push({

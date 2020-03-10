@@ -6,20 +6,14 @@
           <!--<img class="logo" src="../assets/Checky-logo.png" alt="Checky-logo">-->
           <div :class="['slogan']">Checky</div>
         </div>
-        <Submenu name="users" key="1">
-          <template slot="title">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-users"></span>
-            <div :class="[display,'item-tag']">用户管理</div>
-          </template>
-          <MenuItem name="users" key="1-1" to="/users" v-if="menus.users">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-user-circle"></span>
-            <div :class="[display,'item-tag']">用户列表</div>
-          </MenuItem>
-          <MenuItem name="AuthManage" key="1-2" to="/users/AuthManage" v-if="menus.admin">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-user-secret"></span>
-            <div :class="[display,'item-tag']">权限设置</div>
-          </MenuItem>
-        </Submenu>
+        <MenuItem name="users" key="1-1" to="/users" v-if="menus.users">
+          <span :style="iconSize" class="item-icon fa fa-fw fa-users"></span>
+          <span :class="[display,'item-tag']">用户列表</span>
+        </MenuItem>
+        <MenuItem name="AuthManage" key="1-2" to="/users/AuthManage" v-if="menus.admin">
+          <span :style="iconSize" class="item-icon fa fa-fw fa-user-secret"></span>
+          <span :class="[display,'item-tag']">权限设置</span>
+        </MenuItem>
         <MenuItem name="essays" key="2" to="/essays" v-if="menus.essays">
           <span :style="iconSize" class="item-icon fa fa-fw fa-heart"></span>
           <span :class="[display,'item-tag']">动态列表</span>

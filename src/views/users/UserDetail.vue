@@ -16,7 +16,7 @@
             <div class="info-div">
               <span class="info-item">总收入：{{userIncome}}</span>
               <span class="info-item">总支出：{{userExpenditure}}</span>
-              <span class="info-item">余额：{{userBalance}}</span>
+              <span class="info-item">余  额：{{userBalance}}</span>
             </div>
           </div>
         </Card>

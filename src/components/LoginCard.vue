@@ -51,11 +51,11 @@
                 users:res.data.menus.users,
                 admin:res.data.menus.admin,
                 essays:res.data.menus.essays,
-                money:false,
+                money:res.data.menus.money,
                 tasks:res.data.menus.tasks,
                 parameter:res.data.menus.parameter,
                 appeal:res.data.menus.appeal,
-                report:false,
+                report:res.data.menus.report,
               });
               this.$Store.commit('$_setLogin', '1');
               setTimeout(() => {
