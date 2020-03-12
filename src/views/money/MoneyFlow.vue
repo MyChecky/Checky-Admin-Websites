@@ -54,7 +54,6 @@
       }
     },
     computed: {
-
       moneyColumns() {
         let columns = [];
         if (this.showCheckbox) {
@@ -73,11 +72,13 @@
         }
         columns.push({
           title: '流水ID',
-          key: 'flowId'
+          key: 'flowId',
+          width: 250,
         });
         columns.push({
           title: '任务ID',
           key: 'taskId',
+          width: 250,
           render: (h, params) => {
             return h(
               "a",
@@ -100,11 +101,15 @@
         });
         columns.push({
           title: '相关用户',
-          key: 'userName'
+          key: 'userName',
+          width: 120,
+          align: 'center'
         });
         columns.push({
           title: '真实货币',
           key: 'ifTest',
+          width: 120,
+          align: 'center',
           filterMultiple: false,
           filters: [
             {
@@ -135,6 +140,8 @@
         columns.push({
           title: '资金流动',
           key: 'flowIo',
+          width: 120,
+          align: 'center',
           filterMultiple: false,
           filters: [
             {
@@ -165,6 +172,8 @@
         columns.push({
           title: '金额',
           key: 'flowMoney',
+          width: 140,
+          align: 'center',
           render: (h, params) => {
             return h(
               MoneyTag,
@@ -179,6 +188,7 @@
         columns.push({
           title: '类型',
           key: 'flowType',
+          width: 120,
           filterMultiple: false,
           filters: [
             {
@@ -216,6 +226,7 @@
           title: '时间',
           key: 'flowTime',
           align: 'center',
+          width: 150,
           sortable: true
         });
         return columns;
@@ -254,7 +265,10 @@
         console.log(`搜索${this.kw},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
-        this.$api.money.queryFlowByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.money.queryFlowByKeyword({
+          username: keyword,
+
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {

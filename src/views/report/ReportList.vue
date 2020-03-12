@@ -62,6 +62,7 @@
         columns.push({
           title: '举报ID',
           key: 'reportId',
+          width: 200,
         });
         columns.push({
           title: '举报用户ID',
@@ -90,10 +91,12 @@
         columns.push({
           title: '昵称',
           key: 'userName',
+          width: 80,
         });
         columns.push({
           title: '举报对象',
           key: 'reportType',
+          width: 120,
         });
         columns.push({
           title: '举报对象ID',
@@ -122,6 +125,7 @@
         columns.push({
           title: '举报内容',
           key: 'reportContent',
+          width:160,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -145,12 +149,13 @@
           title: '举报时间',
           key: 'reportTime',
           sortable: true,
+          width: 180,
         });
         columns.push({
           title: '操作',
           key: 'action',
           align: 'center',
-          width: 200,
+          width: 180,
           render: (h, params) => {
             return h('div', [
               h('Button', {

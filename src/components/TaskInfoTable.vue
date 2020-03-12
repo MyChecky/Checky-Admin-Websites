@@ -35,7 +35,7 @@
         showCheckbox: true,
         fixedHeader: false,
         tableHeight: 600,
-        pageSize: 10,
+        pageSize: 9,
         tableSize: 'default',
         page: 0,
         usersSize: 0,
@@ -70,14 +70,13 @@
         columns.push({
           title: '任务ID',
           key: 'taskId',
-          width: 180
+          width: 190
         });
         columns.push({
           title: '用户ID',
           key: 'userId',
-          width: 180
+          width: 190
         });
-
         columns.push({
           title: '用户昵称',
           key: 'userName',
@@ -105,7 +104,7 @@
         columns.push({
           title: '任务标题',
           key: 'taskTitle',
-          width: 150
+          width: 180
         });
         columns.push({
           title: '开始时间',
@@ -119,15 +118,16 @@
           width: 120,
           sortable: true
         });
-
         columns.push({
           title: '监督人数',
           key: 'supervisorNum',
+          width: 100,
+          align: 'center',
         });
-
         columns.push({
           title: '状态',
           key: 'taskState',
+          width: 100,
           filterMultiple: false,
           filters: [
             {
@@ -147,10 +147,10 @@
             return row.taskState === value;
           }
         });
-
         columns.push({
           title: '操作',
           key: 'action',
+          width: 120,
           align: 'center',
           render: (h, params) => {
             return h(
@@ -224,7 +224,9 @@
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.tasks.queryTaskByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.tasks.queryTaskByKeyword({
+          username: keyword
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {

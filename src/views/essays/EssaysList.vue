@@ -97,6 +97,8 @@
         columns.push({
           title: '用户昵称',
           key: 'userName',
+          width: 100,
+          align: 'center',
         });
         columns.push({
           title: '文本',
@@ -125,11 +127,13 @@
           title: '时间',
           key: 'essayTime',
           sortable: true,
-          width: 200
+          width: 180
         });
         columns.push({
           title: '附件',
           key: 'img',
+          width: 80,
+          align: 'center',
           render: (h, params) => {
             return h(
               "button", {
@@ -171,15 +175,20 @@
         columns.push({
           title: '点赞数',
           key: 'likeNum',
+          width: 80,
+          align: 'center',
         });
         columns.push({
           title: '评论数',
           key: 'commentNum',
+          width: 80,
+          align: 'center',
         });
         columns.push({
           title: '操作',
           key: 'action',
           align: 'center',
+          width: 120,
           render: (h, params) => {
             return h(
               "button",
@@ -223,6 +232,7 @@
           title: '详情',
           key: 'detail',
           align: 'center',
+          width: 120,
           render: (h, params) => {
             return h(
               "button",

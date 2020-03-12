@@ -36,8 +36,8 @@ export default {
     // 为了避免多次搜索导致的结果返回异步的问题
     // 采用axios的cancel token来取消上一次搜索请求
     queryByKeyword: (data,cancelToken) =>{
-      // data['c'] = cancelToken
-      return post('admin/user/queryByKeyWord',{params:data,c:cancelToken})
+      data['c'] = cancelToken;
+      return post('admin/user/queryByKeyWord',data)
     }
   },
 //管理员
@@ -51,7 +51,8 @@ export default {
       return post('/admin/query', data)
     },
     queryByKeyword: (data,cancelToken) =>{
-      return post('admin/queryByKeyWord',{params:data,c:cancelToken})
+      data['c'] = cancelToken;
+      return post('admin/queryByKeyWord',data)
     },
     //更改admin信息
     updateAdmin:(data)=>{
@@ -66,7 +67,7 @@ export default {
 
     queryByKeyword: (data,cancelToken) =>{
       data['c'] = cancelToken;
-      return post('admin/essay/query',data)
+      return post('admin/essay/queryByKeyword',data)
     },
 
     deleteById:data=>{
@@ -116,12 +117,12 @@ export default {
     },
 
     querySuggestionByKeyword: (data,cancelToken) =>{
-      data['c'] = cancelToken
+      data['c'] = cancelToken;
       return post('admin/task/querysuggestion',data)
     },
 
     queryTaskByKeyword: (data,cancelToken) =>{
-      data['c'] = cancelToken
+      data['c'] = cancelToken;
       return post('admin/task/query',data)
     }
   },
@@ -154,13 +155,13 @@ export default {
     },
     //查询用户资金流水
     queryFlowByKeyword: (data,cancelToken) =>{
-      data['c'] = cancelToken
+      data['c'] = cancelToken;
       return post('admin/moneyFlows/query',data)
     },
 
     //查询用户资金流水
     queryRechargeByKeyword: (data,cancelToken) =>{
-      data['c'] = cancelToken
+      data['c'] = cancelToken;
       return post('admin/moneyRecharge/query',data)
     },
     //获取充值提现列表

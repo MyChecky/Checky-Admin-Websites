@@ -72,10 +72,12 @@
         columns.push({
           title: '建议ID',
           key: 'suggestionId',
+          width: 240,
         });
         columns.push({
           title: '建议人ID',
           key: 'userId',
+          width: 240,
           render: (h, params) => {
             return h(
               "a",
@@ -97,8 +99,9 @@
           }
         });
         columns.push({
-          title: '建议人用户名',
+          title: '建议人昵称',
           key: 'userName',
+          width: 120,
           align: 'center',
         });
         columns.push({
@@ -109,6 +112,9 @@
               InputBar, {
                 props: {
                   text: params.row.suggestionContent,
+                },
+                style:{
+                  width: 240,
                 },
                 on: {
                   inputChange: (val) => {
@@ -123,10 +129,12 @@
         columns.push({
           title: '建议时间',
           key: 'suggestionTime',
+          width: 220,
         });
         columns.push({
           title: '操作',
           key: 'action',
+          width: 240,
           align: 'center',
           render: (h, params) => {
             return h('div', [

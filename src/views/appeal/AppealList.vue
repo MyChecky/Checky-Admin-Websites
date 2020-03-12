@@ -63,15 +63,16 @@
         columns.push({
           title: '申诉ID',
           key: 'appealId',
+          width: 180,
           render: (h, params) => {
             return h('div', [
               h('span', {
                 style: {
-                  display: ['inline-block', 'flex'],
+                  display: ['inline-block'],
                   width: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
                 },
                 domProps: {
                   title: this.tableData[params.index].appealId
@@ -83,11 +84,12 @@
         columns.push({
           title: '申诉用户ID',
           key: 'userId',
+          width: 200,
           render: (h, params) => {
             return h('div', [
               h('a', {
                 style: {
-                  display: ['inline-block', 'flex'],
+                  display: ['inline-block'],
                   width: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -113,10 +115,12 @@
         columns.push({
           title: '昵称',
           key: 'userName',
+          width: 80,
         });
         columns.push({
           title: '任务ID',
           key: 'taskId',
+          width: 180,
           render: (h, params) => {
             return h(
               "a",
@@ -140,11 +144,12 @@
         columns.push({
           title: '打卡ID',
           key: 'checkId',
+          width: 180,
           render: (h, params) => {
             return h('div', [
               h('span', {
                 style: {
-                  display: ['inline-block', 'flex'],
+                  display: ['inline-block'],
                   width: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -161,6 +166,7 @@
         columns.push({
           title: '申诉内容',
           key: 'appealContent',
+          width: 120,
           render: (h, params) => {
             return h('div', [
               h('span', {
@@ -183,6 +189,7 @@
           title: '申诉时间',
           key: 'appealTime',
           sortable: true,
+          width: 160,
           render: (h, params) => {
             return h('div', [
               h('span', {
