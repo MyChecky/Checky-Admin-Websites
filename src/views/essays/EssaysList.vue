@@ -12,13 +12,15 @@
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page>
-    <div class="pic-container" v-if="show" >
+    <div class="pic-container" v-if="show">
       <div class="cover" @click="showing"></div>
       <div :class="['outer-div',]">
         <div class="pics">
           <img :src="this.imgUrl" alt="pic" class="pic-img" v-if="this.showItem.imgShow">
-          <audio :src="this.imgUrl" controls="controls" alt="audio" class="pic-audio" v-if="this.showItem.audioShow"></audio>
-          <video :src="this.imgUrl" controls="controls" alt="video" class="pic-video" v-if="this.showItem.videoShow"></video>
+          <audio :src="this.imgUrl" controls="controls" alt="audio" class="pic-audio"
+                 v-if="this.showItem.audioShow"></audio>
+          <video :src="this.imgUrl" controls="controls" alt="video" class="pic-video"
+                 v-if="this.showItem.videoShow"></video>
         </div>
         <div class="button-bar">
           <button class="turn-button fa fa-angle-left" @click="last"></button>
@@ -243,7 +245,7 @@
                 on: {
                   click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    this.$router.push(`/essays/id=${e.target.attributes.essayId.nodeValue}`);
+                    this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
                   }
                 }
               },
@@ -286,7 +288,11 @@
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.essays.queryByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.essays.queryByKeyword({
+          username: keyword,
+          page: this.page,
+          pageSize: this.pageSize
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
