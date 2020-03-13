@@ -40,7 +40,11 @@
         usersSize: 0,
         tableData: [],
         cancel: null,
-        kw: ""
+
+        startTime: "1970-01-01",
+        endTime: "2999-01-01",
+        searchType: "", // 用不到
+        keyword: "",
       }
     },
     computed: {
@@ -184,7 +188,7 @@
           });
           this.usersSize = res.data.total;
           this.tableData = res.data.users;
-          //this.tableSize = res.data.size;
+          // this.tableSize = res.data.size;
         }).catch((err) => {
         console.log(err);
       })
@@ -193,21 +197,23 @@
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods: {
-      search: function (keyword, page) {
+      search: function (startTime, endTime, keyword, searchType, page) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.searchType = searchType;
         this.page = page;
-        this.kw = keyword;
+        this.keyword = keyword;
         // 解决异步问题
         if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
-        console.log(`搜索${this.kw},页码${this.page}`);
+        console.log(`搜索${this.keyword},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
         this.$api.users.queryByKeyword({
-          page: this.page,
-          pageSize: 4,
-          keyword: this.kw
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
         }, new CancelToken((c) => {
           this.cancel = c;
         }))
@@ -225,9 +231,9 @@
       },
       changePage(e) {
         this.page = e;
-        this.$api.users.queryUsersInfo({
-          page: this.page,
-          pageSize: this.pageSize,
+        this.$api.users.queryByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
         })
           .then((res) => {
             res.data.users.map(item => {

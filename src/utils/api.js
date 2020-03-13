@@ -37,7 +37,7 @@ export default {
     // 采用axios的cancel token来取消上一次搜索请求
     queryByKeyword: (data,cancelToken) =>{
       // data['c'] = cancelToken
-      return post('admin/user/queryByKeyWord',{params:data,c:cancelToken})
+      return post('admin/user/queryByKeyWord',data)
     }
   },
 //管理员
@@ -51,7 +51,7 @@ export default {
       return post('/admin/query', data)
     },
     queryByKeyword: (data,cancelToken) =>{
-      return post('admin/queryByKeyWord',{params:data,c:cancelToken})
+      return post('admin/queryByKeyWord',data)
     },
     //更改admin信息
     updateAdmin:(data)=>{
@@ -66,7 +66,7 @@ export default {
 
     queryByKeyword: (data,cancelToken) =>{
       data['c'] = cancelToken;
-      return post('admin/essay/query',data)
+      return post('admin/essay/queryByKeyword',data)
     },
 
     deleteById:data=>{
@@ -161,7 +161,7 @@ export default {
     //查询用户资金流水
     queryRechargeByKeyword: (data,cancelToken) =>{
       data['c'] = cancelToken
-      return post('admin/moneyRecharge/query',data)
+      return post('admin/moneyRecharge/queryByKeyword',data)
     },
     //获取充值提现列表
     queryAllMoneyRecharge: data => {

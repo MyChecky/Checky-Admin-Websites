@@ -13,7 +13,7 @@
         <div class="task-list">
           <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                  :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
-                 :columns="moneyColumns"></Table>
+                 :columns="moneyColumns" :changePage="changePage"></Table>
         </div>
       </Card>
 
@@ -50,11 +50,24 @@
         money: [],
         page: 0,
         cancel: null,
-        kw: ""
+
+        tableNow: "timeNickTitle",
+        startTime: "1970-01-01",
+        endTime: "2999-01-01",
+        searchType: "",
+        keyword: "",
+        moneyTest: 2,
+        moneyIO: "all",
+        moneyType: "all"
+      }
+    },
+    watch: {
+      "moneyType": function() {
+        console.log("aihcanj")
+        console.log(this.moneyType)
       }
     },
     computed: {
-
       moneyColumns() {
         let columns = [];
         if (this.showCheckbox) {
@@ -114,10 +127,16 @@
             {
               label: '否',
               value: 0
+            },
+            {
+              label: '全部',
+              value: 2
             }
           ],
           filterMethod(value, row) {
-            return row.ifTest === value;
+            this.moneyTest=value
+            // return row.ifTest === value
+            this.changePage(1)
           },
           render: (h, params) => {
             let _this = this;
@@ -144,10 +163,16 @@
             {
               label: '出账',
               value: "O"
+            },
+            {
+              label: '全部',
+              value: "all"
             }
           ],
           filterMethod(value, row) {
-            return row.flowIo === value;
+            this.moneyIO = value;
+            // return row.flowIo === value;
+            this.changePage(1)
           },
           render: (h, params) => {
             let _this = this;
@@ -192,10 +217,18 @@
             {
               label: '奖励',
               value: "award"
+            },
+            {
+              label: '全部',
+              value: "all"
             }
           ],
           filterMethod(value, row) {
-            return row.flowType === value;
+            console.log("value", value)
+            this.moneyType = value;
+            // return row.flowType === value;
+            console.log("mt", this.moneyType)
+            this.changePage(1)
           },
           render: (h, params) => {
             let _this = this;
@@ -244,9 +277,12 @@
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180;
     },
     methods: {
-      search: function (keyword, page) {
+      search: function (startTime, endTime, keyword, searchType, page) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.searchType = searchType;
         this.page = page;
-        this.kw = keyword;
+        this.keyword = keyword;
         // 解决异步问题
         if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
@@ -254,12 +290,16 @@
         console.log(`搜索${this.kw},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
-        this.$api.money.queryFlowByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.money.queryFlowByKeyword({
+          moneyType: this.moneyType, moneyTest: this.moneyTest, moneyIO: this.moneyIO,
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
             console.log(res);
-            this.money = res.data.moneyFlow;
+            this.money = res.data.moneyFlows;
             this.moneyFlowsSize = res.data.total
           })
           .catch(err => {
@@ -268,12 +308,13 @@
       },
       changePage(e) {
         this.page = e;
-        this.$api.money.queryAllMoneyFlow({
-          page: this.page,
-          pageSize: this.pageSize
+        this.$api.money.queryFlowByKeyword({
+          moneyType: this.moneyType, moneyTest: this.moneyTest, moneyIO: this.moneyIO,
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
         })
           .then((res) => {
-            this.money = res.data.moneyFlow
+            this.money = res.data.moneyFlows
             this.moneyFlowsSize = res.data.total
           }).catch((err) => {
           console.log(err)

@@ -5,7 +5,8 @@
         <span class="card-title">任务列表</span>
         <span class="total">总数：{{tasksSize}}</span>
         <div class="search-div">
-          <SearchBar :search="search"></SearchBar>
+          <SearchBar :search="search" :tableNow="tableNow"></SearchBar>
+
         </div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
@@ -47,7 +48,12 @@
         tableData: [],
         tasksSize: 0,
         cancel: null,
-        kw: ""
+
+        tableNow: "timeNickTitle",
+        startTime: "1970-01-01",
+        endTime: "2999-01-01",
+        searchType: "",
+        keyword: "",
       }
     },
     computed: {
@@ -213,18 +219,25 @@
       // detail(index){
       //   console.log(this.tableData.indexOf(index));
       // }
-      search: function (keyword, page) {
+      search: function (startTime, endTime, keyword, searchType, page) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.searchType = searchType;
         this.page = page;
-        this.kw = keyword;
+        this.keyword = keyword;
         // 解决异步问题
         if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
-        console.log(`搜索${this.kw},页码${this.page}`);
+        console.log(`搜索${this.keyword},页码${this.page}`);
+        console.log("taskChangePage", this.startTime, this.endTime, this.keyword, this.searchType)
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.tasks.queryTaskByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.tasks.queryTaskByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
@@ -239,16 +252,28 @@
       changePage(e) {
         this.page = e;
         console.log(this.page);
-        this.$api.tasks.getTasks({"page": this.page, "pageSize": this.pageSize}).then((res) => {
-          res.data.tasks.map(item => {
-            item.taskState = this.stateMapping[item.taskState]
-          });
-          console.log(res.data.tasks);
-          this.tableData = res.data.tasks;
-          this.tasksSize = res.data.total
-        }).catch((err) => {
-          console.log(err);
-        })
+        console.log("taskChangePage", this.startTime, this.endTime, this.keyword, this.searchType)
+        if (this.cancel) {// 存在上一次请求则取消
+          this.cancel();
+        }
+        console.log(`搜索${this.keyword},页码${this.page}`);
+        // 定义CancelToken，它是axios的一个属性，且是一个构造函数
+        let CancelToken = axios.CancelToken;
+        this.$api.tasks.queryTaskByKeyword({
+            startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+            keyword: this.keyword, page: this.page, pageSize: this.pageSize
+          },
+          new CancelToken((c) => {
+            this.cancel = c;
+          }))
+          .then(res => {
+            console.log(res);
+            this.tableData = res.data.tasks;
+            this.tasksSize = res.data.total;
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
     }
   }

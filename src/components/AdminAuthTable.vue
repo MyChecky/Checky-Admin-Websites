@@ -4,9 +4,9 @@
       <div class="table-header">
         <span class="card-title">管理员列表</span>
         <span class="total">总数：{{this.adminsSize}}</span>
-        <div class="search-div">
-          <SearchBar :search="search"></SearchBar>
-        </div>
+<!--        <div class="search-div">-->
+<!--          <SearchBar :search="search"></SearchBar>-->
+<!--        </div>-->
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
