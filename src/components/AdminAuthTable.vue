@@ -436,7 +436,7 @@
         })
           .then((res) => {
             //this.tableData = res.data;
-            console.log("res.data: ", this.tableData);
+            console.log("res.data: ", res.data);
             if (res.data.state === 'ok') {
               this.$Message.warning('新建成功！刷新后更新数据');
             }
@@ -461,6 +461,20 @@
           this.formData.menus = ["appeal", "admin", "essays", "money", "report", "tasks", "users", "parameter"];
         } else {
           this.formData.menus = [];
+        }
+      },
+      newhandleCheckAll() {
+        if (this.indeterminate) {
+          this.checkAll = false;
+        } else {
+          this.checkAll = !this.checkAll;
+        }
+        this.indeterminate = false;
+
+        if (this.checkAll) {
+          this.newformData.menus = ["appeal", "admin", "essays", "money", "report", "tasks", "users", "parameter"];
+        } else {
+          this.newformData.menus = [];
         }
       },
       checkAllGroupChange(data) {
