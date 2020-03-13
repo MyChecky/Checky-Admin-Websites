@@ -29,19 +29,19 @@ export default {
       return post('/admin/task/tasks', data)
     },
     //编辑用户权限
-    changeUserAuth:(data)=>{
-      return post('/admin/user/changeauth',data)
+    changeUserAuth: (data) => {
+      return post('/admin/user/changeauth', data)
     },
     // 搜索
     // 为了避免多次搜索导致的结果返回异步的问题
     // 采用axios的cancel token来取消上一次搜索请求
-    queryByKeyword: (data,cancelToken) =>{
+    queryByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
-      return post('admin/user/queryByKeyWord',data)
+      return post('admin/user/queryByKeyWord', data)
     }
   },
 //管理员
-  admins:{
+  admins: {
     //获取所有管理员信息
     queryAdminsInfo: (data) => {
       return post('/admin/all', data)
@@ -50,28 +50,36 @@ export default {
     queryAdmin: (data) => {
       return post('/admin/query', data)
     },
-    queryByKeyword: (data,cancelToken) =>{
+    queryByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
-      return post('admin/queryByKeyWord',data)
+      return post('admin/queryByKeyWord', data)
     },
     //更改admin信息
-    updateAdmin:(data)=>{
-      return post('/admin/updateAdmin',data)
+    updateAdmin: (data) => {
+      return post('/admin/updateAdmin', data)
+    },
+    //删除管理员
+    deleteById: (data) => {
+      return post('/admin/deleteAdmin', data)
+    },
+    //新增管理员
+    addAdmin:(data)=>{
+      return post('/admin/addAdmin', data)
     }
   },
 // 动态
   essays: {
-    getEssays : data=>{
-      return post('/admin/essay/all',data)
+    getEssays: data => {
+      return post('/admin/essay/all', data)
     },
 
-    queryByKeyword: (data,cancelToken) =>{
+    queryByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
-      return post('admin/essay/queryByKeyword',data)
+      return post('admin/essay/queryByKeyword', data)
     },
 
-    deleteById:data=>{
-      return post('admin/essay/delete',data)
+    deleteById: data => {
+      return post('admin/essay/delete', data)
     },
 
     queryEssay: (data) => {
@@ -79,60 +87,60 @@ export default {
     },
   },
 // 任务
-  tasks : {
+  tasks: {
     getTasks: (data) => {
-      return post('/admin/task/tasks',data)
+      return post('/admin/task/tasks', data)
     },
     // 获取任务类型
     queryType: (data) => {
-      return post('/taskType/allType',data)
+      return post('/taskType/allType', data)
     },
 
-    queryTypeSuggestion: data =>{
-      return post('/admin/suggestion/all',data)
+    queryTypeSuggestion: data => {
+      return post('/admin/suggestion/all', data)
     },
 
     queryTask: data => {
-      return post('/admin/task/detail',data)
+      return post('/admin/task/detail', data)
     },
 
     getTaskSupervisors: data => {
-      return post('/admin/task/supervisors',data)
+      return post('/admin/task/supervisors', data)
     },
 
     suggestionDeal: data => {
-      return post('/admin/suggestion/deal',data)
+      return post('/admin/suggestion/deal', data)
     },
 
     passSuggestion: data => {
-      return post('/admin/suggestion/pass',data)
+      return post('/admin/suggestion/pass', data)
     },
 
     denySuggestion: data => {
-      return post('/admin/suggestion/deny',data)
+      return post('/admin/suggestion/deny', data)
     },
 
     delType: data => {
-      return post('/admin/taskType/delete',data)
+      return post('/admin/taskType/delete', data)
     },
 
-    querySuggestionByKeyword: (data,cancelToken) =>{
+    querySuggestionByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
-      return post('admin/task/querysuggestion',data)
+      return post('admin/task/querysuggestion', data)
     },
 
-    queryTaskByKeyword: (data,cancelToken) =>{
+    queryTaskByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
-      return post('admin/task/query',data)
+      return post('admin/task/query', data)
     }
   },
 
-  checks : {
+  checks: {
     getTaskChecks: data => {
-      return post('/admin/task/check',data)
+      return post('/admin/task/check', data)
     },
-    getCheckDetail:data =>{
-      return post('admin/task/check/detail',data)
+    getCheckDetail: data => {
+      return post('admin/task/check/detail', data)
     },
     // getCheckSupervisor: data =>{
     //   return post('admin/check/supervise',data)
@@ -142,65 +150,65 @@ export default {
 // 资金
   money: {
     // 获取单个用户资金记录
-    queryUserMoneyFlow: (data) =>{
-      return post('/admin/moneyFlows/user',data)
+    queryUserMoneyFlow: (data) => {
+      return post('/admin/moneyFlows/user', data)
     },
 
     queryAllMoneyFlow: data => {
-      return post('/admin/moneyFlows/all',data)
+      return post('/admin/moneyFlows/all', data)
     },
 
-    getGraphData: data =>{
-      return post('/admin/moneyFlows/graph',data)
+    getGraphData: data => {
+      return post('/admin/moneyFlows/graph', data)
     },
     //查询用户资金流水
-    queryFlowByKeyword: (data,cancelToken) =>{
+    queryFlowByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
-      return post('admin/moneyFlows/query',data)
+      return post('admin/moneyFlows/query', data)
     },
 
     //查询用户资金流水
-    queryRechargeByKeyword: (data,cancelToken) =>{
+    queryRechargeByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
-      return post('admin/moneyRecharge/query',data)
+      return post('admin/moneyRecharge/query', data)
     },
     //获取充值提现列表
     queryAllMoneyRecharge: data => {
-      return post('/admin/moneyRecharge/rechargeList',data)
+      return post('/admin/moneyRecharge/rechargeList', data)
     },
     //获得用户充值提现表
     queryUserMoneyRecharge: data => {
-      return post('/admin/moneyRecharge/rechargeUser',data)
+      return post('/admin/moneyRecharge/rechargeUser', data)
     },
   },
 // 申诉
   appeal: {
-    getAppeals: data =>{
-      return post('/admin/appeal/all',data)
+    getAppeals: data => {
+      return post('/admin/appeal/all', data)
     },
 
     deal: data => {
-      return post('/admin/appeal/process',data)
+      return post('/admin/appeal/process', data)
     },
 
-    queryByKeyword: (data,cancelToken) =>{
+    queryByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken
-      return post('admin/appeal/query',data)
+      return post('admin/appeal/query', data)
     }
   },
 // 举报
   report: {
     getReports: data => {
-      return post('/admin/report/all',data)
+      return post('/admin/report/all', data)
     },
 
     deal: data => {
-      return post('/admin/report/process',data)
+      return post('/admin/report/process', data)
     },
 
-    queryByKeyword: (data,cancelToken) =>{
+    queryByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken
-      return post('admin/report/query',data)
+      return post('admin/report/query', data)
     }
   }
 }
