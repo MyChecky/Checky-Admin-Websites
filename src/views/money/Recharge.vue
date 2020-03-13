@@ -52,7 +52,6 @@
         money: [],
         page: 0,
         cancel: null,
-
         tableNow: "timeNickTitle",
         startTime: "1970-01-01",
         endTime: "2999-01-01",
@@ -80,15 +79,18 @@
         }
         columns.push({
           title: '交易ID',
-          key: 'payId'
+          key: 'payId',
+          width: 220,
         });
         columns.push({
           title: '订单编号',
-          key: 'payOrderinfo'
+          key: 'payOrderinfo',
+          width: 220,
         });
         columns.push({
           title: '用户ID',
           key: 'payUserid',
+          width: 220,
           render: (h, params) => {
             return h(
               "a",
@@ -112,10 +114,14 @@
         columns.push({
           title: '用户昵称',
           key: 'payUserName',
-        });
+          width: 120,
+          align: 'center',
+      });
         columns.push({
           title: '金额',
           key: 'payMoney',
+          width: 140,
+          align: 'center',
           render: (h, params) => {
             return h(
               MoneyTag,
@@ -130,6 +136,8 @@
         columns.push({
           title: '交易类型',
           key: 'payType',
+          width: 120,
+          align: 'center',
           filterMultiple: false,
           filters: [
             {
@@ -166,6 +174,7 @@
         columns.push({
           title: '时间',
           key: 'payTime',
+          width: 200,
           align: 'center',
           sortable: true
         });

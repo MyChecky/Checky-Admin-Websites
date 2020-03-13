@@ -72,6 +72,7 @@
         columns.push({
           title: '头像',
           key: 'userAvatar',
+          width: 120,
           render: (h, params) => {
             return h(
               Avatar,
@@ -85,20 +86,24 @@
         });
         columns.push({
           title: '昵称',
-          key: 'userName'
+          key: 'userName',
+          width: 100,
+          align: 'center',
         });
         columns.push({
           title: '性别',
           key: 'userGender',
           filterMultiple: false,
+          width: 100,
+          align: 'center',
           filters: [
             {
               label: '男',
-              value: '0'
+              value: '1'
             },
             {
               label: '女',
-              value: '1'
+              value: '0'
             }
           ],
           filterMethod(value, row) {
@@ -114,16 +119,21 @@
         columns.push({
           title: '任务数',
           key: 'taskNum',
+          width: 110,
+          align: 'center',
           sortable: true
         });
         columns.push({
           title: '监督数',
           key: 'superviseNum',
+          width: 110,
+          align: 'center',
           sortable: true
         });
         columns.push({
           title: '信用',
           key: 'userCredit',
+          width: 120,
           sortable: true,
           render: (h, params) => {
             return h(
@@ -139,6 +149,7 @@
         columns.push({
           title: '操作',
           key: 'action',
+          width: 140,
           align: 'center',
           render: (h, params) => {
             return h(

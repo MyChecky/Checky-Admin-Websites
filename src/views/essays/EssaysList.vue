@@ -12,13 +12,15 @@
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="essaysSize" :page-size="pageSize" @on-change="changePage"></Page>
-    <div class="pic-container" v-if="show" >
+    <div class="pic-container" v-if="show">
       <div class="cover" @click="showing"></div>
       <div :class="['outer-div',]">
         <div class="pics">
           <img :src="this.imgUrl" alt="pic" class="pic-img" v-if="this.showItem.imgShow">
-          <audio :src="this.imgUrl" controls="controls" alt="audio" class="pic-audio" v-if="this.showItem.audioShow"></audio>
-          <video :src="this.imgUrl" controls="controls" alt="video" class="pic-video" v-if="this.showItem.videoShow"></video>
+          <audio :src="this.imgUrl" controls="controls" alt="audio" class="pic-audio"
+                 v-if="this.showItem.audioShow"></audio>
+          <video :src="this.imgUrl" controls="controls" alt="video" class="pic-video"
+                 v-if="this.showItem.videoShow"></video>
         </div>
         <div class="button-bar">
           <button class="turn-button fa fa-angle-left" @click="last"></button>
@@ -100,6 +102,8 @@
         columns.push({
           title: '用户昵称',
           key: 'userName',
+          width: 100,
+          align: 'center',
         });
         columns.push({
           title: '文本',
@@ -128,11 +132,13 @@
           title: '时间',
           key: 'essayTime',
           sortable: true,
-          width: 200
+          width: 180
         });
         columns.push({
           title: '附件',
           key: 'img',
+          width: 80,
+          align: 'center',
           render: (h, params) => {
             return h(
               "button", {
@@ -174,15 +180,20 @@
         columns.push({
           title: '点赞数',
           key: 'likeNum',
+          width: 80,
+          align: 'center',
         });
         columns.push({
           title: '评论数',
           key: 'commentNum',
+          width: 80,
+          align: 'center',
         });
         columns.push({
           title: '操作',
           key: 'action',
           align: 'center',
+          width: 120,
           render: (h, params) => {
             return h(
               "button",
@@ -226,6 +237,7 @@
           title: '详情',
           key: 'detail',
           align: 'center',
+          width: 120,
           render: (h, params) => {
             return h(
               "button",
@@ -248,7 +260,7 @@
                 on: {
                   click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    this.$router.push(`/essays/id=${e.target.attributes.essayId.nodeValue}`);
+                    this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
                   }
                 }
               },

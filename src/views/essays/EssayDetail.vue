@@ -3,19 +3,19 @@
     <div v-if="exist">
       <div class="inner-div">
         <Card>
-          <span class="card-title">基本信息</span>
+          <span class="card-title">动态详情</span>
           <div class="inner-card">
             <!-- <Avatar :source="userInfo.userAvatar" :size="80"></Avatar> -->
             <div class="info-div">
-              <span class="info-item">动态ID：{{taskInfo.essayId}}</span>
-              <span class="info-item">动态内容：{{taskInfo.essayContent}}</span>
-              <span class="info-item">发布时间：{{taskInfo.essayTime}}</span>
+              <span class="info-item">动态ID：{{essayInfo.essayId}}</span>
+              <span class="info-item">动态内容：{{essayInfo.essayContent}}</span>
+              <span class="info-item">发布时间：{{essayInfo.essayTime}}</span>
             </div>
             <!-- <Avatar :source="userInfo.userAvatar" :size="80"></Avatar> -->
             <div class="info-div">
-              <span class="info-item">发布用户：{{taskInfo.userName}}</span>
-              <span class="info-item">获赞数：{{taskInfo.likeNum}}</span>
-              <span class="info-item">评论人数：{{taskInfo.commentNum}}</span>
+              <span class="info-item">发布用户：{{essayInfo.userName}}</span>
+              <span class="info-item">评论人数：{{essayInfo.commentNum}}</span>
+              <span class="info-item">获赞数：{{essayInfo.likeNum}}</span>
             </div>
           </div>
         </Card>
@@ -24,17 +24,39 @@
         <Card class="others">
           <div class="table-header">
             <span class="card-title">附件列表</span>
-            <span class="total">总数：{{essayInfo.length}}</span>
-            <div class="search-div">
-              <SearchBar></SearchBar>
-            </div>
+            <span class="total">总数：{{imgInfo.length}}</span>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
-                   :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="essayInfo"
-                   :columns="supervisorColumns"></Table>
+                   :stripe="showStripe" :show-header="showHeader" :size="imgInfo.length" :data="imgInfo"
+                   :columns="imgColumns"></Table>
           </div>
         </Card>
+      </div>
+      <div class="inner-div">
+        <Card class="others">
+          <div class="table-header">
+            <span class="card-title">评论列表</span>
+            <span class="total">总数：{{commentInfo.length}}</span>
+          </div>
+          <div class="task-list">
+            <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
+                   :stripe="showStripe" :show-header="showHeader" :size="commentInfo.length" :data="commentInfo"
+                   :columns="commentsColumns"></Table>
+          </div>
+        </Card>
+      </div>
+      <div class="pic-container" v-if="show">
+        <div class="cover" @click="showing"></div>
+        <div :class="['outer-div',]">
+          <div class="pics">
+            <img :src="this.imgUrl" alt="pic" class="pic-img" v-if="this.showItem.imgShow">
+            <audio :src="this.imgUrl" controls="controls" alt="audio" class="pic-audio"
+                   v-if="this.showItem.audioShow"></audio>
+            <video :src="this.imgUrl" controls="controls" alt="video" class="pic-video"
+                   v-if="this.showItem.videoShow"></video>
+          </div>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -51,6 +73,7 @@
   import Credit from '../../components/Credit'
   import SearchBar from '../../components/SearchBar'
   import MoneyTag from '../../components/MoneyTag'
+  import {base} from '../../utils/axios'
 
   export default {
 
@@ -75,11 +98,21 @@
         tableSize: 'default',
         exist: true,
         score: -1,
-        essayInfo: {},
+        essayInfo: [],
+        commentInfo: [],
+        imgInfo: [],
+        show: false,
+        baseURL: base + '/',
+        imgUrl: '',
+        showItem: {
+          imgShow: false,
+          audioShow: false,
+          videoShow: false,
+        }
       }
     },
     computed: {
-      attchfileColumns() {
+      imgColumns() {
         let columns = [];
         if (this.showCheckbox) {
           columns.push({
@@ -124,7 +157,7 @@
             return h(
               "button", {
                 attrs: {
-                  picList: params.row.img
+                  fileAddr: this.imgInfo[params.index].fileAddr
                 },
                 style: {
                   border: "none",
@@ -138,26 +171,100 @@
                 },
                 on: {
                   click: (e) => {
-                    this.index = 0; //index置0
                     this.show = true;
-                    this.picList = params.row.img;
-                    console.log("picList", this.picList);
-                    this.imgUrl = this.baseURL + this.picList[this.index].fileAddr;
-                    if (this.picList[this.index].recordType === "audio") {
+                    this.imgUrl = this.baseURL + this.imgInfo[params.index].fileAddr;
+                    console.log("fileAddr", this.imgUrl);
+                    if (this.imgInfo[params.index].recordType === "audio") {
                       this.showItem.audioShow = true;
-                    } else if (this.picList[this.index].recordType === "video") {
+                    } else if (this.imgInfo[params.index].recordType === "video") {
                       this.showItem.videoShow = true;
-                    } else if (this.picList[this.index].recordType === "image") {
+                    } else if (this.imgInfo[params.index].recordType === "image") {
                       this.showItem.imgShow = true
                     }
                     console.log(this.showItem);
-
                   }
 
                 }
               }
             )
           }
+        });
+        return columns;
+      },
+      commentsColumns() {
+        let columns = [];
+        if (this.showCheckbox) {
+          columns.push({
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          })
+        }
+        if (this.showIndex) {
+          columns.push({
+            type: 'index',
+            width: 60,
+            align: 'center'
+          })
+        }
+        columns.push({
+          title: '评论ID',
+          key: 'commentId'
+        });
+        columns.push({
+          title: '用户ID',
+          key: 'userId',
+          render: (h, params) => {
+            return h(
+              "a",
+              {
+                class: ['fa'],
+                attrs: {
+                  userId: this.commentInfo[params.index].userId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    console.log(e.target.attributes.userId);
+                    this.$router.push('/users/id=' + this.commentInfo[params.index].userId)
+                  }
+                }
+              },
+              this.commentInfo[params.index].userId,
+            );
+          }
+        });
+        columns.push({
+          title: '头像',
+          key: 'userAvatar',
+          render: (h, params) => {
+            return h(
+              Avatar,
+              {
+                props: {
+                  source: params.row.userAvatar
+                }
+              }
+            )
+          }
+        });
+        columns.push({
+          title: '昵称',
+          key: 'userName'
+        });
+        columns.push({
+          title: '动态ID',
+          key: 'commentId',
+        });
+        columns.push({
+          title: '评论内容',
+          key: 'commentContent'
+        });
+        columns.push({
+          title: '评论时间',
+          key: 'commentTime',
+          align: 'center',
+          sortable: true
         });
         return columns;
       },
@@ -172,14 +279,20 @@
         .then((res) => {
           console.log(res.data);
           this.essayInfo = res.data.essay;
+          this.commentInfo = res.data.comments;
+          this.imgInfo = res.data.essay.img;
         })
         .catch((err) => {
           console.log(err)
         });
     },
     methods: {
-      search(keyword) {
-      },
+      showing() {
+        this.show = false;
+        this.showItem.imgShow = false;
+        this.showItem.audioShow = false;
+        this.showItem.videoShow = false;
+      }
     }
   }
 </script>
@@ -261,5 +374,33 @@
   .others {
     display: flex;
     width: 100%;
+  }
+  .pic-container {
+  }
+
+  .cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-color: rgba(100, 100, 100, 0.2);
+  }
+
+  .pics {
+    margin-bottom: 2px;
+  }
+
+  .pic-img {
+    max-width: 300px;
+    max-height: 400px;
+    background-size: cover;
+  }
+
+  .pic-video {
+    max-width: 450px;
+    max-height: 600px;
+    background-size: cover;
   }
 </style>
