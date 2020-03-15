@@ -35,6 +35,10 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-money"></span>
             <div :class="[display,'item-tag']">充值记录</div>
           </MenuItem>
+          <MenuItem name="PersonalChart" key="3-4" to="/money/PersonalChart">
+            <span :style="iconSize" class="item-icon fa fa-fw fa-line-chart"></span>
+            <div :class="[display,'item-tag']">个人统计图</div>
+          </MenuItem>
         </Submenu>
         <MenuItem name="tasks" key="4-1" v-if="menus.tasks" to="/tasks/list">
           <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>

@@ -12,6 +12,7 @@
               <span class="info-item">性别：{{userInfo.userGender===1?'男':'女'}}<i
                 :class="['fa',userInfo.userGender===1?'fa-mars':'fa-venus',userInfo.userGender===1?'mars':'venus']"></i></span>
               <span class="info-item">创建时间：{{userInfo.userTime}}</span>
+              <span class="info-item">兴趣爱好：{{this.hobbies}}</span>
             </div>
             <div class="info-div">
               <span class="info-item">总收入：{{userIncome}}</span>
@@ -128,7 +129,8 @@
         taskSize: 0,
         userExpenditure: 100,
         userIncome: 300,
-        userBalance: 200
+        userBalance: 200,
+        hobbies: [],
       }
     },
     computed: {
@@ -451,6 +453,14 @@
         }).catch((err) => {
         console.log(err)
       });
+      this.$api.users.queryHobbies({userId: id})
+        .then((res) => {
+          this.hobbies = res.data.hobbies;
+          console.log(res.data.hobbie);
+        })
+        .catch((err) => {
+          console.log(err)
+        });
       this.$api.users.queryUserTask({
         userId: id,
         page: this.taskpage,
@@ -465,7 +475,7 @@
           this.taskSize = res.data.total
         }).catch((err) => {
         console.log(err)
-      })
+      });
       this.$api.money.queryUserMoneyFlow({
         userId: id,
         page: this.moneypage,
@@ -477,7 +487,7 @@
           this.moneySize = res.data.total
         }).catch((err) => {
         console.log(err)
-      })
+      });
       this.$api.money.queryUserMoneyRecharge({
         userId: id,
         page: this.rechargepage,

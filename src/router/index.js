@@ -84,6 +84,15 @@ export default new Router({
           components: {content: () => import('@/views/money/Chart')}
         },
         {
+          path: 'money/PersonalChart',
+          name: 'PersonalChart',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/money/PersonalChart')}
+        },
+        {
           path: 'money/moneyFlow',
           name: 'moneyFlow',
           meta: {

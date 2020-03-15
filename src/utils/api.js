@@ -20,6 +20,10 @@ export default {
     queryUsersInfo: (data) => {
       return post('/admin/user/all', data)
     },
+    //获取用户兴趣爱好
+    queryHobbies: (data) => {
+      return post('/admin/user/queryHobby', data)
+    },
     // 查询单个用户详情
     queryUser: (data) => {
       return post('/admin/user/query', data)
@@ -63,7 +67,7 @@ export default {
       return post('/admin/deleteAdmin', data)
     },
     //新增管理员
-    addAdmin:(data)=>{
+    addAdmin: (data) => {
       return post('/admin/addAdmin', data)
     }
   },
