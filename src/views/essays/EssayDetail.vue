@@ -22,6 +22,54 @@
       </div>
       <div class="inner-div">
         <Card class="others">
+          <span class="card-title">动态列表</span>
+          <Row>
+            <Col span="11">
+              <Card>
+                <p slot="title">{{this.imgInfo[0].recordContent}} <span
+                  class="info-item"> -{{imgInfo[0].recordTime}}</span></p>
+                <div class="info-div">
+                  <span class="info-item">动态ID：{{imgInfo[0].essayId}}</span>
+                  <span class="info-item">打卡ID：{{imgInfo[0].checkId}}</span>
+                  <span class="info-item">动态内容：{{imgInfo[0].recordContent}}</span>
+                  <span class="info-item">发布时间：{{imgInfo[0].recordTime}}</span>
+                  <span class="info-item">附件类型：{{imgInfo[0].recordType}}</span>
+                  <img :src="imgInfo[0].fileAddr" alt="pic" class="pic-img">
+                </div>
+              </Card>
+            </Col>
+            <Col span="11" offset="1">
+              <Card>
+                <p slot="title">{{this.imgInfo[1].recordContent}} <span
+                  class="info-item"> -{{imgInfo[1].recordTime}}</span></p>
+                <div class="info-div">
+                  <span class="info-item">动态ID：{{imgInfo[1].essayId}}</span>
+                  <span class="info-item">打卡ID：{{imgInfo[1].checkId}}</span>
+                  <span class="info-item">动态内容：{{imgInfo[1].recordContent}}</span>
+                  <span class="info-item">发布时间：{{imgInfo[1].recordTime}}</span>
+                  <span class="info-item">附件类型：{{imgInfo[1].recordType}}</span>
+                  <img :src="imgInfo[1].fileAddr" alt="pic" class="pic-img">
+                </div>
+              </Card>
+            </Col>
+          </Row>
+        </Card>
+      </div>
+      <div class="inner-div">
+        <Card class="others">
+          <div class="table-header">
+            <span class="card-title">动态附件列表</span>
+            <span class="total">总数：{{imgInfo.length}}</span>
+          </div>
+          <div class="task-list">
+            <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
+                   :stripe="showStripe" :show-header="showHeader" :size="imgInfo.length" :data="imgInfo"
+                   :columns="img_Columns"></Table>
+          </div>
+        </Card>
+      </div>
+      <div class="inner-div">
+        <Card class="others">
           <div class="table-header">
             <span class="card-title">附件列表</span>
             <span class="total">总数：{{imgInfo.length}}</span>
@@ -50,11 +98,9 @@
         <div class="cover" @click="showing"></div>
         <div :class="['outer-div',]">
           <div class="pics">
-            <img :src="this.imgUrl" alt="pic" class="pic-img" v-if="this.showItem.imgShow">
-            <audio :src="this.imgUrl" controls="controls" alt="audio" class="pic-audio"
-                   v-if="this.showItem.audioShow"></audio>
-            <video :src="this.imgUrl" controls="controls" alt="video" class="pic-video"
-                   v-if="this.showItem.videoShow"></video>
+            <img :src="imgUrl" alt="pic" class="pic-img" v-if="showItem.imgShow">
+            <audio :src="imgUrl" controls="controls" alt="audio" class="pic-audio" v-if="showItem.audioShow"></audio>
+            <video :src="imgUrl" controls="controls" alt="video" class="pic-video" v-if="showItem.videoShow"></video>
           </div>
         </div>
       </div>
@@ -74,6 +120,7 @@
   import SearchBar from '../../components/SearchBar'
   import MoneyTag from '../../components/MoneyTag'
   import {base} from '../../utils/axios'
+  import image from "../../components/image";
 
   export default {
 
@@ -81,6 +128,7 @@
     components: {
       Avatar: Avatar,
       Credit: Credit,
+      image: image,
       SearchBar: SearchBar,
       MoneyTag: MoneyTag
     },
@@ -184,6 +232,48 @@
                     console.log(this.showItem);
                   }
 
+                }
+              }
+            )
+          }
+        });
+        return columns;
+      },
+      img_Columns() {
+        let columns = [];
+        if (this.showCheckbox) {
+          columns.push({
+            type: 'selection',
+            width: 60,
+            align: 'center'
+          })
+        }
+        if (this.showIndex) {
+          columns.push({
+            type: 'index',
+            width: 60,
+            align: 'center'
+          })
+        }
+        columns.push({
+          title: '记录内容',
+          key: 'recordContent'
+        });
+        columns.push({
+          title: '发布时间',
+          key: 'recordTime',
+          align: 'center',
+          sortable: true
+        });
+        columns.push({
+          title: '照片',
+          key: 'fileAddr',
+          render: (h, params) => {
+            return h(
+              image,
+              {
+                props: {
+                  source: this.imgInfo[params.index].fileAddr
                 }
               }
             )
@@ -375,6 +465,7 @@
     display: flex;
     width: 100%;
   }
+
   .pic-container {
   }
 
