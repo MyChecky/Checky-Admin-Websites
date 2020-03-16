@@ -42,6 +42,7 @@ export default {
     queryByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;
       return post('admin/user/queryByKeyWord', data)
+
     }
   },
 //管理员
@@ -172,9 +173,9 @@ export default {
     },
 
     //查询用户资金流水
-    queryRechargeByKeyword: (data, cancelToken) => {
-      data['c'] = cancelToken;
-      return post('admin/moneyRecharge/query', data)
+    queryRechargeByKeyword: (data,cancelToken) =>{
+      data['c'] = cancelToken
+      return post('admin/moneyRecharge/queryByKeyword',data)
     },
     //获取充值提现列表
     queryAllMoneyRecharge: data => {

@@ -52,8 +52,12 @@
         money: [],
         page: 0,
         cancel: null,
-        kw: "",
-
+        tableNow: "timeNickTitle",
+        startTime: "1970-01-01",
+        endTime: "2999-01-01",
+        searchType: "",
+        keyword: "",
+        payType: "all"
       }
     },
     computed: {
@@ -143,10 +147,15 @@
             {
               label: '提现',
               value: 'withdraw'
+            },
+            {
+              label: '全部',
+              value: 'all'
             }
           ],
           filterMethod(value, row) {
             //return row.userGender === value;   //Todo
+            this.payType = value
             return row.payType === value;
           },
           render: (h, params) => {
@@ -197,23 +206,29 @@
     },
 
     methods: {
-      search: function (keyword, page) {
+      search: function (startTime, endTime, keyword, searchType, page) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.searchType = searchType;
         this.page = page;
-        this.kw = keyword;
+        this.keyword = keyword;
         // 解决异步问题
         if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
-        console.log(`搜索${this.kw},页码${this.page}`);
+        console.log(`搜索${this.keyword},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.money.queryRechargeByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.money.queryRechargeByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize, payType: this.payType
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
             console.log(res);
-            this.money = res.data.moneyFlow;
+            this.money = res.data.pays;
             this.moneyFlowsSize = res.data.total
           })
           .catch(err => {
@@ -222,21 +237,17 @@
       },
       changePage(e) {
         this.page = e;
-        if (this.kw) {
-          this.search(this.kw, this.page)
-        } else {
-          console.log(`查询全部${this.kw},页码${this.page}`);
-          this.$api.money.queryAllMoneyRecharge({
-            page: this.page,
-            pageSize: this.pageSize
-          })
-            .then((res) => {
-              this.money = res.data.pays;
-              this.moneyRechargeSize = res.data.total
-            }).catch((err) => {
-            console.log(err)
-          })
-        }
+        console.log(`查询全部${this.keyword},页码${this.page}`);
+        this.$api.money.queryRechargeByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize, payType: this.payType
+        })
+          .then((res) => {
+            this.money = res.data.pays;
+            this.moneyRechargeSize = res.data.total
+          }).catch((err) => {
+          console.log(err)
+        })
       }
     }
   }

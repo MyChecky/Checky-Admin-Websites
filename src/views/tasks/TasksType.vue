@@ -4,7 +4,7 @@
       <div class="table-header">
         <span class="card-title">现有类型</span>
         <span class="total"> 总数：{{types.length}}</span>
-        <div class="search-div"></div>
+
       </div>
       <div class="types-div">
         <typeDiv v-for="(item,index) in types" :typeItem=item :i=index :key="item.typeId"
@@ -15,6 +15,9 @@
       <div class="table-header">
         <span class="card-title">建议列表</span>
         <span class="total">总数：{{suggestionsSize}}</span>
+        <div class="search-div">
+          <SearchBar :search="search"></SearchBar>
+        </div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="typeSuggestions" :columns="suggestionColumn"></Table>
@@ -27,11 +30,13 @@
 <script>
   import TypeDiv from '../../components/TypeDiv'
   import InputBar from '../../components/InputBar'
+  import SearchBar from '../../components/SearchBar'
 
   export default {
     components: {
       TypeDiv: TypeDiv,
-      InputBar: InputBar
+      InputBar: InputBar,
+      SearchBar: SearchBar
     },
     data() {
       return {
@@ -226,6 +231,8 @@
       //this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods: {
+
+
       search: function (keyword, page) {
         this.page = page;
         this.kw = keyword;

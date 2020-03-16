@@ -9,9 +9,9 @@
           @click="changeValue">
           添加管理员
         </button>
-        <div class="search-div">
-          <SearchBar :search="search"></SearchBar>
-        </div>
+<!--        <div class="search-div">-->
+<!--          <SearchBar :search="search"></SearchBar>-->
+<!--        </div>-->
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>

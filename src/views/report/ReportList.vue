@@ -5,7 +5,7 @@
         <span class="card-title">举报列表</span>
         <span class="total">总数：{{reportsSize}}</span>
         <div class="search-div">
-          <SearchBar :search="search"></SearchBar>
+          <SearchBar :search="search" :tableNow="tableNow"></SearchBar>
         </div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
@@ -38,7 +38,13 @@
         tableSize: 'default',
         page: 0,
         reportsSize: 0,
-        tableData: []
+        tableData: [],
+
+        tableNow: "timeNickContent",
+        startTime: "1970-01-01",
+        endTime: "2999-01-01",
+        searchType: "",
+        keyword: "",
       }
     },
     computed: {
@@ -231,9 +237,12 @@
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
     methods: {
-      search: function (keyword, page) {
+      search: function (startTime, endTime, keyword, searchType, page) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.searchType = searchType;
         this.page = page;
-        this.kw = keyword;
+        this.keyword = keyword;
         // 解决异步问题
         if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
@@ -242,7 +251,10 @@
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.report.queryByKeyword({username: keyword}, new CancelToken((c) => {
+        this.$api.report.queryByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
@@ -256,7 +268,10 @@
       },
       changePage(e) {
         this.page = e
-        this.$api.report.getReports({page: this.page, pageSize: this.pageSize})
+        this.$api.report.queryByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+        })
           .then(res => {
             console.log(res.data)
             res.data.reports.map(item => {
