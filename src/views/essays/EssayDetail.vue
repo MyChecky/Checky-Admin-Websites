@@ -71,19 +71,6 @@
       <div class="inner-div">
         <Card class="others">
           <div class="table-header">
-            <span class="card-title">附件列表</span>
-            <span class="total">总数：{{imgInfo.length}}</span>
-          </div>
-          <div class="task-list">
-            <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
-                   :stripe="showStripe" :show-header="showHeader" :size="imgInfo.length" :data="imgInfo"
-                   :columns="imgColumns"></Table>
-          </div>
-        </Card>
-      </div>
-      <div class="inner-div">
-        <Card class="others">
-          <div class="table-header">
             <span class="card-title">评论列表</span>
             <span class="total">总数：{{commentInfo.length}}</span>
           </div>
@@ -160,85 +147,6 @@
       }
     },
     computed: {
-      imgColumns() {
-        let columns = [];
-        if (this.showCheckbox) {
-          columns.push({
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          })
-        }
-        if (this.showIndex) {
-          columns.push({
-            type: 'index',
-            width: 60,
-            align: 'center'
-          })
-        }
-        columns.push({
-          title: '记录ID',
-          key: 'recordId'
-        });
-        columns.push({
-          title: '打卡ID',
-          key: 'checkId'
-        });
-        columns.push({
-          title: '附件类型',
-          key: 'recordType'
-        });
-        columns.push({
-          title: '记录内容',
-          key: 'recordContent'
-        });
-        columns.push({
-          title: '发布时间',
-          key: 'recordTime',
-          align: 'center',
-          sortable: true
-        });
-        columns.push({
-          title: '附件',
-          key: 'img',
-          render: (h, params) => {
-            return h(
-              "button", {
-                attrs: {
-                  fileAddr: this.imgInfo[params.index].fileAddr
-                },
-                style: {
-                  border: "none",
-                  backgroundColor: 'transparent',
-                  textDecoration: 'underline',
-                  color: 'dodgerblue',
-                  cursor: 'pointer',
-                },
-                domProps: {
-                  innerText: '预览'
-                },
-                on: {
-                  click: (e) => {
-                    this.show = true;
-                    this.imgUrl = this.baseURL + this.imgInfo[params.index].fileAddr;
-                    console.log("fileAddr", this.imgUrl);
-                    if (this.imgInfo[params.index].recordType === "audio") {
-                      this.showItem.audioShow = true;
-                    } else if (this.imgInfo[params.index].recordType === "video") {
-                      this.showItem.videoShow = true;
-                    } else if (this.imgInfo[params.index].recordType === "image") {
-                      this.showItem.imgShow = true
-                    }
-                    console.log(this.showItem);
-                  }
-
-                }
-              }
-            )
-          }
-        });
-        return columns;
-      },
       img_Columns() {
         let columns = [];
         if (this.showCheckbox) {
@@ -257,12 +165,12 @@
         }
         columns.push({
           title: '记录内容',
-          key: 'recordContent'
+          key: 'recordContent',width:200,
         });
         columns.push({
           title: '发布时间',
           key: 'recordTime',
-          align: 'center',
+          align: 'center',width:200,
           sortable: true
         });
         columns.push({
