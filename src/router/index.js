@@ -84,7 +84,7 @@ export default new Router({
           components: {content: () => import('@/views/money/Chart')}
         },
         {
-          path: 'money/PersonalChart',
+          path: 'money/PersonalChart/id=:userId',
           name: 'PersonalChart',
           meta: {
             title: '',
