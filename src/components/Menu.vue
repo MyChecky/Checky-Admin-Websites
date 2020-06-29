@@ -1,10 +1,14 @@
 <template>
   <Menu mode="vertical" active-name="['users']" :open-names="['tasks','money']" style="height: 100%;width: auto;padding-top: 10px;">
     <div class="logo-div">Checky</div>
-    <MenuItem name="users" key="1" to="/users">
-      <Icon type="stats-bars" size="22px"></Icon>
-      用户列表
-    </MenuItem>
+    <Submenu name="users" key="1">
+      <template slot="title">
+        <Icon type="stats-bars" size="22px"></Icon>
+        用户列表
+      </template>
+      <MenuItem name="users" key="1-1" to="/users">用户管理</MenuItem>
+      <MenuItem name="users/AuthManage" key="1-2">权限设置</MenuItem>
+    </Submenu>
     <MenuItem name="essays" key="2" to="/essays">
       <Icon type="stats-bars" size="22px"></Icon>
       动态列表
@@ -32,6 +36,10 @@
     <MenuItem name="report" key="6" >
       <Icon type="stats-bars" size="22px"></Icon>
       举报列表
+    </MenuItem>
+    <MenuItem name="AuthManage" key="7" to="#">
+      <Icon type="ios-key" size="22px"></Icon>
+      权限管理
     </MenuItem>
   </Menu>
 </template>

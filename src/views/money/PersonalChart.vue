@@ -15,11 +15,11 @@
   import TestMoneyChart from "../../components/TestMoneyChart";
 
   export default {
+    name:'PersonalChart',
     components:{
       RealMoneyChart,
       TestMoneyChart
     }
-
   }
 </script>
 

@@ -11,7 +11,6 @@
               <span class="info-item">开始时间：{{taskInfo.taskStartTime}}</span>
               <span class="info-item">结束时间：{{taskInfo.taskEndTime}}</span>
               <span class="info-item">任务标题：{{taskInfo.taskTitle}}</span>
-
             </div>
             <!-- <Avatar :source="userInfo.userAvatar" :size="80"></Avatar> -->
             <div class="info-div">
@@ -30,35 +29,19 @@
             </div>
           </div>
         </Card>
-        <!-- <Card>
-          <span class="card-title">兴趣爱好</span>
-          <div class="inner-card"></div>
-        </Card> -->
-        <!-- <Card>
-          <div style="display: flex;flex-direction: column;justify-content: space-between;height: 100%;">
-            <span class="card-title">信用评分</span>
-            <span class="credit-span">评分：{{userInfo.userCredit}}</span>
-            <Credit v-if='score>=0' size="large" :score="score"></Credit>
-            <div class="credit-button-div">
-              <button class="op-button">举报/申诉</button>
-              <button class="fa fa-eye op-button disabled">恢复</button>
-              <button class="fa fa-exclamation-circle op-button cancel">屏蔽用户</button>
-            </div>
-          </div>
-        </Card> -->
       </div>
       <div class="inner-div">
         <Card class="others">
           <div class="table-header">
             <span class="card-title">监督列表</span>
             <span class="total">总数：{{supervisors.length}}</span>
-            <div class="search-div"><SearchBar></SearchBar></div>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                    :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="supervisors"
                    :columns="supervisorColumns"></Table>
           </div>
+          <Page class="pager" :total="this.supervisors.length" :page-size="pageSize" @on-change="changeSupervisorsPage"></Page>
         </Card>
       </div>
       <div class="inner-div">
@@ -66,13 +49,13 @@
           <div class="table-header">
             <span class="card-title">打卡列表</span>
             <span class="total">总数：{{checks.length}}</span>
-            <div class="search-div"><SearchBar></SearchBar></div>
           </div>
           <div class="task-list">
             <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                    :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="checks"
                    :columns="checkColumns"></Table>
           </div>
+          <Page class="pager" :total="checks.length" :page-size="pageSize" @on-change="changeChecksPage"></Page>
         </Card>
       </div>
     </div>
@@ -111,6 +94,7 @@
         tableHeight: 400,
         pageSize: 10,
         tableSize: 'default',
+        taskSize: 0,
         exist: true,
         score: -1,
         taskInfo: {},
@@ -144,12 +128,21 @@
           key: 'userName'
         });
         columns.push({
+          title: '监督者状态',
+          key: 'superviserState'
+        });
+        columns.push({
           title: '加入时间',
           key: 'addTime',
           align: 'center',
           sortable: true
         });
-
+        columns.push({
+          title: '退出时间',
+          key: 'leaveTime',
+          align: 'center',
+          sortable: true
+        });
         columns.push({
           title: '监督次数',
           key: 'superviseNum',
@@ -207,11 +200,11 @@
           title: '操作',
           key: 'action',
           align: 'center',
-          render: (h,params) => {
+          render: (h, params) => {
             return h(
               "button",
               {
-                style:{
+                style: {
                   padding: '5px 10px',
                   backgroundColor: '#2b85e4',
                   color: '#fff',
@@ -222,12 +215,12 @@
                 domProps: {
                   innerText: '详情'
                 },
-                class:['fa','fa-caret-right'],
+                class: ['fa', 'fa-caret-right'],
                 attrs: {
                   checkId: this.checks[params.index].checkId,
                 },
-                on:{
-                  click:(e)=>{// 点击事件， e 为事件参数
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
                     console.log(e.target.attributes.checkId.nodeValue);
                     this.$router.push(`/tasks/check/check=${e.target.attributes.checkId.nodeValue}&task=${this.$route.params.taskId}`)
@@ -236,52 +229,85 @@
               },
               "详情"
             );
-            }
+          }
         });
         return columns;
       }
     },
     beforeMount() {
+      //查询当前登录用户的部门
+      if (localStorage.tasks === 'false') {
+        this.$router.push(`/404`)
+      }
       let id = this.$route.params.taskId;
-      this.$api.tasks.queryTask({taskId:id})
-        .then((res)=>{
-          console.log(res.data)
-          this.taskInfo = res.data.task
-          this.taskInfo.taskState = this.$translator.translator('taskState',this.taskInfo.taskState)
+      this.$api.tasks.queryTask({taskId: id})
+        .then((res) => {
+          console.log(res.data);
+          this.taskInfo = res.data.task;
+          this.taskInfo.taskState = this.$translator.translator('taskState', this.taskInfo.taskState)
         })
-        .catch((err)=>{
+        .catch((err) => {
           console.log(err)
-      })
+        });
       this.$api.tasks.getTaskSupervisors({
         taskId: id,
-        page:this.page
+        page: this.page
       })
-      .then((res)=>{
-        console.log(res.data)
-        this.supervisors = res.data.supervisors
-      })
-      .catch((err)=>{
-
-      })
-
+        .then((res) => {
+          console.log(res.data);
+          this.supervisors = res.data.supervisors
+        })
+        .catch((err) => {
+          console.log(err)
+        });
       this.$api.checks.getTaskChecks({
         taskId: id,
-        page:this.page
+        page: this.page
       })
-      .then((res)=>{
-        console.log(res.data)
-        this.checks = res.data.checks
-        this.checks.map((item)=>{
-          item.checkState = this.$translator.translator('checkState',item.checkState)
+        .then((res) => {
+        console.log(res.data);
+        this.checks = res.data.checks;
+        this.checks.map((item) => {
+          item.checkState = this.$translator.translator('checkState', item.checkState)
         })
       })
-      .catch((err)=>{
-
-      })
+        .catch((err) => {
+          console.log(err);
+        })
     },
     methods: {
-      search(keyword) {
+      changeSupervisorsPage(e) {
+        this.page = e;
+        console.log(this.page);
+        this.$api.tasks.getTaskSupervisors({
+          taskId: id,
+          page: this.page
+        })
+          .then((res) => {
+            console.log(res.data);
+            this.supervisors = res.data.supervisors
+          })
+          .catch((err) => {
+            console.log(err)
+          });
       },
+      changeChecksPage(e) {
+        this.page = e;
+        console.log(this.page);
+        this.$api.checks.getTaskChecks({
+          taskId: id,
+          page: this.page
+        }).then((res) => {
+          console.log(res.data);
+          this.checks = res.data.checks;
+          this.checks.map((item) => {
+            item.checkState = this.$translator.translator('checkState', item.checkState)
+          })
+        })
+          .catch((err) => {
+            console.log(err);
+          })
+      }
     }
   }
 </script>
@@ -305,11 +331,14 @@
     display: flex;
     align-items: flex-end;
   }
-  .search-div{
-    flex-grow: 5;
+
+  .pager {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: center;
+    margin: 5px auto;
   }
+
   .notice {
     position: absolute;
     left: 50%;
@@ -356,51 +385,6 @@
 
   .info-item {
     margin: 5px 2px;
-  }
-
-  .mars {
-    margin: auto 10px;
-    font-weight: 600;
-    color: #2b85e4;
-  }
-
-  .venus {
-    margin: auto 10px;
-    font-weight: 600;
-    color: deeppink;
-  }
-
-  .credit-span {
-    padding: 2px 8px;
-  }
-
-  .credit-button-div {
-    padding-left: 3px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .op-button {
-    padding: 5px 10px;
-    background-color: #2b85e4;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin: 0px 5px;
-  }
-
-  .cancel {
-    background-color: #e83015;
-  }
-
-  .disabled {
-    background-color: #999999;
-  }
-
-  .money-flow {
-    display: flex;
-    width: 100%;
   }
 
   .others {

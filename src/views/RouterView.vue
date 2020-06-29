@@ -6,15 +6,19 @@
           <!--<img class="logo" src="../assets/Checky-logo.png" alt="Checky-logo">-->
           <div :class="['slogan']">Checky</div>
         </div>
-        <MenuItem name="users" key="1" to="/users">
+        <MenuItem name="users" key="1-1" to="/users" v-if="menus.users">
           <span :style="iconSize" class="item-icon fa fa-fw fa-users"></span>
-          <div :class="[display,'item-tag']">用户列表</div>
+          <span :class="[display,'item-tag']">用户列表</span>
         </MenuItem>
-        <MenuItem name="essays" key="2" to="/essays">
+        <MenuItem name="AuthManage" key="1-2" to="/users/AuthManage" v-if="menus.admin">
+          <span :style="iconSize" class="item-icon fa fa-fw fa-user-secret"></span>
+          <span :class="[display,'item-tag']">权限设置</span>
+        </MenuItem>
+        <MenuItem name="essays" key="2" to="/essays" v-if="menus.essays">
           <span :style="iconSize" class="item-icon fa fa-fw fa-heart"></span>
           <span :class="[display,'item-tag']">动态列表</span>
         </MenuItem>
-        <Submenu name="money" key="3">
+        <Submenu name="money" key="3" v-if="menus.money">
           <template slot="title">
             <span :style="iconSize" class="item-icon fa fa-fw fa-cny"></span>
             <div :class="[display,'item-tag']">资金管理</div>
@@ -27,26 +31,28 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-refresh"></span>
             <div :class="[display,'item-tag']">流水记录</div>
           </MenuItem>
-        </Submenu>
-        <Submenu name="tasks" key="4">
-          <template slot="title">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>
-            <div :class="[display,'item-tag']">任务列表</div>
-          </template>
-          <MenuItem name="tasks-list" key="4-1" to="/tasks/list">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-bars"></span>
-            <div :class="[display,'item-tag']">任务列表</div>
+          <MenuItem name="recharge" key="3-3" to="/money/recharge">
+            <span :style="iconSize" class="item-icon fa fa-fw fa-money"></span>
+            <div :class="[display,'item-tag']">充值记录</div>
           </MenuItem>
-          <MenuItem name="type" key="4-2" to="/tasks/type">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-envelope"></span>
-            <div :class="[display,'item-tag']">类型建议</div>
+          <MenuItem name="PersonalChart" key="3-4" to="/money/PersonalChart">
+            <span :style="iconSize" class="item-icon fa fa-fw fa-line-chart"></span>
+            <div :class="[display,'item-tag']">个人统计图</div>
           </MenuItem>
         </Submenu>
-        <MenuItem name="appeal" key="5" to="/appeal">
+        <MenuItem name="tasks" key="4-1" v-if="menus.tasks" to="/tasks/list">
+          <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>
+          <span :class="[display,'item-tag']">任务列表</span>
+        </MenuItem>
+        <MenuItem name="type" key="4-2" v-if="menus.tasks" to="/tasks/type">
+          <span :style="iconSize" class="item-icon fa fa-fw fa-envelope"></span>
+          <span :class="[display,'item-tag']">类型建议</span>
+        </MenuItem>
+        <MenuItem name="appeal" key="5" to="/appeal" v-if="menus.appeal">
           <span :style="iconSize" class="item-icon fa fa-fw fa-hand-paper-o"></span>
           <div :class="[display,'item-tag']">申诉列表</div>
         </MenuItem>
-        <MenuItem name="report" key="6" to="/report">
+        <MenuItem name="report" key="6" to="/report" v-if="menus.report">
           <span :style="iconSize" class="item-icon fa fa-fw fa-exclamation-circle"></span>
           <div :class="[display,'item-tag']">举报列表</div>
         </MenuItem>
@@ -66,23 +72,46 @@
 
 <script>
   import Header from '../components/Header'
+
   export default {
     name: "BlankView",
-    components:{
-      Header:Header
+    components: {
+      Header: Header
     },
     data() {
       return {
         spanLeft: 3,
         spanRight: 21,
         display: 'item-tag-active',
-        rotate: ''
+        rotate: '',
+        menus: {
+          users: true,
+          admin: false,
+          essays: false,
+          money: false,
+          tasks: false,
+          parameter: false,
+          appeal: false,
+          report: false,
+        }
       }
     },
     computed: {
       iconSize() {
         return this.spanLeft === 3 ? 'font-size: 14px' : 'font-size: 24px';
       }
+    },
+    beforeMount: function () {
+      console.log(localStorage);
+      this.menus.users = localStorage.users === "true";
+      this.menus.admin = localStorage.admin === "true";
+      this.menus.essays = localStorage.essays === "true";
+      this.menus.money = localStorage.money === "true";
+      this.menus.tasks = localStorage.tasks === "true";
+      this.menus.parameter = localStorage.parameter === "true";
+      this.menus.appeal = localStorage.appeal === "true";
+      this.menus.report = localStorage.report === "true";
+      console.log(this.menus)
     },
     methods: {
       toggleClick() {
@@ -97,7 +126,7 @@
           this.display = '';
           this.rotate = '';
         }
-      }
+      },
     }
   }
 </script>

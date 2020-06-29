@@ -14,6 +14,12 @@
         data () {
             return {
             }
+        },
+        beforeMount() {
+          //查询当前登录用户的部门
+          if (localStorage.tasks === 'false') {
+            this.$router.push(`/404`)
+          }
         }
     }
 </script>

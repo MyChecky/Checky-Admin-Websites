@@ -4,7 +4,7 @@
       <div class="cover" v-if="show" @click="show=!show"></div>
       <div :class="['outer-div',]" v-if="show">
         <div class="pics">
-          <img :src="baseURL+pics[index].fileAddr" alt="" class="pic-img">
+          <img :src="baseURL+pics[index].fileAddr" alt="pic" class="pic-img">
         </div>
         <div class="button-bar">
           <button class="turn-button fa fa-angle-left" @click="last"></button>

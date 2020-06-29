@@ -21,6 +21,15 @@ export default new Router({
       components: {container: () => import('@/views/RouterView')},
       children: [
         {
+          path: 'money/recharge',
+          name: 'recharge',
+          meta: {
+            title: '',
+            auth: false // 开发时用false
+          },
+          components: {content: () => import('@/views/money/Recharge')}
+        },
+        {
           path: 'users',
           name: 'users',
           meta: {
@@ -28,6 +37,15 @@ export default new Router({
             auth: false // 开发时用false
           },
           components: {content: () => import('@/views/users/UsersList')}
+        },
+        {
+          path: 'users/AuthManage',
+          name: 'AuthManage',
+          meta: {
+            title: '',
+            auth: false // 开发时用false
+          },
+          components:{content: () => import('@/views/users/AuthManage')}
         },
         {
           path: 'users/id=:userId',
@@ -48,6 +66,15 @@ export default new Router({
           components: {content: () => import('@/views/essays/EssaysList')}
         },
         {
+          path: 'essays/id=:essayId',
+          name: 'essays-detail',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/essays/EssayDetail')}
+        },
+        {
           path: 'money/chart',
           name: 'chart',
           meta: {
@@ -55,6 +82,15 @@ export default new Router({
             auth: false
           },
           components: {content: () => import('@/views/money/Chart')}
+        },
+        {
+          path: 'money/PersonalChart',
+          name: 'PersonalChart',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/money/PersonalChart')}
         },
         {
           path: 'money/moneyFlow',

@@ -1,11 +1,12 @@
 <template>
+
   <div class="container">
 
     <div class="inner-div">
       <Card class="others">
         <div class="table-header">
-          <span class="card-title">流水记录</span>
-          <span class="total">总数：{{moneyFlowsSize}}</span>
+          <span class="card-title">充值记录</span>
+          <span class="total">总数：{{moneyRechargeSize}}</span>
           <div class="search-div">
             <SearchBar :search="search"></SearchBar>
           </div>
@@ -13,12 +14,12 @@
         <div class="task-list">
           <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder"
                  :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="money"
-                 :columns="moneyColumns" :changePage="changePage"></Table>
+                 :columns="moneyColumns"></Table>
         </div>
       </Card>
 
     </div>
-    <Page class="pager" :total="moneyFlowsSize" :page-size="pageSize" @on-change="changePage"></Page>
+    <Page class="pager" :total="moneyRechargeSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
 </template>
 
@@ -28,7 +29,7 @@
   import axios from 'axios'
 
   export default {
-    name: "MoneyFlow",
+    name: "Recharge",
     components: {
       SearchBar: SearchBar,
       MoneyTag: MoneyTag
@@ -42,29 +43,21 @@
         showCheckbox: false,
         fixedHeader: false,
         tableHeight: 400,
-        pageSize: 7,
+        pageSize: 8,
         tableSize: 'default',
         exist: true,
         score: -1,
         moneyFlowsSize: 0,
+        moneyRechargeSize: 0,
         money: [],
         page: 0,
         cancel: null,
-
         tableNow: "timeNickTitle",
         startTime: "1970-01-01",
         endTime: "2999-01-01",
         searchType: "",
         keyword: "",
-        moneyTest: 2,
-        moneyIO: "all",
-        moneyType: "all"
-      }
-    },
-    watch: {
-      "moneyType": function() {
-        console.log("aihcanj")
-        console.log(this.moneyType)
+        payType: "all"
       }
     },
     computed: {
@@ -85,119 +78,48 @@
           })
         }
         columns.push({
-          title: '流水ID',
-          key: 'flowId',
-          width: 250,
+          title: '交易ID',
+          key: 'payId',
+          width: 220,
         });
         columns.push({
-          title: '任务ID',
-          key: 'taskId',
-          width: 250,
+          title: '订单编号',
+          key: 'payOrderinfo',
+          width: 220,
+        });
+        columns.push({
+          title: '用户ID',
+          key: 'payUserid',
+          width: 220,
           render: (h, params) => {
             return h(
               "a",
               {
                 class: ['fa'],
                 attrs: {
-                  taskId: this.money[params.index].taskId,
+                  userId: this.money[params.index].payUserid,
                 },
                 on: {
                   click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
-                    console.log(e.target.attributes.taskId);
-                    this.$router.push('/tasks/id=' + this.money[params.index].taskId)
+                    console.log(e.target.attributes.userId);
+                    this.$router.push('/users/id=' + this.money[params.index].payUserid)
                   }
                 }
               },
-              this.money[params.index].taskId,
+              this.money[params.index].payUserid,
             );
           }
         });
         columns.push({
-          title: '相关用户',
-          key: 'userName',
-          width: 120,
-          align: 'center'
-        });
-        columns.push({
-          title: '真实货币',
-          key: 'ifTest',
+          title: '用户昵称',
+          key: 'payUserName',
           width: 120,
           align: 'center',
-          filterMultiple: false,
-          filters: [
-            {
-              label: '是',
-              value: 1
-            },
-            {
-              label: '否',
-              value: 0
-            },
-            {
-              label: '全部',
-              value: 2
-            }
-          ],
-          filterMethod(value, row) {
-            this.moneyTest=value
-            // return row.ifTest === value
-            this.changePage(1)
-          },
-          render: (h, params) => {
-            let _this = this;
-            let texts = '';
-            if (params.row.ifTest == 0) {
-              texts = "否"
-            } else if (params.row.ifTest == 1) {
-              texts = "是"
-            }
-            return h('div', {
-              props: {},
-            }, texts)
-          }
-        });
-        columns.push({
-          title: '资金流动',
-          key: 'flowIo',
-          width: 120,
-          align: 'center',
-          filterMultiple: false,
-          filters: [
-            {
-              label: '入账',
-              value: "I"
-            },
-            {
-              label: '出账',
-              value: "O"
-            },
-            {
-              label: '全部',
-              value: "all"
-            }
-          ],
-          filterMethod(value, row) {
-            this.moneyIO = value;
-            // return row.flowIo === value;
-            this.changePage(1)
-          },
-          render: (h, params) => {
-            let _this = this;
-            let texts = '';
-            if (params.row.flowIo == "I") {
-              texts = "入账"
-            } else if (params.row.flowIo == "O") {
-              texts = "出账"
-            }
-            return h('div', {
-              props: {},
-            }, texts)
-          }
-        });
+      });
         columns.push({
           title: '金额',
-          key: 'flowMoney',
+          key: 'payMoney',
           width: 140,
           align: 'center',
           render: (h, params) => {
@@ -205,51 +127,44 @@
               MoneyTag,
               {
                 props: {
-                  money: params.row.flowMoney
+                  money: params.row.payMoney     //Todo
                 }
               }
             )
           }
         });
         columns.push({
-          title: '类型',
-          key: 'flowType',
+          title: '交易类型',
+          key: 'payType',
           width: 120,
+          align: 'center',
           filterMultiple: false,
           filters: [
             {
-              label: '支付',
-              value: "pay"
+              label: '充值',
+              value: 'pay'
             },
             {
-              label: '退款',
-              value: "refund"
-            },
-            {
-              label: '奖励',
-              value: "award"
+              label: '提现',
+              value: 'withdraw'
             },
             {
               label: '全部',
-              value: "all"
+              value: 'all'
             }
           ],
           filterMethod(value, row) {
-            console.log("value", value)
-            this.moneyType = value;
-            // return row.flowType === value;
-            console.log("mt", this.moneyType)
-            this.changePage(1)
+            //return row.userGender === value;   //Todo
+            this.payType = value
+            return row.payType === value;
           },
           render: (h, params) => {
             let _this = this;
             let texts = '';
-            if (params.row.flowType == "pay") {
-              texts = "支付"
-            } else if (params.row.flowType == "refund") {
-              texts = "退款"
-            } else if (params.row.flowType == "award") {
-              texts = "奖励"
+            if (params.row.payType == "pay") {
+              texts = "充值"
+            } else if (params.row.payType == "withdraw") {
+              texts = "提现"
             }
             return h('div', {
               props: {},
@@ -258,9 +173,9 @@
         });
         columns.push({
           title: '时间',
-          key: 'flowTime',
+          key: 'payTime',
+          width: 200,
           align: 'center',
-          width: 150,
           sortable: true
         });
         return columns;
@@ -270,13 +185,13 @@
       if (localStorage.money === 'false') {
         this.$router.push(`/404`)
       }
-      this.$api.money.queryAllMoneyFlow({
+      this.$api.money.queryAllMoneyRecharge({
         page: this.page,
         pageSize: this.pageSize
       })
         .then((res) => {
-          this.money = res.data.moneyFlow;
-          this.moneyFlowsSize = res.data.total
+          this.money = res.data.pays;
+          this.moneyRechargeSize = res.data.total
         }).catch((err) => {
         console.log(err)
       });
@@ -285,9 +200,11 @@
         this.$router.push(`/404`)
       }
     },
+
     mounted() {
       this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 180;
     },
+
     methods: {
       search: function (startTime, endTime, keyword, searchType, page) {
         this.startTime = startTime;
@@ -299,19 +216,19 @@
         if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
-        console.log(`搜索${this.kw},页码${this.page}`);
+        console.log(`搜索${this.keyword},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
-        this.$api.money.queryFlowByKeyword({
-          moneyType: this.moneyType, moneyTest: this.moneyTest, moneyIO: this.moneyIO,
+
+        this.$api.money.queryRechargeByKeyword({
           startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
-          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize, payType: this.payType
         }, new CancelToken((c) => {
           this.cancel = c;
         }))
           .then(res => {
             console.log(res);
-            this.money = res.data.moneyFlows;
+            this.money = res.data.pays;
             this.moneyFlowsSize = res.data.total
           })
           .catch(err => {
@@ -320,14 +237,14 @@
       },
       changePage(e) {
         this.page = e;
-        this.$api.money.queryFlowByKeyword({
-          moneyType: this.moneyType, moneyTest: this.moneyTest, moneyIO: this.moneyIO,
+        console.log(`查询全部${this.keyword},页码${this.page}`);
+        this.$api.money.queryRechargeByKeyword({
           startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
-          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize, payType: this.payType
         })
           .then((res) => {
-            this.money = res.data.moneyFlows
-            this.moneyFlowsSize = res.data.total
+            this.money = res.data.pays;
+            this.moneyRechargeSize = res.data.total
           }).catch((err) => {
           console.log(err)
         })
@@ -337,6 +254,7 @@
 </script>
 
 <style scoped>
+
   .container {
     display: flex;
     flex-direction: column;

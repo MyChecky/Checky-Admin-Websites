@@ -3,10 +3,13 @@
     <Card>
       <div class="table-header">
         <span class="card-title">用户列表</span>
-        <span class="total">总数：{{usersSize}}</span>
-        <div class="search-div"><SearchBar :search="search"></SearchBar></div>
+        <span class="total">总数：{{this.usersSize}}</span>
+        <div class="search-div">
+          <SearchBar :search="search"></SearchBar>
+        </div>
       </div>
-      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe" :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
+      <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
+             :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="usersSize" :page-size="pageSize" @on-change="changePage"></Page>
   </div>
@@ -18,30 +21,34 @@
   import Credit from '../components/Credit'
   import Avatar from '../components/Avatar'
   import axios from 'axios';
+
   export default {
     name: "UsersInfoTable",
-    components: {Credit: Credit,Avatar: Avatar,SearchBar:SearchBar},
-    data () {
+    components: {Credit: Credit, Avatar: Avatar, SearchBar: SearchBar},
+    data() {
       return {
-        showBorder:false,
-        showStripe:false,
-        showHeader:true,
-        showIndex:false,
-        showCheckbox:true,
-        fixedHeader:false,
+        showBorder: false,
+        showStripe: false,
+        showHeader: true,
+        showIndex: false,
+        showCheckbox: true,
+        fixedHeader: false,
         tableHeight: 600,
-        pageSize: 10,
-        tableSize: 'default',
+        pageSize: 9,
+        tableSize: 1,
         page: 0,
         usersSize: 0,
-        tableData: [
-        ],
-        cancel:null,
-        kw:""
+        tableData: [],
+        cancel: null,
+
+        startTime: "1970-01-01",
+        endTime: "2999-01-01",
+        searchType: "", // 用不到
+        keyword: "",
       }
     },
     computed: {
-      tableColumns () {
+      tableColumns() {
         let columns = [];
         if (this.showCheckbox) {
           columns.push({
@@ -60,16 +67,17 @@
         columns.push({
           title: '用户ID',
           key: 'userId',
-          width: 200
+          width:200
         });
         columns.push({
           title: '头像',
           key: 'userAvatar',
-          render: (h,params)=>{
+          width: 120,
+          render: (h, params) => {
             return h(
               Avatar,
               {
-                props:{
+                props: {
                   source: params.row.userAvatar
                 }
               }
@@ -78,50 +86,60 @@
         });
         columns.push({
           title: '昵称',
-          key: 'userName'
+          key: 'userName',
+          width: 100,
+          align: 'center',
         });
         columns.push({
           title: '性别',
           key: 'userGender',
           filterMultiple: false,
+          width: 100,
+          align: 'center',
           filters: [
             {
               label: '男',
-              value: '男'
+              value: '1'
             },
             {
               label: '女',
-              value: '女'
+              value: '0'
             }
           ],
-          filterMethod (value, row) {
+          filterMethod(value, row) {
             return row.userGender === value;
           }
         });
         columns.push({
           title: '创建时间',
           key: 'userTime',
+          width:200,
           sortable: true
         });
         columns.push({
           title: '任务数',
           key: 'taskNum',
+          width: 110,
+          align: 'center',
           sortable: true
         });
         columns.push({
           title: '监督数',
           key: 'superviseNum',
+          width: 110,
+          align: 'center',
           sortable: true
         });
         columns.push({
           title: '信用',
           key: 'userCredit',
+          width: 120,
           sortable: true,
-          render: (h,params)=>{
+          render: (h, params) => {
             return h(
               Credit,
               {
-                props:{
+                props: {
                   score: Math.ceil(params.row.userCredit / 20)
                 }
               }
@@ -131,12 +149,13 @@
         columns.push({
           title: '操作',
           key: 'action',
+          width: 140,
           align: 'center',
-          render: (h,params) => {
+          render: (h, params) => {
             return h(
               "button",
               {
-                style:{
+                style: {
                   padding: '5px 10px',
                   backgroundColor: '#2b85e4',
                   color: '#fff',
@@ -147,12 +166,12 @@
                 domProps: {
                   innerText: '详情'
                 },
-                class:['fa','fa-caret-right'],
+                class: ['fa', 'fa-caret-right'],
                 attrs: {
                   userId: this.tableData[params.index].userId,
                 },
-                on:{
-                  click:(e)=>{// 点击事件， e 为事件参数
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
                     e.stopPropagation();
                     this.$router.push(`/users/id=${e.target.attributes.userId.nodeValue}`);
                   }
@@ -165,92 +184,111 @@
         return columns;
       },
     },
-    beforeMount: function(){
+    beforeMount: function () {
+      if (localStorage.users === 'false') {
+        this.$router.push(`/404`)
+      }
       // 请求所有用户信息
-      this.$api.users.queryUsersInfo({"page":this.page}).then((res)=>{
-        res.data.users.map(item=>{
-          item.userGender = item.userGender===1?'男':'女'
-        });
-        this.usersSize = res.data.usersSize;
-        this.tableData = res.data.users;
-      }).catch((err)=>{
+      this.$api.users.queryUsersInfo({
+        "page": this.page,
+        "pageSize": this.pageSize,
+      })
+        .then((res) => {
+          res.data.users.map(item => {
+            item.userGender = item.userGender === 1 ? '男' : '女'
+          });
+          this.usersSize = res.data.total;
+          this.tableData = res.data.users;
+          // this.tableSize = res.data.size;
+        }).catch((err) => {
         console.log(err);
       })
     },
-    mounted(){
-      this.tableHeight =  window.innerHeight - this.$refs.table.$el.offsetTop - 125;
+    mounted() {
+      this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
     },
-    methods:{
-      search:function(keyword,page){
+    methods: {
+      search: function (startTime, endTime, keyword, searchType, page) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.searchType = searchType;
         this.page = page;
-        this.kw = keyword;
+        this.keyword = keyword;
         // 解决异步问题
-        if (this.cancel){// 存在上一次请求则取消
+        if (this.cancel) {// 存在上一次请求则取消
           this.cancel();
         }
-        console.log(`搜索${this.kw},页码${this.page}`);
+        console.log(`搜索${this.keyword},页码${this.page}`);
         // 定义CancelToken，它是axios的一个属性，且是一个构造函数
         let CancelToken = axios.CancelToken;
 
-        this.$api.users.queryByKeyword({page:this.page,keyword:this.kw},new CancelToken((c) => {
+        this.$api.users.queryByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+        }, new CancelToken((c) => {
           this.cancel = c;
         }))
-          .then(res=>{
-            console.log(res)
-            this.tableData = res.data.users
+          .then(res => {
+            console.log(res);
+            res.data.users.map(item => {
+              item.userGender = item.userGender === 1 ? '男' : '女'
+            });
+            this.tableData = res.data.users;
+            this.usersSize = res.data.total
           })
-          .catch(err=>{
+          .catch(err => {
             console.log(err)
           })
       },
       changePage(e) {
-        this.page = e
-        if (this.kw) {
-          this.search(this.kw,this.page)
-        }
-        else {
-          console.log(`查询全部${this.kw},页码${this.page}`);
-          this.$api.users.queryUsersInfo({"page": this.page}).then((res) => {
+        this.page = e;
+        this.$api.users.queryByKeyword({
+          startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
+          keyword: this.keyword, page: this.page, pageSize: this.pageSize
+        })
+          .then((res) => {
             res.data.users.map(item => {
               item.userGender = item.userGender === 1 ? '男' : '女'
             });
-            console.log(res.data.users);
-            this.usersSize = res.data.usersSize;
             this.tableData = res.data.users;
           }).catch((err) => {
-            console.log(err);
-          })
-        }
-      }
+          console.log(err);
+        })
+      },
     }
   }
 </script>
 
 <style scoped>
-  .table-header{
+  .table-header {
     margin-bottom: 10px;
     display: flex;
     align-items: flex-end;
   }
-  .search-div{
+
+  .search-div {
     flex-grow: 5;
     display: flex;
     justify-content: flex-end;
   }
-  .table{
+
+  .table {
     margin: auto 0px;
     height: 100%;
   }
-  .pager{
+
+  .pager {
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin: 5px auto;
   }
+
   .card-title {
     font-weight: 600;
     color: #333;
     font-size: 20px;
     margin-right: 10px;
   }
+
 </style>
