@@ -11,12 +11,7 @@
         <DropdownItem name="2018">2018</DropdownItem>
       </DropdownMenu>
     </Dropdown>
-    <div class="some_data">
-      <span class="some_data_content">测试金额累积收入：{{graphData.totalSystemTestGet}}</span>
-      <span class="some_data_content">充值金额累积收入：{{graphData.totalSystemTrueGet}}</span>
-      <span class="some_data_content">现存沉淀资金：{{graphData.totalPayGet}}</span>
-    </div>
-    <div id="chart-target-real" class="chart-target-real"></div>
+    <div id="chart-target-test" class="chart-target-test"></div>
   </div>
 </template>
 
@@ -25,6 +20,7 @@
 
   export default {
     name: "Chart",
+    props:['userId'],
     data() {
       return {
         colors: [
@@ -40,17 +36,18 @@
     methods:{
       changeMenu(name){
         this.pickYear = name;
+
       },
       draw(){
         //查询当前登录用户的部门
         if (localStorage.department === '"task"') {
           this.$router.push(`/404`)
         }
-        this.$api.money.getGraphData({year:this.pickYear})
+        this.$api.money.getUserGraphData({userId:this.userId, year:this.pickYear})
           .then(res=>{
             console.log(res.data)
             this.graphData = res.data
-            let myChart = echarts.init(document.getElementById('chart-target-real'), 'light');
+            let myChart = echarts.init(document.getElementById('chart-target-test'), 'light');
             myChart.setOption({
               title: {
                 text: `${this.pickYear}年 资金统计图`,
@@ -115,13 +112,13 @@
                 {
                   name:"收入",
                   type: 'bar',
-                  data:this.graphData.trueIncomeList
+                  data:this.graphData.testIncomeList
                 },
                 {
                   name:"退还",
                   type: 'bar',
                   yAxisIndex: 1,
-                  data:this.graphData.trueRefundList
+                  data:this.graphData.testRefundList
                 },
                 {
                   name:"净利润",
@@ -134,7 +131,7 @@
                   itemStyle: {
                     borderWidth: 5
                   },
-                  data:this.graphData.trueBenefitList
+                  data:this.graphData.testBenefitList
                 }
 
               ]
@@ -151,6 +148,8 @@
         console.log("更新后的数据"+this.pickYear);
       }
     },
+    beforeMount(){
+    },
     mounted() {
       this.draw();
     }
@@ -162,16 +161,8 @@
     float: right;
     margin-top: -45px;
   }
-  .chart-target-real {
+  .chart-target-test {
     width: 100%;
     height: 600px;
-  }
-  .some_data{
-    margin-bottom: 10px;
-    display: flex;
-    align-items: flex-end;
-  }
-  .some_data_content{
-    margin-left: 25px;
   }
 </style>

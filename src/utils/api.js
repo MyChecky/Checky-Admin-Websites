@@ -166,6 +166,9 @@ export default {
     getGraphData: data => {
       return post('/admin/moneyFlows/graph', data)
     },
+    getUserGraphData: data => {
+      return post('/admin/moneyFlows/userGraph', data)
+    },
     //查询用户资金流水
     queryFlowByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken;

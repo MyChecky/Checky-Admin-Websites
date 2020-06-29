@@ -11,11 +11,6 @@
         <DropdownItem name="2018">2018</DropdownItem>
       </DropdownMenu>
     </Dropdown>
-    <div class="some_data">
-      <span class="some_data_content">测试金额累积收入：{{graphData.totalSystemTestGet}}</span>
-      <span class="some_data_content">充值金额累积收入：{{graphData.totalSystemTrueGet}}</span>
-      <span class="some_data_content">现存沉淀资金：{{graphData.totalPayGet}}</span>
-    </div>
     <div id="chart-target-real" class="chart-target-real"></div>
   </div>
 </template>
@@ -25,6 +20,7 @@
 
   export default {
     name: "Chart",
+    props:['userId'],
     data() {
       return {
         colors: [
@@ -46,7 +42,7 @@
         if (localStorage.department === '"task"') {
           this.$router.push(`/404`)
         }
-        this.$api.money.getGraphData({year:this.pickYear})
+        this.$api.money.getUserGraphData({userId:this.userId, year:this.pickYear})
           .then(res=>{
             console.log(res.data)
             this.graphData = res.data
@@ -165,13 +161,5 @@
   .chart-target-real {
     width: 100%;
     height: 600px;
-  }
-  .some_data{
-    margin-bottom: 10px;
-    display: flex;
-    align-items: flex-end;
-  }
-  .some_data_content{
-    margin-left: 25px;
   }
 </style>

@@ -18,6 +18,9 @@
               <span class="info-item">总收入：{{userIncome}}</span>
               <span class="info-item">总支出：{{userExpenditure}}</span>
               <span class="info-item">余  额：{{userBalance}}</span>
+              <a :href="'#/money/PersonalChart/id=' + userInfo.userId">
+                <span class="info-item">查看流水统计图</span>
+              </a>
             </div>
           </div>
         </Card>
