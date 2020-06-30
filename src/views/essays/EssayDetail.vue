@@ -34,7 +34,7 @@
                   <span class="info-item">动态内容：{{imgInfo[0].recordContent}}</span>
                   <span class="info-item">发布时间：{{imgInfo[0].recordTime}}</span>
                   <span class="info-item">附件类型：{{imgInfo[0].recordType}}</span>
-                  <img :src="imgInfo[0].fileAddr" alt="pic" class="pic-img">
+                  <img :src="this.baseURL + imgInfo[0].fileAddr" alt="pic" class="pic-img">
                 </div>
               </Card>
             </Col>
@@ -48,7 +48,7 @@
                   <span class="info-item">动态内容：{{imgInfo[1].recordContent}}</span>
                   <span class="info-item">发布时间：{{imgInfo[1].recordTime}}</span>
                   <span class="info-item">附件类型：{{imgInfo[1].recordType}}</span>
-                  <img :src="imgInfo[1].fileAddr" alt="pic" class="pic-img">
+                  <img :src="this.baseURL + imgInfo[1].fileAddr" alt="pic" class="pic-img">
                 </div>
               </Card>
             </Col>
@@ -181,7 +181,7 @@
               image,
               {
                 props: {
-                  source: this.imgInfo[params.index].fileAddr
+                  source: this.baseURL + this.imgInfo[params.index].fileAddr
                 }
               }
             )
