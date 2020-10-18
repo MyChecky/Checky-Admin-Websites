@@ -138,6 +138,41 @@ export default new Router({
           components: {content: () => import('@/views/tasks/TasksType')}
         },
         {
+          path: 'tags/list',
+          name: 'tags',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/tags/TagManage')}
+        },
+        {
+          path: 'tags/topic',
+          name: 'topic',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/tags/TopicManage')}
+        },
+        {
+          path: 'tags/tagsType',
+          name: 'tagsType',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/tags/TagOfType')}
+        },{
+          path: 'tags/type',
+          name: 'type',
+          meta: {
+            title: '',
+            auth: false
+          },
+          components: {content: () => import('@/views/tags/TypeManage')}
+        },
+        {
           path: 'appeal',
           name: 'appeal',
           meta: {
