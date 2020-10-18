@@ -139,7 +139,45 @@ export default {
       return post('admin/task/query', data)
     }
   },
-
+//标签管理
+  tags: {
+    // 获取所有排序过的标签
+    getSortedTags: data => {
+      return post('/admin/tag/sort', data)
+    },
+    // 删除标签
+    delTag: data => {
+      return post('/admin/tag/delete', data)
+    },
+    // 新增标签
+    addTag: data => {
+      return post('/admin/tag/add', data)
+    },
+    // 获取所有排序后话题
+    getSortedTopics: data => {
+      return post('/admin/topic/sort', data)
+    },
+    // 新增话题
+    addTopic: data => {
+      return post('/admin/topic/add', data)
+    },
+    // 删除话题
+    delTopic: data => {
+      return post('/admin/topic/delete', data)
+    },
+    // 获取所有类型与标签关系
+    getTypeTag: data => {
+      return post('/admin/typeTag/all', data)
+    },
+    // 获取所有类型
+    getAllType:data=>{
+      return post('admin/taskType/allType')
+    },
+    // 删除话题
+    delType: data => {
+      return post('/admin/taskType/delete', data)
+    },
+  },
   checks: {
     getTaskChecks: data => {
       return post('/admin/task/check', data)
@@ -176,9 +214,9 @@ export default {
     },
 
     //查询用户资金流水
-    queryRechargeByKeyword: (data,cancelToken) =>{
+    queryRechargeByKeyword: (data, cancelToken) => {
       data['c'] = cancelToken
-      return post('admin/moneyRecharge/queryByKeyword',data)
+      return post('admin/moneyRecharge/queryByKeyword', data)
     },
     //获取充值提现列表
     queryAllMoneyRecharge: data => {
