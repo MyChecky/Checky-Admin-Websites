@@ -27,26 +27,11 @@
           <Col span="20">
             <FormItem label="话题引领新动态" label-position="top">
               <label>
-                <Input placeholder="在这里开启新的话题" v-model="addForm.tagContent"/>
+                <Input placeholder="在这里开启新的话题" v-model="addForm.topicContent"/>
               </label>
             </FormItem>
           </Col>
         </Row>
-        <Row :gutter="16">
-          <Col span="20">
-            <FormItem label="关联类型" label-position="top">
-              <label>
-                <Select v-model="addForm.typeId">
-                  <Option v-for="(item,index) in types" :value="item.typeId" :key="index">{{
-                      item.typeContent
-                    }}
-                  </Option>
-                </Select>
-              </label>
-            </FormItem>
-          </Col>
-        </Row>
-
       </Form>
     </Modal>
   </div>
@@ -67,7 +52,7 @@ export default {
   data() {
     return {
       addForm: {
-        tagContent: '',
+        topicContent: '',
         typeId: '',
       },
       types: [],
@@ -283,7 +268,7 @@ export default {
     addTag() {
       let that = this
       this.$api.tags.addTopic({
-        topicContent: that.addForm.tagContent,
+        topicContent: that.addForm.topicContent,
       }).then(res => {
         if (res.status === 200) {
           that.modal6 = false

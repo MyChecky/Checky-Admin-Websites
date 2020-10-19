@@ -78,7 +78,7 @@ export default {
       tableHeight: 600,
       pageSize: 10,
       tableSize: 'default',
-      page: 0,
+      page: 1,
       tagsSize: 0,
       tableData: [],
       cancel: null,
@@ -206,16 +206,17 @@ export default {
     if (localStorage.essays === 'false') {
       this.$router.push(`/404`)
     }
-    this.$api.tags.getSortedTags({
-      "page": this.page,
-      "pageSize": this.pageSize,
-    }).then((res) => {
+    this.$api.tags.getSortedTags().then((res) => {
         this.tableData = res.data.sortedTagList;
         this.tagsSize = this.tableData.length;
       })
-    this.$api.tags.getAllType()
+    this.$api.tags.getAllType({
+      "page": this.page,
+      "pageSize": this.pageSize,
+    })
       .then(res => {
-        this.types = res.data
+        console.log(res.data.data)
+        this.types = res.data.data
       })
   },
   mounted() {
@@ -253,10 +254,7 @@ export default {
     },
     changePage(e) {
       this.page = e;
-      this.$api.tags.getSortedTags({
-        "page": this.page,
-        "pageSize": this.pageSize,
-      }).then((res) => {
+      this.$api.tags.getSortedTags().then((res) => {
         this.tableData = res.data.sortedTagList;
         this.tagsSize = this.tableData.length;
       })

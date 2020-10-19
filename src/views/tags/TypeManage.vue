@@ -27,7 +27,7 @@
           <Col span="20">
             <FormItem label="类型内容" label-position="top">
               <label>
-                <Input placeholder="请输入新的类型内容" v-model="addForm.tagContent"/>
+                <Input placeholder="请输入新的类型内容" v-model="addForm.typeContent"/>
               </label>
             </FormItem>
           </Col>
@@ -105,8 +105,14 @@ export default {
         align: 'center',
       });
       columns.push({
-        title: '打卡数量',
-        key: 'typeCount',
+        title: '打卡总数',
+        key: 'totalNum',
+        align: 'center',
+        sortable: true,
+      });
+      columns.push({
+        title: '通过总数',
+        key: 'passNum',
         align: 'center',
         sortable: true,
       });
@@ -198,8 +204,9 @@ export default {
       "page": this.page,
       "pageSize": this.pageSize,
     }).then((res) => {
-        this.tableData = res.data;
+        this.tableData = res.data.data;
         this.tagsSize = this.tableData.length;
+        console.log(res)
       })
   },
   mounted() {
@@ -247,9 +254,8 @@ export default {
     },
     addTag() {
       let that = this
-      this.$api.tags.addTag({
-        tagContent: that.addForm.tagContent,
-        typeId: that.addForm.typeId
+      this.$api.tags.addTopic({
+        typeContent: that.addForm.typeContent,
       }).then(res => {
         if (res.status === 200) {
           that.modal6 = false
