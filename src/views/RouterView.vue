@@ -35,7 +35,7 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-book"></span>
             <div :class="[display,'item-tag']">话题管理</div>
           </MenuItem>
-          <MenuItem name="typeManage" key="7-4" to="/tags/topic">
+          <MenuItem name="typeManage" key="7-4" to="/tags/type">
             <span :style="iconSize" class="item-icon fa fa-fw fa-bandcamp"></span>
             <div :class="[display,'item-tag']">类型管理</div>
           </MenuItem>
