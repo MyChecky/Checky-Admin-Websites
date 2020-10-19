@@ -170,8 +170,8 @@ export default {
       return post('/admin/typeTag/all', data)
     },
     // 获取所有类型
-    getAllType:data=>{
-      return post('admin/taskType/allType')
+    getAllType: data => {
+      return post('admin/taskType/allType', data)
     },
     // 删除话题
     delType: data => {
