@@ -119,6 +119,12 @@ export default {
         sortable: true,
       });
       columns.push({
+        title: '子标签数',
+        key: 'subTagsNum',
+        align: 'center',
+        sortable: true,
+      });
+      columns.push({
         title: '操作',
         key: 'action',
         align: 'center',
