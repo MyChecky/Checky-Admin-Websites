@@ -166,7 +166,15 @@ export default {
                   })
                     .then(res => {
                       console.log("删除", res.data.state);
-                      if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
+                      this.$api.tags.getSortedTags({
+                        "page": this.page,
+                        "pageSize": this.pageSize,
+                      }).then((res) => {
+                        this.tableData = res.data.sortedTagList;
+                        this.tagsSize = res.data.total;
+                      })
+
+                      // if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
                     })
                     .catch(err => {
                       console.log("删除失败", err)
@@ -222,9 +230,12 @@ export default {
     if (localStorage.essays === 'false') {
       this.$router.push(`/404`)
     }
-    this.$api.tags.getSortedTags().then((res) => {
+    this.$api.tags.getSortedTags({
+      "page": this.page,
+      "pageSize": this.pageSize,
+    }).then((res) => {
         this.tableData = res.data.sortedTagList;
-        this.tagsSize = this.tableData.length;
+        this.tagsSize = res.data.total;
       })
     this.$api.tags.getAllTypeWithoutPage().then(res => {
         console.log("getAllTypeWithoutPage", res.data.taskTypes);
@@ -266,9 +277,13 @@ export default {
     },
     changePage(e) {
       this.page = e;
-      this.$api.tags.getSortedTags().then((res) => {
+
+      this.$api.tags.getSortedTags({
+        "page": this.page,
+        "pageSize": this.pageSize,
+      }).then((res) => {
         this.tableData = res.data.sortedTagList;
-        this.tagsSize = this.tableData.length;
+        this.tagsSize = res.data.total;
       })
     },
     addTag() {
@@ -282,11 +297,14 @@ export default {
           that.addForm.resetFields
           console.log("addTagRes", res);
 
-          this.$api.tags.getSortedTags().then((res) => {
-            console.log("afterAdd", res.data)
+          this.$api.tags.getSortedTags({
+            "page": this.page,
+            "pageSize": this.pageSize,
+          }).then((res) => {
             this.tableData = res.data.sortedTagList;
-            this.tagsSize = this.tableData.length;
+            this.tagsSize = res.data.total;
           })
+
         }
       }).catch(err => {
         console.log("addTagErr", err)

@@ -24,10 +24,6 @@
             <span :style="iconSize" class="item-icon fa fa-fw fa-line-chart"></span>
             <div :class="[display,'item-tag']">标签管理</div>
           </template>
-<!--          <MenuItem name="tagList" key="7-1" to="/tags/list">-->
-<!--            <span :style="iconSize" class="item-icon fa fa-fw fa-tags"></span>-->
-<!--            <div :class="[display,'item-tag']">标签列表</div>-->
-<!--          </MenuItem>-->
           <MenuItem name="typeManage" key="7-1" to="/tags/type">
             <span :style="iconSize" class="item-icon fa fa-fw fa-bandcamp"></span>
             <div :class="[display,'item-tag']">类型管理</div>

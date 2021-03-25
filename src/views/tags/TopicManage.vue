@@ -21,7 +21,7 @@
       v-model="modal6"
       title="新建话题"
       :loading="loading"
-      @on-ok="addTag">
+      @on-ok="addTopic">
       <Form :model="addForm">
         <Row :gutter="16">
           <Col span="20">
@@ -153,7 +153,17 @@ export default {
                   })
                     .then(res => {
                       console.log("删除", res.data.state);
-                      if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
+
+                      this.$api.tags.getSortedTopics({
+                        "page": this.page,
+                        "pageSize": this.pageSize,
+                      }).then((res) => {
+                        this.tableData = res.data.sortedTopicList;
+                        this.tagsSize = res.data.total;
+                        console.log("getSortedTopics", res.data);
+                      })
+
+                      // if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
                     })
                     .catch(err => {
                       console.log(err)
@@ -213,8 +223,8 @@ export default {
       "pageSize": this.pageSize,
     }).then((res) => {
       this.tableData = res.data.sortedTopicList;
-      this.tagsSize = this.tableData.length;
-      console.log(res.data);
+      this.tagsSize = res.data.total;
+      console.log("getSortedTopics", res.data);
     })
     // this.$api.tags.getAllType()
     //   .then(res => {
@@ -264,11 +274,11 @@ export default {
         "pageSize": this.pageSize,
       }).then((res) => {
         this.tableData = res.data.sortedTopicList;
-        this.tagsSize = this.tableData.length;
-        console.log(res.data);
+        this.tagsSize = res.data.total;
+        console.log("getSortedTopics", res.data);
       })
     },
-    addTag() {
+    addTopic() {
       let that = this
       this.$api.tags.addTopic({
         topicContent: that.addForm.topicContent,
@@ -276,12 +286,16 @@ export default {
         if (res.status === 200) {
           that.modal6 = false
           that.addForm.resetFields
-          console.log(res)
-          that.$api.tags.getSortedTopics()
-            .then((res) => {
-              that.tableData = res.data.sortedTopicList;
-              that.tagsSize = that.tableData.length;
-            })
+          console.log("addTopic",res)
+
+          this.$api.tags.getSortedTopics({
+            "page": this.page,
+            "pageSize": this.pageSize,
+          }).then((res) => {
+            this.tableData = res.data.sortedTopicList;
+            this.tagsSize = res.data.total;
+            console.log("getSortedTopics", res.data);
+          })
         }
       }).catch(err => {
         console.log(err)

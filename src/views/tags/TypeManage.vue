@@ -149,7 +149,16 @@ export default {
                   })
                     .then(res => {
                       console.log("删除", res.data.state);
-                      if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
+                      this.$api.tags.getAllType({
+                        "page": this.page,
+                        "pageSize": this.pageSize,
+                      }).then((res) => {
+                        this.tableData = res.data.taskTypes;
+                        this.tagsSize = res.data.total;
+                        console.log("this.$api.tags.getAllType", res)
+                      })
+
+                      // if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
                     })
                     .catch(err => {
                       console.log(err)
@@ -210,7 +219,7 @@ export default {
       "pageSize": this.pageSize,
     }).then((res) => {
         this.tableData = res.data.taskTypes;
-        this.tagsSize = this.tableData.length;
+        this.tagsSize = res.data.total;
         console.log("this.$api.tags.getAllType", res)
       })
   },
@@ -253,8 +262,9 @@ export default {
         "page": this.page,
         "pageSize": this.pageSize,
       }).then((res) => {
-        this.tableData = res.data;
-        this.tagsSize = this.tableData.length;
+        this.tableData = res.data.taskTypes;
+        this.tagsSize = res.data.total;
+        console.log("this.$api.tags.getAllType", res)
       })
     },
     addType() {
@@ -272,7 +282,7 @@ export default {
             "pageSize": this.pageSize,
           }).then((res) => {
             this.tableData = res.data.taskTypes;
-            this.tagsSize = this.tableData.length;
+            this.tagsSize = res.data.total;
             console.log("this.$api.tags.getAllType", res)
           })
           // that.$api.tags.getSortedTags()
