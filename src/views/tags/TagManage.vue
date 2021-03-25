@@ -74,6 +74,7 @@ export default {
       showStripe: false,
       showHeader: true,
       showIndex: true,
+      showDetail: false,
       showCheckbox: true,
       tableHeight: 600,
       pageSize: 10,
@@ -117,8 +118,20 @@ export default {
         align: 'center',
       });
       columns.push({
-        title: '打卡数量',
+        title: '打卡总数',
         key: 'tagCount',
+        align: 'center',
+        sortable: true,
+      });
+      columns.push({
+        title: '通过总数',
+        key: 'passCount',
+        align: 'center',
+        sortable: true,
+      });
+      columns.push({
+        title: '所属类型',
+        key: 'tagBelongedTypes',
         align: 'center',
         sortable: true,
       });
@@ -149,14 +162,14 @@ export default {
                 click: (e) => {// 点击事件， e 为事件参数
                   e.stopPropagation();
                   this.$api.tags.delTag({
-                    'id': this.tableData[params.index].tagId
+                    'tagId': this.tableData[params.index].tagId
                   })
                     .then(res => {
                       console.log("删除", res.data.state);
                       if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
                     })
                     .catch(err => {
-                      console.log(err)
+                      console.log("删除失败", err)
                     })
                 }
               }
@@ -165,40 +178,43 @@ export default {
           );
         }
       });
-      columns.push({
-        title: '详情',
-        key: 'detail',
-        align: 'center',
-        render: (h, params) => {
-          return h(
-            "button",
-            {
-              style: {
-                padding: '5px 10px',
-                backgroundColor: '#2b85e4',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '2px',
-                cursor: 'pointer'
-              },
-              domProps: {
-                innerText: '详情'
-              },
-              class: ['fa', 'fa-caret-right'],
-              attrs: {
-                userId: this.tableData[params.index].essayId,
-              },
-              on: {
-                click: (e) => {// 点击事件， e 为事件参数
-                  e.stopPropagation();
-                  // this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
+      if(this.showDetail){
+        columns.push({
+          title: '详情',
+          key: 'detail',
+          align: 'center',
+          render: (h, params) => {
+            return h(
+              "button",
+              {
+                style: {
+                  padding: '5px 10px',
+                  backgroundColor: '#2b85e4',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '2px',
+                  cursor: 'pointer'
+                },
+                domProps: {
+                  innerText: '详情'
+                },
+                class: ['fa', 'fa-caret-right'],
+                attrs: {
+                  userId: this.tableData[params.index].essayId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    // this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
+                  }
                 }
-              }
-            },
-            "详情"
-          );
-        }
-      });
+              },
+              "详情"
+            );
+          }
+        });
+      }
+
       return columns;
     },
   },
@@ -210,13 +226,9 @@ export default {
         this.tableData = res.data.sortedTagList;
         this.tagsSize = this.tableData.length;
       })
-    this.$api.tags.getAllType({
-      "page": this.page,
-      "pageSize": this.pageSize,
-    })
-      .then(res => {
-        console.log(res.data.data)
-        this.types = res.data.data
+    this.$api.tags.getAllTypeWithoutPage().then(res => {
+        console.log("getAllTypeWithoutPage", res.data.taskTypes);
+        this.types = res.data.taskTypes;
       })
   },
   mounted() {
@@ -268,15 +280,16 @@ export default {
         if (res.status === 200) {
           that.modal6 = false
           that.addForm.resetFields
-          console.log(res)
-          that.$api.tags.getSortedTags()
-            .then((res) => {
-              that.tableData = res.data.sortedTagList;
-              that.tagsSize = that.tableData.length;
-            })
+          console.log("addTagRes", res);
+
+          this.$api.tags.getSortedTags().then((res) => {
+            console.log("afterAdd", res.data)
+            this.tableData = res.data.sortedTagList;
+            this.tagsSize = this.tableData.length;
+          })
         }
       }).catch(err => {
-        console.log(err)
+        console.log("addTagErr", err)
       })
     }
   }

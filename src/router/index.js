@@ -138,15 +138,6 @@ export default new Router({
           components: {content: () => import('@/views/tasks/TasksType')}
         },
         {
-          path: 'tags/list',
-          name: 'tags',
-          meta: {
-            title: '',
-            auth: false
-          },
-          components: {content: () => import('@/views/tags/TagManage')}
-        },
-        {
           path: 'tags/topic',
           name: 'topic',
           meta: {
@@ -156,13 +147,13 @@ export default new Router({
           components: {content: () => import('@/views/tags/TopicManage')}
         },
         {
-          path: 'tags/tagsType',
+          path: 'tags/tag',
           name: 'tagsType',
           meta: {
             title: '',
             auth: false
           },
-          components: {content: () => import('@/views/tags/TagOfType')}
+          components: {content: () => import('@/views/tags/TagManage')}
         },{
           path: 'tags/type',
           name: 'type',

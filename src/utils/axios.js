@@ -4,8 +4,8 @@ import router from '../router/index'
 import store from '../store/index'
 // 环境的切换
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'http://127.0.0.1:8090/Checky';
-  //axios.defaults.baseURL = 'https://www.ycloudtech.cn:8090/Checky';
+  // axios.defaults.baseURL = 'http://127.0.0.1:8090/Checky';
+  axios.defaults.baseURL = 'https://www.ycloudtech.cn:8090/Checky';
 }
 else if (process.env.NODE_ENV === 'debug') {
   axios.defaults.baseURL = '';

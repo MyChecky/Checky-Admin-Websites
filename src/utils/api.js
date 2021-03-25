@@ -171,11 +171,19 @@ export default {
     },
     // 获取所有类型
     getAllType: data => {
-      return post('admin/taskType/allType', data)
+      return post('/admin/taskType/allType', data)
     },
-    // 删除话题
+    // 获取所有类型
+    getAllTypeWithoutPage: data => {
+      return post('/admin/taskType/getAllTypeWithoutPage', data)
+    },
+    // 删除类型
     delType: data => {
       return post('/admin/taskType/delete', data)
+    },
+    // 新增类型
+    addType:data => {
+      return post('/admin/taskType/addType', data)
     },
   },
   checks: {

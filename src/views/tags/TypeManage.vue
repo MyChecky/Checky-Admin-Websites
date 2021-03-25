@@ -14,14 +14,15 @@
         </div>
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
-             :show-header="showHeader" :size="tagsSize" :data="tableData" :columns="tableColumns"></Table>
+             :show-header="showHeader" :size="tagsSize" :data="tableData" :columns="tableColumns">
+      </Table>
     </Card>
     <Page class="pager" :total="tagsSize" :page-size="pageSize" @on-change="changePage"></Page>
     <Modal
       v-model="modal6"
       title="新建类型"
       :loading="loading"
-      @on-ok="addTag">
+      @on-ok="addType">
       <Form :model="addForm" style="margin-left: 50px">
         <Row :gutter="16">
           <Col span="20">
@@ -62,6 +63,7 @@ export default {
       showStripe: false,
       showHeader: true,
       showIndex: true,
+      showDetail: false,
       showCheckbox: true,
       tableHeight: 600,
       pageSize: 10,
@@ -159,40 +161,43 @@ export default {
           );
         }
       });
-      columns.push({
-        title: '详情',
-        key: 'detail',
-        align: 'center',
-        render: (h, params) => {
-          return h(
-            "button",
-            {
-              style: {
-                padding: '5px 10px',
-                backgroundColor: '#2b85e4',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '2px',
-                cursor: 'pointer'
-              },
-              domProps: {
-                innerText: '详情'
-              },
-              class: ['fa', 'fa-caret-right'],
-              attrs: {
-                userId: this.tableData[params.index].essayId,
-              },
-              on: {
-                click: (e) => {// 点击事件， e 为事件参数
-                  e.stopPropagation();
-                  // this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
+      if(this.showDetail){
+        columns.push({
+          title: '详情',
+          key: 'detail',
+          align: 'center',
+          render: (h, params) => {
+            return h(
+              "button",
+              {
+                style: {
+                  padding: '5px 10px',
+                  backgroundColor: '#2b85e4',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '2px',
+                  cursor: 'pointer'
+                },
+                domProps: {
+                  innerText: '详情'
+                },
+                class: ['fa', 'fa-caret-right'],
+                attrs: {
+                  userId: this.tableData[params.index].essayId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    // this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
+                  }
                 }
-              }
-            },
-            "详情"
-          );
-        }
-      });
+              },
+              "详情"
+            );
+          }
+        });
+      }
+
       return columns;
     },
   },
@@ -204,9 +209,9 @@ export default {
       "page": this.page,
       "pageSize": this.pageSize,
     }).then((res) => {
-        this.tableData = res.data.data;
+        this.tableData = res.data.taskTypes;
         this.tagsSize = this.tableData.length;
-        console.log(res)
+        console.log("this.$api.tags.getAllType", res)
       })
   },
   mounted() {
@@ -252,20 +257,29 @@ export default {
         this.tagsSize = this.tableData.length;
       })
     },
-    addTag() {
+    addType() {
       let that = this
-      this.$api.tags.addTopic({
+      this.$api.tags.addType({
         typeContent: that.addForm.typeContent,
       }).then(res => {
         if (res.status === 200) {
           that.modal6 = false
           that.addForm.resetFields
           console.log(res)
-          that.$api.tags.getSortedTags()
-            .then((res) => {
-              that.tableData = res.data.sortedTagList;
-              that.tagsSize = that.tableData.length;
-            })
+
+          this.$api.tags.getAllType({
+            "page": this.page,
+            "pageSize": this.pageSize,
+          }).then((res) => {
+            this.tableData = res.data.taskTypes;
+            this.tagsSize = this.tableData.length;
+            console.log("this.$api.tags.getAllType", res)
+          })
+          // that.$api.tags.getSortedTags()
+          //   .then((res) => {
+          //     that.tableData = res.data.sortedTagList;
+          //     that.tagsSize = that.tableData.length;
+          //   })
         }
       }).catch(err => {
         console.log(err)

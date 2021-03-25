@@ -62,6 +62,7 @@ export default {
       showStripe: false,
       showHeader: true,
       showIndex: true,
+      showDetail: false,
       showCheckbox: true,
       fixedHeader: false,
       tableHeight: 600,
@@ -164,40 +165,42 @@ export default {
           );
         }
       });
-      columns.push({
-        title: '详情',
-        key: 'detail',
-        align: 'center',
-        render: (h, params) => {
-          return h(
-            "button",
-            {
-              style: {
-                padding: '5px 10px',
-                backgroundColor: '#2b85e4',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '2px',
-                cursor: 'pointer'
-              },
-              domProps: {
-                innerText: '详情'
-              },
-              class: ['fa', 'fa-caret-right'],
-              attrs: {
-                userId: this.tableData[params.index].essayId,
-              },
-              on: {
-                click: (e) => {// 点击事件， e 为事件参数
-                  e.stopPropagation();
-                  // this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
+      if (this.showDetail) {
+        columns.push({
+          title: '详情',
+          key: 'detail',
+          align: 'center',
+          render: (h, params) => {
+            return h(
+              "button",
+              {
+                style: {
+                  padding: '5px 10px',
+                  backgroundColor: '#2b85e4',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '2px',
+                  cursor: 'pointer'
+                },
+                domProps: {
+                  innerText: '详情'
+                },
+                class: ['fa', 'fa-caret-right'],
+                attrs: {
+                  userId: this.tableData[params.index].essayId,
+                },
+                on: {
+                  click: (e) => {// 点击事件， e 为事件参数
+                    e.stopPropagation();
+                    // this.$router.push(`/essays/id=${this.tableData[params.index].essayId}`);
+                  }
                 }
-              }
-            },
-            "详情"
-          );
-        }
-      });
+              },
+              "详情"
+            );
+          }
+        });
+      }
       return columns;
     },
   },
@@ -209,14 +212,14 @@ export default {
       "page": this.page,
       "pageSize": this.pageSize,
     }).then((res) => {
-        this.tableData = res.data.sortedTopicList;
-        this.tagsSize = this.tableData.length;
-        console.log(res.data);
-      })
-    this.$api.tags.getAllType()
-      .then(res => {
-        this.types = res.data
-      })
+      this.tableData = res.data.sortedTopicList;
+      this.tagsSize = this.tableData.length;
+      console.log(res.data);
+    })
+    // this.$api.tags.getAllType()
+    //   .then(res => {
+    //     this.types = res.data
+    //   })
   },
   mounted() {
     this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;

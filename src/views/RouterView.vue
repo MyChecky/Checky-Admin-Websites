@@ -18,28 +18,30 @@
           <span :style="iconSize" class="item-icon fa fa-fw fa-heart"></span>
           <span :class="[display,'item-tag']">动态列表</span>
         </MenuItem>
+
         <Submenu name="tag" key="7" v-if="menus.admin">
           <template slot="title">
             <span :style="iconSize" class="item-icon fa fa-fw fa-line-chart"></span>
             <div :class="[display,'item-tag']">标签管理</div>
           </template>
-          <MenuItem name="tagList" key="7-1" to="/tags/list">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-tags"></span>
-            <div :class="[display,'item-tag']">标签列表</div>
+<!--          <MenuItem name="tagList" key="7-1" to="/tags/list">-->
+<!--            <span :style="iconSize" class="item-icon fa fa-fw fa-tags"></span>-->
+<!--            <div :class="[display,'item-tag']">标签列表</div>-->
+<!--          </MenuItem>-->
+          <MenuItem name="typeManage" key="7-1" to="/tags/type">
+            <span :style="iconSize" class="item-icon fa fa-fw fa-bandcamp"></span>
+            <div :class="[display,'item-tag']">类型管理</div>
           </MenuItem>
-          <MenuItem name="tagType" key="7-2" to="/tags/tagsType">
+          <MenuItem name="tagManage" key="7-2" to="/tags/tag">
             <span :style="iconSize" class="item-icon fa fa-fw fa-refresh"></span>
-            <div :class="[display,'item-tag']">类型与标签</div>
+            <div :class="[display,'item-tag']">标签管理</div>
           </MenuItem>
           <MenuItem name="topicManage" key="7-3" to="/tags/topic">
             <span :style="iconSize" class="item-icon fa fa-fw fa-book"></span>
             <div :class="[display,'item-tag']">话题管理</div>
           </MenuItem>
-          <MenuItem name="typeManage" key="7-4" to="/tags/type">
-            <span :style="iconSize" class="item-icon fa fa-fw fa-bandcamp"></span>
-            <div :class="[display,'item-tag']">类型管理</div>
-          </MenuItem>
         </Submenu>
+
         <Submenu name="money" key="3" v-if="menus.money">
           <template slot="title">
             <span :style="iconSize" class="item-icon fa fa-fw fa-cny"></span>
@@ -62,6 +64,7 @@
             <div :class="[display,'item-tag']">个人统计图</div>
           </MenuItem>
         </Submenu>
+
         <MenuItem name="tasks" key="4-1" v-if="menus.tasks" to="/tasks/list">
           <span :style="iconSize" class="item-icon fa fa-fw fa-tasks"></span>
           <span :class="[display,'item-tag']">任务列表</span>
