@@ -9,9 +9,9 @@
           @click="modal6=true">
           添加话题
         </button>
-        <div class="search-div">
-          <SearchBar :search="search" :tableNow="tableNow"></SearchBar>
-        </div>
+<!--        <div class="search-div">-->
+<!--          <SearchBar :search="search" :tableNow="tableNow"></SearchBar>-->
+<!--        </div>-->
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
              :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>

@@ -8,6 +8,7 @@
             <!-- <Avatar :source="userInfo.userAvatar" :size="80"></Avatar> -->
             <div class="info-div">
               <span class="info-item">动态ID：{{essayInfo.essayId}}</span>
+              <span class="info-item">动态话题：{{essayInfo.topicName}}</span>
               <span class="info-item">动态内容：{{essayInfo.essayContent}}</span>
               <span class="info-item">发布时间：{{essayInfo.essayTime}}</span>
             </div>
@@ -20,41 +21,42 @@
           </div>
         </Card>
       </div>
-      <div class="inner-div">
-        <Card class="others">
-          <span class="card-title">动态列表</span>
-          <Row>
-            <Col span="11">
-              <Card>
-                <p slot="title">{{this.imgInfo[0].recordContent}} <span
-                  class="info-item"> -{{imgInfo[0].recordTime}}</span></p>
-                <div class="info-div">
-                  <span class="info-item">动态ID：{{imgInfo[0].essayId}}</span>
-                  <span class="info-item">打卡ID：{{imgInfo[0].checkId}}</span>
-                  <span class="info-item">动态内容：{{imgInfo[0].recordContent}}</span>
-                  <span class="info-item">发布时间：{{imgInfo[0].recordTime}}</span>
-                  <span class="info-item">附件类型：{{imgInfo[0].recordType}}</span>
-                  <img :src="this.baseURL + imgInfo[0].fileAddr" alt="pic" class="pic-img">
-                </div>
-              </Card>
-            </Col>
-            <Col span="11" offset="1">
-              <Card>
-                <p slot="title">{{this.imgInfo[1].recordContent}} <span
-                  class="info-item"> -{{imgInfo[1].recordTime}}</span></p>
-                <div class="info-div">
-                  <span class="info-item">动态ID：{{imgInfo[1].essayId}}</span>
-                  <span class="info-item">打卡ID：{{imgInfo[1].checkId}}</span>
-                  <span class="info-item">动态内容：{{imgInfo[1].recordContent}}</span>
-                  <span class="info-item">发布时间：{{imgInfo[1].recordTime}}</span>
-                  <span class="info-item">附件类型：{{imgInfo[1].recordType}}</span>
-                  <img :src="this.baseURL + imgInfo[1].fileAddr" alt="pic" class="pic-img">
-                </div>
-              </Card>
-            </Col>
-          </Row>
-        </Card>
-      </div>
+
+<!--      <div class="inner-div">-->
+<!--        <Card class="others">-->
+<!--          <span class="card-title">动态列表</span>-->
+<!--          <Row>-->
+<!--            <Col span="11">-->
+<!--              <Card>-->
+<!--                <p slot="title">{{this.imgInfo[0].recordContent}} <span-->
+<!--                  class="info-item"> -{{imgInfo[0].recordTime}}</span></p>-->
+<!--                <div class="info-div">-->
+<!--                  <span class="info-item">动态ID：{{imgInfo[0].essayId}}</span>-->
+<!--                  <span class="info-item">打卡ID：{{imgInfo[0].checkId}}</span>-->
+<!--                  <span class="info-item">动态内容：{{imgInfo[0].recordContent}}</span>-->
+<!--                  <span class="info-item">发布时间：{{imgInfo[0].recordTime}}</span>-->
+<!--                  <span class="info-item">附件类型：{{imgInfo[0].recordType}}</span>-->
+<!--                  <img :src="this.baseURL + imgInfo[0].fileAddr" alt="pic" class="pic-img">-->
+<!--                </div>-->
+<!--              </Card>-->
+<!--            </Col>-->
+<!--            <Col span="11" offset="1">-->
+<!--              <Card>-->
+<!--                <p slot="title">{{this.imgInfo[1].recordContent}} <span-->
+<!--                  class="info-item"> -{{imgInfo[1].recordTime}}</span></p>-->
+<!--                <div class="info-div">-->
+<!--                  <span class="info-item">动态ID：{{imgInfo[1].essayId}}</span>-->
+<!--                  <span class="info-item">打卡ID：{{imgInfo[1].checkId}}</span>-->
+<!--                  <span class="info-item">动态内容：{{imgInfo[1].recordContent}}</span>-->
+<!--                  <span class="info-item">发布时间：{{imgInfo[1].recordTime}}</span>-->
+<!--                  <span class="info-item">附件类型：{{imgInfo[1].recordType}}</span>-->
+<!--                  <img :src="this.baseURL + imgInfo[1].fileAddr" alt="pic" class="pic-img">-->
+<!--                </div>-->
+<!--              </Card>-->
+<!--            </Col>-->
+<!--          </Row>-->
+<!--        </Card>-->
+<!--      </div>-->
       <div class="inner-div">
         <Card class="others">
           <div class="table-header">
@@ -163,10 +165,10 @@
             align: 'center'
           })
         }
-        columns.push({
-          title: '记录内容',
-          key: 'recordContent',width:200,
-        });
+        // columns.push({
+        //   title: '记录内容',
+        //   key: 'recordContent',width:200,
+        // });
         columns.push({
           title: '发布时间',
           key: 'recordTime',
@@ -275,7 +277,7 @@
       let id = this.$route.params.essayId;
       this.$api.essays.queryEssay({essayId: id})
         .then((res) => {
-          console.log(res.data);
+          console.log("admin -> queryEssay", res.data);
           this.essayInfo = res.data.essay;
           this.commentInfo = res.data.comments;
           this.imgInfo = res.data.essay.img;

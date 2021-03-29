@@ -6,6 +6,7 @@
         <Icon type="ios-arrow-down"></Icon>
       </a>
       <DropdownMenu slot="list">
+        <DropdownItem name="2021">2021</DropdownItem>
         <DropdownItem name="2020">2020</DropdownItem>
         <DropdownItem name="2019">2019</DropdownItem>
         <DropdownItem name="2018">2018</DropdownItem>
@@ -33,13 +34,14 @@
           "#5bc49f"
         ],
         totalMoney:250.2,
-        pickYear:2019,
+        pickYear:2021,
         graphData:{}
       }
     },
     methods:{
       changeMenu(name){
         this.pickYear = name;
+        // this.draw();
       },
       draw(){
         //查询当前登录用户的部门
