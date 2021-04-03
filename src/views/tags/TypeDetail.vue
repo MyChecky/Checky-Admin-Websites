@@ -2,37 +2,51 @@
   <div>
     <Card>
       <div class="table-header">
-        <span class="card-title">类型管理</span>
+        <span class="card-title">类型详情</span>
         <span class="total">总数：{{ tagsSize }}</span>
         <button
           style="margin-left: 20px ; padding: 5px 10px; backgroundColor: #2b85e4;color: #fff; border: none; borderRadius: 2px; cursor: pointer "
           @click="modal6 = true">
-          创建新类型
+          添加标签
         </button>
-<!--        <div class="search-div">-->
-<!--          <SearchBar :search="search" :tableNow="tableNow"></SearchBar>-->
-<!--        </div>-->
+        <!--        <div class="search-div">-->
+        <!--          <SearchBar :search="search" :tableNow="tableNow"></SearchBar>-->
+        <!--        </div>-->
       </div>
       <Table class="table" highlight-row ref="table" :height="tableHeight" :border="showBorder" :stripe="showStripe"
-             :show-header="showHeader" :size="tagsSize" :data="tableData" :columns="tableColumns">
-      </Table>
+             :show-header="showHeader" :size="tableSize" :data="tableData" :columns="tableColumns"></Table>
     </Card>
     <Page class="pager" :total="tagsSize" :page-size="pageSize" @on-change="changePage"></Page>
     <Modal
       v-model="modal6"
-      title="新建类型"
+      title="新建标签"
       :loading="loading"
-      @on-ok="addType">
+      @on-ok="addTag">
       <Form :model="addForm" style="margin-left: 50px">
         <Row :gutter="16">
           <Col span="20">
-            <FormItem label="类型内容" label-position="top">
+            <FormItem label="标签内容" label-position="top">
               <label>
-                <Input placeholder="请输入新的类型内容" v-model="addForm.typeContent"/>
+                <Input placeholder="请输入新的标签内容" v-model="addForm.tagContent"/>
               </label>
             </FormItem>
           </Col>
         </Row>
+        <Row :gutter="16">
+          <Col span="20">
+            <FormItem label="关联类型" label-position="top">
+              <label>
+                <Select v-model="addForm.typeId">
+                  <Option v-for="(item,index) in types" :value="item.typeId" :key="index">{{
+                      item.typeContent
+                    }}
+                  </Option>
+                </Select>
+              </label>
+            </FormItem>
+          </Col>
+        </Row>
+
       </Form>
     </Modal>
   </div>
@@ -44,7 +58,7 @@ import SearchBar from '../../components/SearchBar'
 import axios from 'axios'
 
 export default {
-  name: 'TypeManage',
+  name: 'TagManage',
   components: {
     PicViewer: PicViewer,
     SearchBar: SearchBar
@@ -63,12 +77,12 @@ export default {
       showStripe: false,
       showHeader: true,
       showIndex: true,
-      showDetail: true,
+      showDetail: false,
       showCheckbox: true,
       tableHeight: 600,
       pageSize: 10,
       tableSize: 'default',
-      page: 0,
+      page: 1,
       tagsSize: 0,
       tableData: [],
       cancel: null,
@@ -98,29 +112,29 @@ export default {
         })
       }
       columns.push({
-        title: '类型ID',
-        key: 'typeId',
+        title: '标签ID',
+        key: 'tagId',
       });
       columns.push({
-        title: '类型内容',
-        key: 'typeContent',
+        title: '标签内容',
+        key: 'tagContent',
         align: 'center',
       });
       columns.push({
         title: '打卡总数',
-        key: 'totalNum',
+        key: 'tagCount',
         align: 'center',
         sortable: true,
       });
       columns.push({
         title: '通过总数',
-        key: 'passNum',
+        key: 'passCount',
         align: 'center',
         sortable: true,
       });
       columns.push({
-        title: '子标签数',
-        key: 'subTagsNum',
+        title: '所属类型',
+        key: 'tagBelongedTypes',
         align: 'center',
         sortable: true,
       });
@@ -150,24 +164,24 @@ export default {
               on: {
                 click: (e) => {// 点击事件， e 为事件参数
                   e.stopPropagation();
-                  this.$api.tags.delType({
-                    'typeId': this.tableData[params.index].typeId
+                  this.$api.tags.delTag({
+                    'tagId': this.tableData[params.index].tagId
                   })
                     .then(res => {
                       console.log("删除", res.data.state);
-                      this.$api.tags.getAllType({
+                      this.$api.tags.getOneTypeTags({
                         "page": this.page,
                         "pageSize": this.pageSize,
+                        "typeId": this.typeId,
                       }).then((res) => {
-                        this.tableData = res.data.taskTypes;
+                        this.tableData = res.data.sortedTagList;
                         this.tagsSize = res.data.total;
-                        console.log("this.$api.tags.getAllType", res)
                       })
 
                       // if (res.data.state === 'ok') this.tableData.splice(params.index, 1)
                     })
                     .catch(err => {
-                      console.log(err)
+                      console.log("删除失败", err)
                     })
                 }
               }
@@ -176,101 +190,70 @@ export default {
           );
         }
       });
-      if(this.showDetail){
-        columns.push({
-          title: '详情',
-          key: 'detail',
-          align: 'center',
-          render: (h, params) => {
-            return h(
-              "button",
-              {
-                style: {
-                  padding: '5px 10px',
-                  backgroundColor: '#2b85e4',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '2px',
-                  cursor: 'pointer'
-                },
-                domProps: {
-                  innerText: '详情'
-                },
-                class: ['fa', 'fa-caret-right'],
-                attrs: {
-                  typeId: this.tableData[params.index].typeId,
-                },
-                on: {
-                  click: (e) => {// 点击事件， e 为事件参数
-                    e.stopPropagation();
-                    console.log("goto type detail", this.tableData[params.index].typeId)
-                    this.$router.push(`/tags/type/id=${this.tableData[params.index].typeId}`);
-                  }
-                }
-              },
-              "详情"
-            );
-          }
-        });
-      }
-
       return columns;
     },
   },
   beforeMount: function () {
+    let typeId = this.$route.params.typeId;
+    this.typeId = typeId;
     if (localStorage.essays === 'false') {
       this.$router.push(`/404`)
     }
-    this.$api.tags.getAllType({
+    this.$api.tags.getOneTypeTags({
       "page": this.page,
       "pageSize": this.pageSize,
+      "typeId": typeId,
     }).then((res) => {
-        this.tableData = res.data.taskTypes;
-        this.tagsSize = res.data.total;
-        console.log("this.$api.tags.getAllType", res)
-      })
+      this.tableData = res.data.sortedTagList;
+      this.tagsSize = res.data.total;
+    })
+
+    this.$api.tags.getAllTypeWithoutPage().then(res => {
+      console.log("getAllTypeWithoutPage", res.data.taskTypes);
+      this.types = res.data.taskTypes;
+    })
   },
   mounted() {
     this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
   },
   methods: {
     changePage(e) {
+      let typeId = this.$route.params.typeId;
       this.page = e;
-      this.$api.tags.getAllType({
+      console.log("targetPage", this.page);
+      this.$api.tags.getOneTypeTags({
         "page": this.page,
         "pageSize": this.pageSize,
+        "typeId": typeId,
       }).then((res) => {
-        this.tableData = res.data.taskTypes;
+        this.tableData = res.data.sortedTagList;
         this.tagsSize = res.data.total;
-        console.log("this.$api.tags.getAllType", res)
       })
     },
-    addType() {
+
+    addTag() {
+      let typeId = this.$route.params.typeId;
       let that = this
-      this.$api.tags.addType({
-        typeContent: that.addForm.typeContent,
+      this.$api.tags.addTag({
+        tagContent: that.addForm.tagContent,
+        typeId: that.addForm.typeId
       }).then(res => {
         if (res.status === 200) {
           that.modal6 = false
           that.addForm.resetFields
-          console.log(res)
+          console.log("addTagRes", res);
 
-          this.$api.tags.getAllType({
+          this.$api.tags.getOneTypeTags({
             "page": this.page,
             "pageSize": this.pageSize,
+            "typeId": typeId,
           }).then((res) => {
-            this.tableData = res.data.taskTypes;
+            this.tableData = res.data.sortedTagList;
             this.tagsSize = res.data.total;
-            console.log("this.$api.tags.getAllType", res)
           })
-          // that.$api.tags.getSortedTags()
-          //   .then((res) => {
-          //     that.tableData = res.data.sortedTagList;
-          //     that.tagsSize = that.tableData.length;
-          //   })
         }
       }).catch(err => {
-        console.log(err)
+        console.log("addTagErr", err)
       })
     }
   }

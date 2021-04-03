@@ -235,38 +235,6 @@ export default {
     this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 125;
   },
   methods: {
-    // detail(index){
-    //   console.log(this.tableData.indexOf(index));
-    // }
-    search: function (startTime, endTime, keyword, searchType, page) {
-      this.startTime = startTime;
-      this.endTime = endTime;
-      this.searchType = searchType;
-      this.page = page;
-      this.keyword = keyword;
-      // 解决异步问题
-      if (this.cancel) {// 存在上一次请求则取消
-        this.cancel();
-      }
-      console.log(`搜索${this.keyword},页码${this.page}`);
-      // 定义CancelToken，它是axios的一个属性，且是一个构造函数
-      let CancelToken = axios.CancelToken;
-
-      this.$api.essays.queryByKeyword({
-        startTime: this.startTime, endTime: this.endTime, searchType: this.searchType,
-        keyword: this.keyword, page: this.page, pageSize: this.pageSize
-      }, new CancelToken((c) => {
-        this.cancel = c;
-      }))
-        .then(res => {
-          console.log(res);
-          this.tableData = res.data.essays;
-          this.tagsSize = res.data.total;
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
     changePage(e) {
       this.page = e;
       this.$api.tags.getSortedTopics({

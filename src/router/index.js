@@ -164,6 +164,15 @@ export default new Router({
           components: {content: () => import('@/views/tags/TypeManage')}
         },
         {
+          path: 'tags/type/id=:typeId',
+          name: 'type-id',
+          meta: {
+            title: '',
+            auth: false // 开发时用false
+          },
+          components: {content: () => import('@/views/tags/TypeDetail')}
+        },
+        {
           path: 'appeal',
           name: 'appeal',
           meta: {

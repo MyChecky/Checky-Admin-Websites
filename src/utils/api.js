@@ -145,6 +145,9 @@ export default {
     getSortedTags: data => {
       return post('/admin/tag/sort', data)
     },
+    getOneTypeTags: data => {
+      return post('/admin/tag/getOneTypeTags', data)
+    },
     // 删除标签
     delTag: data => {
       return post('/admin/tag/delete', data)
