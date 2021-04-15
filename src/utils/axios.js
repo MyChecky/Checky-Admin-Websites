@@ -64,16 +64,23 @@ export function get(url, data = {}) {
 
 //封装post请求
 export function post(url, data = {}) {
+
+  let userId = store.getters.getAttr('userId');
+  let sessionKey = store.getters.getAttr('sessionKey');
+  if (userId === null || sessionKey === null) {
+    router.push('/login');
+  }
+
   //默认配置
-  let sendObject={
+  let sendObject = {
     url: url,
     method: 'post',
     headers: {
-      'Content-Type':'application/json;charset=UTF-8',
-      'userId': store.getters.getAttr('userId'),
-      'sessionKey': store.getters.getAttr('sessionKey')
+      'Content-Type': 'application/json;charset=UTF-8',
+      'userId': userId,
+      'sessionKey': sessionKey
     },
-    data:data
+    data: data
   };
   // sendObject.data=JSON.stringify(data);
   return service(sendObject)
