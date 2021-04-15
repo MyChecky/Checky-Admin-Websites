@@ -1,17 +1,20 @@
 <template>
   <div>
-    <Dropdown class="checky_graph_dropdown" @on-click="changeMenu">
-      <a href="javascript:void(0)">
-        选择年份
-        <Icon type="ios-arrow-down"></Icon>
-      </a>
-      <DropdownMenu slot="list">
-        <DropdownItem name="2021">2021</DropdownItem>
-        <DropdownItem name="2020">2020</DropdownItem>
-        <DropdownItem name="2019">2019</DropdownItem>
-        <DropdownItem name="2018">2018</DropdownItem>
-      </DropdownMenu>
-    </Dropdown>
+    <DatePicker class="checky_graph_dropdown" type="year" @on-change="changeMenu" format="yyyy"
+                placeholder="年份选择" style="width:100px"/>
+
+<!--    <Dropdown class="checky_graph_dropdown" @on-click="changeMenu">-->
+<!--      <a href="javascript:void(0)">-->
+<!--        选择年份-->
+<!--        <Icon type="ios-arrow-down"></Icon>-->
+<!--      </a>-->
+<!--      <DropdownMenu slot="list">-->
+<!--        <DropdownItem name="2021">2021</DropdownItem>-->
+<!--        <DropdownItem name="2020">2020</DropdownItem>-->
+<!--        <DropdownItem name="2019">2019</DropdownItem>-->
+<!--        <DropdownItem name="2018">2018</DropdownItem>-->
+<!--      </DropdownMenu>-->
+<!--    </Dropdown>-->
     <div id="chart-target-test" class="chart-target-test"></div>
   </div>
 </template>
@@ -160,7 +163,7 @@
 <style scoped>
   .checky_graph_dropdown{
     float: right;
-    margin-top: -45px;
+    /*margin-top: -45px;*/
   }
   .chart-target-test {
     width: 100%;

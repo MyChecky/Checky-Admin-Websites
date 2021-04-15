@@ -129,6 +129,12 @@
 
         });
         columns.push({
+          title: '话题',
+          key: 'topicName',
+          sortable: true,
+          width: 180
+        });
+        columns.push({
           title: '时间',
           key: 'essayTime',
           sortable: true,

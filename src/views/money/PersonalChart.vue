@@ -8,7 +8,7 @@
         <RealMoneyChart :userId="userId"/>
       </TabPane>
       <TabPane label="测试金额" name="testMoney">
-        <TestMoneyChart/>
+        <TestMoneyChart :userId="userId"/>
       </TabPane>
     </Tabs>
   </Card>
